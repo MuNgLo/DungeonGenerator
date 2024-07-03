@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://66fkglptwkl1"]
+[gd_scene load_steps=55 format=3 uid="uid://66fkglptwkl1"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
@@ -30,6 +30,10 @@
 [ext_resource type="Texture2D" uid="uid://dbtj37kwtffth" path="res://addons/MuNgLosDungeon/Icons/DebugIcon.png" id="28_a1cq0"]
 [ext_resource type="Texture2D" uid="uid://s8b4xers08bq" path="res://addons/MuNgLosDungeon/Icons/DiceIcon.png" id="29_286he"]
 [ext_resource type="Texture2D" uid="uid://dwaqs2kxfisr6" path="res://addons/MuNgLosDungeon/Icons/ShowIcon.png" id="29_s37yq"]
+[ext_resource type="Texture2D" uid="uid://bbm8d0xvbhdl3" path="res://addons/MuNgLosDungeon/Icons/ProfileIcon.png" id="31_7xw7w"]
+[ext_resource type="Texture2D" uid="uid://cox2hruyd1v8o" path="res://addons/MuNgLosDungeon/Icons/CogIcon.png" id="32_m0fwq"]
+[ext_resource type="Texture2D" uid="uid://dgb6ce56b7orr" path="res://addons/MuNgLosDungeon/Icons/BiomeIcon.png" id="33_ck4ds"]
+[ext_resource type="Texture2D" uid="uid://wnh4mm6q2vxl" path="res://addons/MuNgLosDungeon/Icons/ExportIcon.png" id="34_3dg3h"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_0jscg"]
 
@@ -112,10 +116,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -8.0
-offset_top = -4.0
-offset_right = -8.0
-offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
@@ -4374,47 +4374,58 @@ offset_right = 30.0
 offset_bottom = 162.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
 
-[node name="Build" type="TextureButton" parent="."]
+[node name="Build" type="TextureButton" parent="Panel"]
 layout_mode = 1
-offset_right = 128.0
-offset_bottom = 128.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 126.0
+offset_bottom = 126.0
 scale = Vector2(0.25, 0.25)
+tooltip_text = "Build: Generate a new Dungeon with current settings"
 texture_normal = ExtResource("26_op7t4")
 stretch_mode = 5
 
-[node name="Clear" type="TextureButton" parent="."]
+[node name="Clear" type="TextureButton" parent="Panel"]
 layout_mode = 1
-offset_top = 34.0
-offset_right = 128.0
-offset_bottom = 162.0
+offset_left = -2.0
+offset_top = 32.0
+offset_right = 126.0
+offset_bottom = 160.0
 scale = Vector2(0.25, 0.25)
+tooltip_text = "Clear: Remove everything"
 texture_normal = ExtResource("27_2lruq")
 stretch_mode = 0
 
-[node name="RNGSeed" type="TextureButton" parent="."]
+[node name="RNGSeed" type="TextureButton" parent="Panel"]
 layout_mode = 1
-offset_top = 66.0
-offset_right = 128.0
-offset_bottom = 194.0
+offset_left = -2.0
+offset_top = 64.0
+offset_right = 126.0
+offset_bottom = 192.0
 scale = Vector2(0.25, 0.25)
+tooltip_text = "Random Seed: Randomize a new seed each Build or use the same."
 texture_normal = ExtResource("29_286he")
 stretch_mode = 0
 
-[node name="Debug" type="TextureButton" parent="."]
+[node name="Debug" type="TextureButton" parent="Panel"]
 layout_mode = 1
-offset_top = 98.0
-offset_right = 128.0
-offset_bottom = 226.0
+offset_left = -2.0
+offset_top = 96.0
+offset_right = 126.0
+offset_bottom = 224.0
 scale = Vector2(0.25, 0.25)
+tooltip_text = "Debug Info: Show the debug info toggle"
 texture_normal = ExtResource("28_a1cq0")
 stretch_mode = 0
 
-[node name="Show" type="MenuButton" parent="."]
+[node name="Show" type="MenuButton" parent="Panel"]
 layout_mode = 1
-offset_top = 130.0
-offset_right = 136.0
-offset_bottom = 266.0
+offset_left = -2.0
+offset_top = 128.0
+offset_right = 134.0
+offset_bottom = 264.0
 scale = Vector2(0.25, 0.25)
+tooltip_text = "Check the things you want to show after a build"
 toggle_mode = false
 shortcut_feedback = false
 shortcut_in_tooltip = false
@@ -4440,3 +4451,58 @@ popup/item_4/text = "Debug"
 popup/item_4/checkable = 1
 popup/item_4/checked = true
 popup/item_4/id = 4
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 162.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
+
+[node name="Profile" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -1.0
+offset_right = 127.0
+offset_bottom = 128.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Profile: Open the profile resource in the Inspector"
+texture_normal = ExtResource("31_7xw7w")
+stretch_mode = 5
+
+[node name="Settings" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 32.0
+offset_right = 126.0
+offset_bottom = 160.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Show the settings resource in the inspector"
+texture_normal = ExtResource("32_m0fwq")
+stretch_mode = 5
+
+[node name="Biome" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 64.0
+offset_right = 126.0
+offset_bottom = 192.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Show the biome resource in the inspector"
+texture_normal = ExtResource("33_ck4ds")
+stretch_mode = 5
+
+[node name="Export" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 96.0
+offset_right = 126.0
+offset_bottom = 224.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("34_3dg3h")
+stretch_mode = 5

@@ -11,6 +11,7 @@ namespace Munglo.DungeonGenerator
         private RichTextLabel notiff;
         private double notiffTTL;
         private ScreenDungeonVisulaizer dunVis;
+        public Node3D CurrentDungeon => GetNode<Node3D>("SubViewportContainer/SubViewport/Dungeon/Generated");
         public override void _Ready()
         {
             notiff = FindChild("Notification") as RichTextLabel;
