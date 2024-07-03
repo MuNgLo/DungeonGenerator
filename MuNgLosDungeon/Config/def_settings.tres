@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="GenerationSettingsResource" load_steps=2 format=3 uid="uid://6su0i5s3ukgo"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/GenerationSettingsResource.cs" id="1_t4wih"]
+
+[resource]
+script = ExtResource("1_t4wih")
+showFloors = true
+showWalls = true
+showCeilings = true
+showProps = true
+showDebug = true
+floorPass = true
+wallPass = true
+ceilingPass = true
+corridorPass = true
+propPass = true
+debugPass = true
+roomPass = true
+waterPass = true
+nbOfFloors = 6
+SizeX = 30
+SizeZ = 30
+SizeY = 3
+corPerStair = 8
+corMaxTotal = 33
+corMaxStraight = 5
+corMinStraight = 2
+maxBranches = 5
+maxRoomsPerPath = 12
+nbOfWaterPathsPer10 = 8
+seed1 = 3369
+seed2 = 8145
+seed3 = 4118
+seed4 = 2269

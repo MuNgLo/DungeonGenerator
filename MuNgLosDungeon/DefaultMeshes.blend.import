@@ -1,0 +1,399 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://de5ghw20v43ys"
+path="res://.godot/imported/DefaultMeshes.blend-477db741c988ace15fba185cfdfdb8b8.scn"
+
+[deps]
+
+source_file="res://addons/MuNgLosDungeon/DefaultMeshes.blend"
+dest_files=["res://.godot/imported/DefaultMeshes.blend-477db741c988ace15fba185cfdfdb8b8.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+import_script/path=""
+_subresources={
+"materials": {
+"bCieling": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defCeilingMaterial.tres"
+},
+"bConcrete": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defConcreteMaterial.tres"
+},
+"bFloor": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defFloorMaterial.tres"
+},
+"bMetalRusty": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defMetalRusty.tres"
+},
+"bWall": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defWallMaterial.tres"
+},
+"bWood": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defWood.tres"
+}
+},
+"meshes": {
+"DefaultMeshes_AlkovMesh": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_AlkovMesh.res"
+},
+"DefaultMeshes_AlkovWallMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_AlkovWallMESH.res"
+},
+"DefaultMeshes_ArchSmallCornerMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ArchSmallCornerMESH.res"
+},
+"DefaultMeshes_ArchSmallMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ArchSmallMESH.res"
+},
+"DefaultMeshes_BannisterMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_BannisterMESH.res"
+},
+"DefaultMeshes_BridgeMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_BridgeMESH.res"
+},
+"DefaultMeshes_CeilingMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_CeilingMESH.res"
+},
+"DefaultMeshes_DebugMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_DebugMESH.res"
+},
+"DefaultMeshes_DoorWideTrimMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_DoorWideTrimMESH.res"
+},
+"DefaultMeshes_ErrorMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ErrorMESH.res"
+},
+"DefaultMeshes_FaultyMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FaultyMESH.res"
+},
+"DefaultMeshes_Floor02MESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_Floor02MESH.res"
+},
+"DefaultMeshes_Floor03MESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_Floor03MESH.res"
+},
+"DefaultMeshes_FloorMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FloorMESH.res"
+},
+"DefaultMeshes_PathEndMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_PathEndMESH.res"
+},
+"DefaultMeshes_PropMarkerMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_PropMarkerMESH.res"
+},
+"DefaultMeshes_StairMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairMESH.res"
+},
+"DefaultMeshes_StairSpiralFloorMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairSpiralFloorMESH.res"
+},
+"DefaultMeshes_StairSpiralGalleryMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairSpiralGalleryMESH.res"
+},
+"DefaultMeshes_StairSpiralGalleryWoodMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairSpiralGalleryWoodMESH.res"
+},
+"DefaultMeshes_StairSpiralMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairSpiralMESH.res"
+},
+"DefaultMeshes_StairSpiralSliceMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairSpiralSliceMESH.res"
+},
+"DefaultMeshes_StairSpiralStepsMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairSpiralStepsMESH.res"
+},
+"DefaultMeshes_StaircaseMesh": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StaircaseMesh.res"
+},
+"DefaultMeshes_Wall02MESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_Wall02MESH.res"
+},
+"DefaultMeshes_WallCornerInnerMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallCornerInnerMESH.res"
+},
+"DefaultMeshes_WallDoorOpening02MESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallDoorOpening02MESH.res"
+},
+"DefaultMeshes_WallDoorOpeningMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallDoorOpeningMESH.res"
+},
+"DefaultMeshes_WallDoorOpeningWideMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallDoorOpeningWideMESH.res"
+},
+"DefaultMeshes_WallFlagGreenMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagGreenMESH.res"
+},
+"DefaultMeshes_WallFlagRedMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagRedMESH.res"
+},
+"DefaultMeshes_WallMESH": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 60.0,
+"lods/normal_split_angle": 25.0,
+"save_to_file/enabled": true,
+"save_to_file/make_streamable": "",
+"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallMESH.res"
+}
+}
+}
+gltf/naming_version=1
+gltf/embedded_image_handling=1
+blender/nodes/visible=0
+blender/nodes/punctual_lights=true
+blender/nodes/cameras=true
+blender/nodes/custom_properties=true
+blender/nodes/modifiers=1
+blender/meshes/colors=false
+blender/meshes/uvs=true
+blender/meshes/normals=true
+blender/meshes/tangents=true
+blender/meshes/skins=2
+blender/meshes/export_bones_deforming_mesh_only=false
+blender/materials/unpack_enabled=true
+blender/materials/export_materials=1
+blender/animation/limit_playback=true
+blender/animation/always_sample=true
+blender/animation/group_tracks=true

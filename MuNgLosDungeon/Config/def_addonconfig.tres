@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="AddonSettings" load_steps=2 format=3 uid="uid://rwtr675ir2dk"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/AddonSettings.cs" id="1_3q58d"]
+
+[resource]
+script = ExtResource("1_3q58d")
+lastUsedProfile = "res://addons/MuNgLosDungeon/Config/def_profile.tres"

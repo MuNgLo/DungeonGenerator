@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RoomResource" load_steps=2 format=3 uid="uid://c3d25nty3rs6k"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/RoomResource.cs" id="1_srpba"]
+
+[resource]
+script = ExtResource("1_srpba")
+roomName = "StartRoom"
+roomStyle = ""
+sizeWidthMin = 5
+sizeWidthMax = 5
+sizeDepthMin = 5
+sizeDepthMax = 5
+nbFloorsMin = 6
+nbFloorsMax = 6
+defaultResponses = 15
+centerSpiralStairs = false
+firstPieceDoor = false
+backDoorChance = -1
+allFloor = false

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0k5luvs28qyn"]
+
+[ext_resource type="ArrayMesh" uid="uid://dpxqipoby8w27" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_CeilingMESH.res" id="1_sgpy8"]
+
+[node name="Wall" type="Node3D"]
+
+[node name="DefaultMeshesCeilingMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = ExtResource("1_sgpy8")

@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsedxwapwcs7g"]
+
+[ext_resource type="ArrayMesh" uid="uid://dwveqgpxso8qk" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_Floor02MESH.res" id="1_666dn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_taeds"]
+size = Vector3(6, 1, 6)
+
+[node name="Floor" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_taeds")
+
+[node name="DefaultMeshesFloor02mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_666dn")
