@@ -202,7 +202,9 @@ namespace Munglo.DungeonGenerator
         internal MapPiece GetRandomAlongPath(out MAPDIRECTION dir, bool leftside = true, bool rightside = true)
         {
             dir = MAPDIRECTION.ANY;
-            if(Count < 1) { dir = MAPDIRECTION.ANY; return null; }
+            if(Count < 1) { 
+                return null; 
+            }
 
 
             if (leftside && rightside)

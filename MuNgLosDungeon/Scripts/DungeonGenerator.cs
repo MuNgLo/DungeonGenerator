@@ -94,43 +94,10 @@ namespace Munglo.DungeonGenerator
             await VisualizePaths();
             if(autoBuildNavMesh) { BuildNavMesh(); }
         }
-
-        /*private async Task VisualizeNonRooms()
-        {
-            int count = 0;
-            foreach (int keyX in Pieces.Keys)
-            {
-                foreach (int keyY in Pieces[keyX].Keys)
-                {
-                    foreach (int keyZ in Pieces[keyX][keyY].Keys)
-                    {
-                        if (Pieces[keyX][keyY][keyZ].RoomIndex < 0)
-                        {
-                            // Show non room pieces
-                            if (BuilVisualNode(biome, Pieces[keyX][keyY][keyZ], out Node3D visualNode, true))
-                            {
-                                unsortedContainer.AddChild(visualNode, true);
-                                if (Engine.IsEditorHint())
-                                {
-                                    MoveToEditedScene(visualNode);
-                                }
-                                AddDebugVisuals(Pieces[keyX][keyY][keyZ]);
-                                visualNode.Position = Dungeon.GlobalPosition(Pieces[keyX][keyY][keyZ]);
-                                visualNode.Show();
-                            }
-                            count++;
-                            if (count % 100 == 0)
-                            {
-                                await ToSignal(GetTree(), "process_frame");
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
+   
         private async Task VisualizePaths()
         {
-            foreach (ISection path in map.Paths)
+            foreach (ISection path in map.Sections)
             {
                 await VisualizePath(path as Path);
             }

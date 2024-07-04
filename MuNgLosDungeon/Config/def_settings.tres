@@ -1,9 +1,13 @@
-[gd_resource type="Resource" script_class="GenerationSettingsResource" load_steps=2 format=3 uid="uid://6su0i5s3ukgo"]
+[gd_resource type="Resource" script_class="GenerationSettingsResource" load_steps=4 format=3 uid="uid://6su0i5s3ukgo"]
 
+[ext_resource type="Resource" uid="uid://6ah2ij0d3nxw" path="res://addons/MuNgLosDungeon/Config/Rooms/DefaultStandardRoom.tres" id="1_k2g1b"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/GenerationSettingsResource.cs" id="1_t4wih"]
+[ext_resource type="Resource" uid="uid://c3d25nty3rs6k" path="res://addons/MuNgLosDungeon/Config/Rooms/DefaultStartRoom.tres" id="2_yngiv"]
 
 [resource]
 script = ExtResource("1_t4wih")
+roomStart = ExtResource("2_yngiv")
+roomDefault = ExtResource("1_k2g1b")
 showFloors = true
 showWalls = true
 showCeilings = true
@@ -17,18 +21,18 @@ propPass = true
 debugPass = true
 roomPass = true
 waterPass = true
-nbOfFloors = 3
+nbOfFloors = 30
 SizeX = 30
 SizeZ = 30
 SizeY = 3
-corPerStair = 5
+corPerStair = 8
 corMaxTotal = 14
-corMaxStraight = 5
+corMaxStraight = 4
 corMinStraight = 2
-maxBranches = 3
-maxRoomsPerPath = 7
+maxBranches = 7
+maxRoomsPerPath = 10
 nbOfWaterPathsPer10 = 8
-seed1 = 3369
-seed2 = 8145
-seed3 = 4118
-seed4 = 2269
+seed1 = 7325
+seed2 = 4249
+seed3 = 2229
+seed4 = 7619

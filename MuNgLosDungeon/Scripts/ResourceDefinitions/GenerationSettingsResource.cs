@@ -4,6 +4,11 @@ namespace Munglo.DungeonGenerator
     [GlobalClass, Tool]
     public partial class GenerationSettingsResource : DungeonAddonResource
     {
+        [ExportGroup("Rooms")]
+        [Export] public RoomResource roomStart;
+        [Export] public RoomResource roomDefault;
+
+
         [ExportGroup("Show")]
         [Export] public bool showFloors = true;
         [Export] public bool showWalls = true;
@@ -42,8 +47,6 @@ namespace Munglo.DungeonGenerator
 
         [ExportGroup("Rooms")]
         [Export] public int maxRoomsPerPath = 4;
-        //[Export] public Vector3I roomMaxSize = new Vector3I(5, 1, 5);
-        //[Export] public Vector3I roomMinSize = new Vector3I(3, 1, 3);
 
         [ExportGroup("Water")]
         [Export] public int nbOfWaterPathsPer10 = 8; // Number of water paths to create per 10 in size of Max(X,Z)

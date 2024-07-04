@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cx5ufrptmr6ir"
-path="res://.godot/imported/MudularBridge.blend-d58977296f5cd3d2acab34e658206833.scn"
+path="res://.godot/imported/MudularBridge.blend-7f9fdb990413d7de107ad5650362bada.scn"
 
 [deps]
 
-source_file="res://addons/MuNgLosDungeon/MudularBridge.blend"
-dest_files=["res://.godot/imported/MudularBridge.blend-d58977296f5cd3d2acab34e658206833.scn"]
+source_file="res://addons/MuNgLosDungeon/BlendFiles/MudularBridge.blend"
+dest_files=["res://.godot/imported/MudularBridge.blend-7f9fdb990413d7de107ad5650362bada.scn"]
 
 [params]
 

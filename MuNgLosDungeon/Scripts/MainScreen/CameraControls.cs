@@ -18,7 +18,10 @@ namespace Munglo.DungeonGenerator
         }
         public override void _Process(double delta)
         {
-            Position += inV.Normalized() * speed * (float)delta;
+            float multiplier = 1.0f;
+            if(Input.IsKeyPressed(Key.Shift)) { multiplier = 2.0f; }
+
+            Position += inV.Normalized() * speed * (float)delta * multiplier;
             inV= Vector3.Zero;
         }
 

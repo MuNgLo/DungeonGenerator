@@ -8,40 +8,33 @@ using System.Threading.Tasks;
 namespace Munglo.DungeonGenerator
 {
     /// <summary>
-    /// On instantiation this build a map from given parameters
+    /// On instantiation this sets itself up to be used. Call GenerateMap() togenerate dungeon data. Use its callback to
+    /// do what you want with it.
     /// </summary>
     public class MapData
     {
         #region TODO move this to settings
         private int chanceForWideCorridor = 70;
-        private bool addArches = false;
+        private bool addArches = true;
         #endregion
 
 
         private Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> pieces;
         private PRNGMarsenneTwister rng;
-
-        private List<ISection> paths;
-        private List<ISection> sections;
-        internal List<ISection> Paths => paths;
-
-        internal Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> Pieces => pieces;
-        internal int nbOfPieces => pieces.Values.SelectMany(p => p.Values).Distinct().SelectMany(p => p.Values).Distinct().Count(); // Würkz
-
         private GenerationSettingsResource mapArgs;
         private RoomResource startRoom;
         private RoomResource standardRoom;
+        private List<ISection> sections;
 
         public List<ISection> Sections => sections;
-
-
+        internal Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> Pieces => pieces;
+        internal int nbOfPieces => pieces.Values.SelectMany(p => p.Values).Distinct().SelectMany(p => p.Values).Distinct().Count(); // Würkz
         internal MapData(GenerationSettingsResource p, RoomResource startRoom, RoomResource standardRoom)
         {
             mapArgs = p;
             this.startRoom = startRoom;
             this.standardRoom = standardRoom;
             pieces = new Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>>();
-            paths = new List<ISection>();
             sections = new List<ISection>();
             rng = new PRNGMarsenneTwister(p.Seed);
         }
@@ -72,15 +65,7 @@ namespace Munglo.DungeonGenerator
                 if (mapArgs.corridorPass && mapArgs.corPerStair > 0)
                 {
                     List<MapPiece> candidates = centerRoom.GetWallPieces(floor);
-
-                    foreach (MapPiece can in candidates)
-                    {
-                        can.SetError(true);
-                    }
-
                     if (candidates.Count < 1) { continue; }
-
-
                     int spread = candidates.Count / Math.Min(candidates.Count, mapArgs.corPerStair);
                     GD.Print($"MapData::GenerateMap() Build corridors out from the Startroom candidates.Count[{candidates.Count}]. spread[{spread}]");
 
@@ -94,22 +79,19 @@ namespace Munglo.DungeonGenerator
                         MapPiece startLocation = GetPiece(candidates[index].Coord + candidates[index].OutsideWallDirection());
                         AddCorridor(startLocation, candidates[index].OutsideWallDirection(), rng.Next(100) < chanceForWideCorridor ? 2 : 1);
 
-                        // pick direction
-                        /*if (paths.Count > 0)
+                        // add branches
+                        if (sections.Last() is Path)
                         {
-                            Path pData = paths.Last() as Path;
-                            if (pData != null)
+                            Path pData = sections.Last() as Path;
+                            for (int b = 0; b < mapArgs.maxBranches; b++)
                             {
-                                for (int b = 0; b < mapArgs.maxBranches; b++)
+                                MapPiece branchPoint = pData.GetRandomAlongPathNoCorner(out MAPDIRECTION dir);
+                                if (branchPoint is not null)
                                 {
-                                    MapPiece branchPoint = pData.GetRandomAlongPathNoCorner(out MAPDIRECTION dir);
-                                    if (branchPoint is not null)
-                                    {
-                                        AddCorridor(branchPoint, dir, rng.Next(100) < 70 ? 1 : 2);
-                                    }
+                                    AddCorridor(branchPoint, dir, rng.Next(100) < 70 ? 1 : 2);
                                 }
                             }
-                        }*/
+                        }
                     }
                 }
                 GD.Print($"MapData::GenerateMap() Generating Rooms for floor[{floor}].");
@@ -156,11 +138,12 @@ namespace Munglo.DungeonGenerator
             // Build Rooms attached to paths
             if (mapArgs.roomPass)
             {
-                for (int i = 0; i < paths.Count; i++)
+                for (int i = 0; i < sections.Count; i++)
                 {
                     for (int inx = 0; inx < mapArgs.maxRoomsPerPath; inx++)
                     {
-                        MapPiece piece = (paths[i] as Path).GetRandomAlongPath(out MAPDIRECTION dir);
+                        if(sections[i] is not Path) { continue; }
+                        MapPiece piece = (sections[i] as Path).GetRandomAlongPath(out MAPDIRECTION dir);
                         if (piece != null && piece.State == MAPPIECESTATE.UNUSED)
                         {
                             piece.Orientation = dir;
@@ -181,8 +164,9 @@ namespace Munglo.DungeonGenerator
         private void LatePassRooms()
         {
             // Props pass of rooms
-            foreach (RoomBase room in sections)
+            foreach (ISection room in sections)
             {
+                if (room is not RoomBase) { continue; }
                 room.PunchBackDoor();
                 room.BuildProps();
             }
@@ -327,48 +311,7 @@ namespace Munglo.DungeonGenerator
             ulong[] bosse = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
             startpoint.Orientation = dir;
             Path path = new Path(this, startpoint, size, bosse, mapArgs.corMaxTotal, mapArgs.corMaxStraight, mapArgs.corMinStraight);
-            if (path.IsValid) { paths.Add(path); }
-        }
-        private void AddWaterPath(WATERAMOUNT size)
-        {
-            MapPiece startpoint;
-            MAPDIRECTION dir = MAPDIRECTION.ANY;
-            int floor = 2;
-            if (floor > 2) { floor = rng.Next(1, 2); }
-            if (GetRandomRandomEdgePiece(floor, out startpoint, out dir))
-            {
-                startpoint.State = MAPPIECESTATE.PENDING;
-                startpoint.water = size; // Do this even fooking workz!!!
-                SavePiece(startpoint);
-                ulong[] bosse = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
-                PathData pData = new PathData(this, startpoint, dir, (PATHSIZE)size, bosse, 20, mapArgs.corMaxStraight, mapArgs.corMinStraight);
-                if (pData.Length > 0)
-                {
-                    pData.SetPathInfo((PATHSIZE)size, size);
-                }
-                ////ProcGenMKIII.Log(this, "AddWaterPath", $"Length[{pData.Length}] pData.Start [{string.Join(',', pData.Start)}] pData.End [{string.Join(',', pData.End)}] End is ({(startpoint.state == MAPPIECESTATE.LOCKED ? "SUCCESS" : "FAILURE")})");
-                ////ProcGenMKIII.Log(this, "AddWaterPath", $"{pData}");
-            }
-
-        }
-        private void PathMakeFit(PathData pData)
-        {
-            if (pData.Water != WATERAMOUNT.NONE)
-            {
-                switch (pData.Size)
-                {
-                    case PATHSIZE.MEDIUM:
-                        //PathMakeFitWaterMedium(pData);
-                        break;
-                    case PATHSIZE.LARGE:
-                        break;
-                    case PATHSIZE.NONE:
-                    case PATHSIZE.SMALL:
-                    default:
-                        //PathMakeFitWaterSmall(pData);
-                        break;
-                }
-            }
+            if (path.IsValid) { sections.Add(path); }
         }
 
         internal void SavePiece(MapPiece piece)

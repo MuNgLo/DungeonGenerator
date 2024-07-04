@@ -111,13 +111,16 @@ namespace Munglo.DungeonGenerator
             dir = MAPDIRECTION.ANY;
             // Check for corner and go recursive 10x before failing
             int breaker = 10;
-            while (result is not null && result.IsCorner(dir))
+            while (breaker > 0)
             {
                 breaker--;
-                if (breaker < 1) { break; }
                 result = GetRandomAlongPath(out dir);
+
+                if(result is not null && !result.IsCorner(dir)) { return result; }
+
+                if (breaker < 1) { break; }
             }
-            return result;
+            return null;
         }
 
         /// <summary>

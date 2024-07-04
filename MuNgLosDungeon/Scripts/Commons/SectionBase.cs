@@ -139,7 +139,25 @@ namespace Munglo.DungeonGenerator
                 map.SavePiece(piece);
             }
         }
-
+        /// <summary>
+        /// Puts wall,floor and ceiling keys against other sections
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SealSection()
+        {
+            foreach (MapPiece piece in pieces)
+            {
+                // Floor
+                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.DOWN)) { piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 }; }
+                // Ceiling
+                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.UP)) { piece.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = orientation, variantID = 0 }; }
+                // Walls
+                for (int i = 1; i < 5; i++)
+                {
+                    if (!Pieces.Exists(p => p.Coord == piece.Coord + (MAPDIRECTION)i)) { piece.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = (MAPDIRECTION)i, variantID = 0 }, true); }
+                }
+            }
+        }
         public List<MapPiece> GetWallPieces(int floor, bool includeCorners = false)
         {
             // Confirmed

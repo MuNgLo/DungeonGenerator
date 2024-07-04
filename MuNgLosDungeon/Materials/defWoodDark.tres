@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://pi0173p1yc5o"]
+
+[ext_resource type="Texture2D" uid="uid://dn21mycjc0sj1" path="res://addons/MuNgLosDungeon/Materials/Textures/defWood.png" id="1_xcwun"]
+
+[resource]
+albedo_color = Color(0.407843, 0.407843, 0.407843, 1)
+albedo_texture = ExtResource("1_xcwun")
+roughness = 0.9
+roughness_texture = ExtResource("1_xcwun")
+uv1_triplanar = true
+uv1_world_triplanar = true

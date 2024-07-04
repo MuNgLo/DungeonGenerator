@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://de5ghw20v43ys"
-path="res://.godot/imported/DefaultMeshes.blend-477db741c988ace15fba185cfdfdb8b8.scn"
+path="res://.godot/imported/DefaultMeshes.blend-4f04d97e06cc67e38989b6c70cf446bc.scn"
 
 [deps]
 
-source_file="res://addons/MuNgLosDungeon/DefaultMeshes.blend"
-dest_files=["res://.godot/imported/DefaultMeshes.blend-477db741c988ace15fba185cfdfdb8b8.scn"]
+source_file="res://addons/MuNgLosDungeon/BlendFiles/DefaultMeshes.blend"
+dest_files=["res://.godot/imported/DefaultMeshes.blend-4f04d97e06cc67e38989b6c70cf446bc.scn"]
 
 [params]
 

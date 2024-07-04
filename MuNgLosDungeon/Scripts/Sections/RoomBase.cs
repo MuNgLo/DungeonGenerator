@@ -50,7 +50,11 @@ namespace Munglo.DungeonGenerator
                     break;
                 }
             }
-            
+
+
+            SealSection();
+
+
             if (roomDef.firstPieceDoor)
             {
                 pieces.First().AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(pieces.First().Orientation) }, true);
@@ -117,6 +121,8 @@ namespace Munglo.DungeonGenerator
             
 
         }
+  
+
         private void ProcessPiece(MapPiece rp)
         {
             if (rp.State != MAPPIECESTATE.PENDING)
@@ -136,10 +142,18 @@ namespace Munglo.DungeonGenerator
                     if ((nb.Coord.x >= minX && nb.Coord.x <= maxX
                         && nb.Coord.y >= MinY && nb.Coord.y < MaxY
                         && nb.Coord.z >= minZ && nb.Coord.z <= maxZ)
-                        ||
-                        (pieces.Exists(p=>p.Coord == nb.Coord + MAPDIRECTION.DOWN) && nb.Coord.y < MaxY)
                         )
                     {
+                        // Not bottomfloor so have to have same sectionindex underneath
+                        if(nb.Coord.y > MinY && !pieces.Exists(p => p.Coord == nb.Coord + MAPDIRECTION.DOWN))
+                        {
+                            // blocked by piece no part of room so wall it
+                            //rp.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = processingDirection }, false);
+                            rp.State = MAPPIECESTATE.LOCKED;
+                            map.SavePiece(rp);
+                            return;
+                        }
+
                         // Expand room to tile if within limits
                         nb.State = MAPPIECESTATE.PENDING;
                         nb.SectionIndex = sectionIndex;
@@ -147,7 +161,7 @@ namespace Munglo.DungeonGenerator
 
                         if (nb.sectionfloor == 0 || (roomDef.allFloor && !nb.hasFloor && nb.sectionfloor < sizeY - 1))
                         {
-                            nb.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 };
+                            //nb.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 };
                         }
 
                         pieces.Add(nb);
@@ -157,10 +171,10 @@ namespace Munglo.DungeonGenerator
                     {
                         if(rp.Coord + MAPDIRECTION.UP == nb.Coord)
                         {
-                            rp.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = processingDirection };
+                            //rp.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = processingDirection };
                         }
                         // cant expand so set wall
-                        rp.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = processingDirection }, false);
+                        //rp.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = processingDirection }, false);
                     }
                 }
                 else
@@ -168,7 +182,7 @@ namespace Munglo.DungeonGenerator
                     if (!pieces.Exists(p => p.Coord == nb.Coord))
                     {
                         // blocked by piece no part of room so wall it
-                        rp.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = processingDirection }, false);
+                        //rp.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = processingDirection }, false);
                     }
                 }
             }

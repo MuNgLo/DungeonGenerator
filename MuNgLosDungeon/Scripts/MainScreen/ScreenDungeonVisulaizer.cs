@@ -29,12 +29,9 @@ namespace Munglo.DungeonGenerator
 
         public void BuildDungeon(GenerationSettingsResource settings, BiomeDefinition biome)
         {
-            genSettings = settings;
-            RoomResource startRoom = ResourceLoader.Load(MasterConfig.defaultStartRoom) as RoomResource;
-            RoomResource standardRoom = ResourceLoader.Load(MasterConfig.defaultStandardRoom) as RoomResource;
-            BuildData(biome, () => { ShowMap(null, null); }, startRoom, standardRoom);
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 0) + "%");
-
+            genSettings = settings;
+            BuildData(biome, () => { ShowMap(null, null); }, settings.roomStart, settings.roomDefault);
         }
         private async void BuildData(BiomeDefinition biome, Action callback, RoomResource startRoom, RoomResource standardRoom)
         {
@@ -51,23 +48,15 @@ namespace Munglo.DungeonGenerator
         public async void ShowMap(object sender, EventArgs e)
         {
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 10) + "%");
-
-
             cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
             mapContainer = FindChild("Generated") as Node3D;
             unsortedContainer = new Node3D();
             unsortedContainer.Name = "UnSorted";
             mapContainer.AddChild(unsortedContainer, true);
-            //if (Engine.IsEditorHint())
-            //{
-            //    MoveToEditedScene(unsortedContainer);
-            //}
             await VisualizeRooms();
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 50) + "%");
-
             await VisualizePaths();
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 100) + "%");
-
             //if (autoBuildNavMesh) { BuildNavMesh(); }
         }
 
@@ -106,8 +95,9 @@ namespace Munglo.DungeonGenerator
         }
         private async Task VisualizePaths()
         {
-            foreach (ISection path in map.Paths)
+            foreach (ISection path in map.Sections)
             {
+                if(path is not Path) { continue; }
                 await VisualizePath(path as Path);
             }
         }
@@ -115,41 +105,29 @@ namespace Munglo.DungeonGenerator
         private async Task VisualizePath(Path path)
         {
             if (path == null) { return; }
-            int count = 0;
-
             Node3D pathNode = new Node3D();
             propContainer = new Node3D();
             tileContainer = new Node3D();
-            pathNode.Name = path.SectionStyle == string.Empty ? "Connector" : path.SectionStyle + "-" + string.Format("000", path.SectionIndex);
+            pathNode.Name = path.SectionStyle == string.Empty ? "Connector" : path.SectionStyle + "-" + string.Format("{0:000}", path.SectionIndex);
             propContainer.Name = $"Props[{path.PropCount}]";
             tileContainer.Name = $"Tiles[{path.TileCount}]";
             mapContainer.AddChild(pathNode, true);
             pathNode.AddChild(propContainer, true);
             pathNode.AddChild(tileContainer, true);
-            // If in editor we add to active scene
-            //if (Engine.IsEditorHint())
-            //{
-            //    MoveToEditedScene(pathNode);
-            //    MoveToEditedScene(propContainer);
-            //    MoveToEditedScene(tileContainer);
-            //}
-
             // Tiles
+            int index = 0;
             foreach (MapPiece rp in path.Pieces)
             {
                 MapPiece piece = map.GetPiece(rp.Coord);
                 if (BuildVisualNode(biome, piece, out Node3D visualNode, propContainer, true))
                 {
+                    visualNode.Name = $"Path{string.Format("0:000", path.SectionIndex)}-{index}";
                     tileContainer.AddChild(visualNode, true);
                     visualNode.Position = Dungeon.GlobalPosition(piece);
                     visualNode.Show();
                     AddDebugVisuals(piece);
-                    //if (Engine.IsEditorHint())
-                    //{
-                    //    MoveToEditedScene(visualNode);
-                    //}
-                    count++;
-                    if (count % 250 == 0)
+                    index++;
+                    if (index % 250 == 0)
                     {
                         await ToSignal(GetTree(), "process_frame");
                     }
@@ -183,26 +161,26 @@ namespace Munglo.DungeonGenerator
 
         private async Task VisualizeRooms()
         {
-            foreach (RoomBase room in map.Sections)
+            foreach (ISection room in map.Sections)
             {
+                if(room is not RoomBase) { continue; }
                 await VisualizeRoom(room);
             }
         }
-        private async Task VisualizeRoom(RoomBase room)
+        private async Task VisualizeRoom(ISection room)
         {
             if (room == null) { return; }
+            if (room is not RoomBase) { return; }
             int count = 0;
-
             Node3D roomNode = new Node3D();
             propContainer = new Node3D();
             tileContainer = new Node3D();
-            roomNode.Name = room.SectionStyle + "-" + string.Format("000", room.SectionIndex);
+            roomNode.Name = room.SectionStyle + "-" + string.Format("{0:000}", room.SectionIndex);
             propContainer.Name = $"Props[{room.PropCount}]";
             tileContainer.Name = $"Tiles[{room.Pieces.Count}]";
             mapContainer.AddChild(roomNode, true);
             roomNode.AddChild(propContainer, true);
             roomNode.AddChild(tileContainer, true);
-
             // Room Tiles
             foreach (MapPiece rp in room.Pieces)
             {
@@ -221,7 +199,6 @@ namespace Munglo.DungeonGenerator
                     }
                 }
             }
-
             // Room Prop
             foreach (MapCoordinate c in room.PropGrids.Keys)
             {
@@ -235,7 +212,6 @@ namespace Munglo.DungeonGenerator
                     }
                 }
             }
-
         }
         internal void SpawnRoomProp(BiomeDefinition biome, MapCoordinate coord, RoomProp propData, bool makeCollider = true)
         {
@@ -266,7 +242,7 @@ namespace Munglo.DungeonGenerator
             if (genSettings.showFloors)
             {
                 if (piece.keyFloor.key != PIECEKEYS.NONE && piece.keyFloor.key != PIECEKEYS.OCCUPIED &&
-                    GetByKey(piece.keyFloor, biome, out Node3D floor, makeCollider)) { visualNode.AddChild(floor); };
+                    GetByKey(piece.keyFloor, biome, out Node3D floor, makeCollider)) { visualNode.AddChild(floor, true); };
             }
             // generate walls
             if (genSettings.showWalls)
@@ -275,28 +251,28 @@ namespace Munglo.DungeonGenerator
                 {
                     if (GetByKey(piece.WallKeyNorth, biome, out Node3D wall, makeCollider))
                     {
-                        visualNode.AddChild(wall);
+                        visualNode.AddChild(wall, true);
                     };
                 }
                 if (piece.Walls.HasFlag(WALLS.E))
                 {
                     if (GetByKey(piece.WallKeyEast, biome, out Node3D wall, makeCollider))
                     {
-                        visualNode.AddChild(wall);
+                        visualNode.AddChild(wall, true);
                     };
                 }
                 if (piece.Walls.HasFlag(WALLS.S))
                 {
                     if (GetByKey(piece.WallKeySouth, biome, out Node3D wall, makeCollider))
                     {
-                        visualNode.AddChild(wall);
+                        visualNode.AddChild(wall, true);
                     };
                 }
                 if (piece.Walls.HasFlag(WALLS.W))
                 {
                     if (GetByKey(piece.WallKeyWest, biome, out Node3D wall, makeCollider))
                     {
-                        visualNode.AddChild(wall);
+                        visualNode.AddChild(wall, true);
                     };
                 }
 
@@ -305,25 +281,25 @@ namespace Munglo.DungeonGenerator
                 // Not flagged as wall but check for rounded corner keys
                 if (piece.WallKeyNorth.key == PIECEKEYS.WCI)
                 {
-                    if (GetByKey(piece.WallKeyNorth, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall); };
+                    if (GetByKey(piece.WallKeyNorth, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall, true); };
                 }
                 if (piece.WallKeyEast.key == PIECEKEYS.WCI)
                 {
-                    if (GetByKey(piece.WallKeyEast, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall); };
+                    if (GetByKey(piece.WallKeyEast, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall, true); };
                 }
                 if (piece.WallKeySouth.key == PIECEKEYS.WCI)
                 {
-                    if (GetByKey(piece.WallKeySouth, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall); };
+                    if (GetByKey(piece.WallKeySouth, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall, true); };
                 }
                 if (piece.WallKeyWest.key == PIECEKEYS.WCI)
                 {
-                    if (GetByKey(piece.WallKeyWest, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall); };
+                    if (GetByKey(piece.WallKeyWest, biome, out Node3D wall, makeCollider)) { visualNode.AddChild(wall, true); };
                 }
             }
             // generate ceiling
             if (genSettings.showCeilings)
             {
-                if (piece.keyCeiling.key != PIECEKEYS.NONE && GetByKey(piece.keyCeiling, biome, out Node3D ceiling, makeCollider)) { visualNode.AddChild(ceiling); };
+                if (piece.keyCeiling.key != PIECEKEYS.NONE && GetByKey(piece.keyCeiling, biome, out Node3D ceiling, makeCollider)) { visualNode.AddChild(ceiling, true); };
             }
 
             // generate props

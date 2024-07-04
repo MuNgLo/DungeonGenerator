@@ -9,4 +9,4 @@ script = ExtResource("1_aoufu")
 showDebugLayer = false
 settings = ExtResource("3_051hi")
 biome = ExtResource("1_3lwkv")
-useRandomSeed = true
+useRandomSeed = false

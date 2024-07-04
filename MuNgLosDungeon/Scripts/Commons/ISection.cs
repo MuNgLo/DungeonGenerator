@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,6 +54,8 @@ namespace Munglo.DungeonGenerator
         /// <param name="pData"></param>
         public void AddProp(MapCoordinate coord, RoomProp pData);
         public bool AddPropOnRandomTile(KeyData keyData, out MapPiece pick);
+
+        public Dictionary<MapCoordinate, Dictionary<Vector3I, RoomProp>> PropGrids { get; }
         public MapPiece GetRandomPiece();
         public MapPiece GetRandomFloor();
         public void PunchBackDoor();
@@ -65,6 +68,12 @@ namespace Munglo.DungeonGenerator
         public bool BridgeAllowed { get; }
         public bool DoorAllowed { get; }
         public List<MapPiece> GetWallPieces(int floor, bool includeCorners = false);
+
+
+        /// <summary>
+        /// Puts wall,floor and ceiling keys against other sections
+        /// </summary>
+        public void SealSection();
 
     }// EOF INTERFACE
 }

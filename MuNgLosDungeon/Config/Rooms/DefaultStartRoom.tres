@@ -5,13 +5,13 @@
 [resource]
 script = ExtResource("1_srpba")
 roomName = "StartRoom"
-roomStyle = ""
-sizeWidthMin = 5
-sizeWidthMax = 5
-sizeDepthMin = 5
-sizeDepthMax = 5
-nbFloorsMin = 6
-nbFloorsMax = 6
+roomStyle = "Heart"
+sizeWidthMin = 4
+sizeWidthMax = 4
+sizeDepthMin = 7
+sizeDepthMax = 7
+nbFloorsMin = 10
+nbFloorsMax = 10
 defaultResponses = 15
 centerSpiralStairs = false
 firstPieceDoor = false

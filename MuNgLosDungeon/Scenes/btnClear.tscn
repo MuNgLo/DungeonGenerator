@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://cbi6bgb6a7bbb"]
-
-[node name="Control" type="Button"]
-offset_right = 17.0
-offset_bottom = 31.0
-text = "Clear"

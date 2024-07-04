@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bcycdeopfis3q"
-path="res://.godot/imported/ModularStairs.blend-d99c631ddb0e17b3b66632ee0cdc8d36.scn"
+path="res://.godot/imported/ModularStairs.blend-e3090c7790bd3ce0291cd0964aec82d1.scn"
 
 [deps]
 
-source_file="res://addons/MuNgLosDungeon/ModularStairs.blend"
-dest_files=["res://.godot/imported/ModularStairs.blend-d99c631ddb0e17b3b66632ee0cdc8d36.scn"]
+source_file="res://addons/MuNgLosDungeon/BlendFiles/ModularStairs.blend"
+dest_files=["res://.godot/imported/ModularStairs.blend-e3090c7790bd3ce0291cd0964aec82d1.scn"]
 
 [params]
 
