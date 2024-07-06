@@ -4,17 +4,14 @@ namespace Munglo.DungeonGenerator
     [GlobalClass, Tool]
     public partial class GenerationSettingsResource : DungeonAddonResource
     {
-        [ExportGroup("Rooms")]
-        [Export] public RoomResource roomStart;
-        [Export] public RoomResource roomDefault;
-
-
         [ExportGroup("Show")]
         [Export] public bool showFloors = true;
         [Export] public bool showWalls = true;
         [Export] public bool showCeilings = true;
         [Export] public bool showProps = true;
         [Export] public bool showDebug = true;
+        [Export] public bool showArches = true;
+
 
         [ExportGroup("Passes")]
         [Export] public bool floorPass = true;
@@ -38,7 +35,8 @@ namespace Munglo.DungeonGenerator
 
         // Corridor things
         [ExportGroup("Corridors")]
-        [Export] public int corPerStair = 4;
+        [Export] public int chanceForWideCorridor = 70;
+        [Export] public int corPerFloor = 4;
         [Export] public int corMaxTotal = 20;
         [Export] public int corMaxStraight = 5; // Each is 6m
         [Export] public int corMinStraight = 2;
@@ -46,6 +44,8 @@ namespace Munglo.DungeonGenerator
 
 
         [ExportGroup("Rooms")]
+        [Export] public RoomResource roomStart;
+        [Export] public RoomResource roomDefault;
         [Export] public int maxRoomsPerPath = 4;
 
         [ExportGroup("Water")]

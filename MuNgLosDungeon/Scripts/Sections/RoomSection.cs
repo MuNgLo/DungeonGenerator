@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace Munglo.DungeonGenerator
 {
-    public class RoomBase : SectionBase
+    public class RoomSection : SectionBase
     {
         private RoomResource roomDef;
         private protected bool centerSpiralStairs;
 
-        internal RoomBase(MapData mapData, MapCoordinate startLoc, MAPDIRECTION dir, RoomResource roomDef, int index, ulong[] seed) : base(seed, index, roomDef.roomStyle, roomDef.roomName, mapData)
+        internal RoomSection(MapData mapData, MapCoordinate startLoc, MAPDIRECTION dir, RoomResource roomDef, int index, ulong[] seed) : base(seed, index, roomDef.roomStyle, roomDef.roomName, mapData)
         {
             this.roomDef = roomDef;
             coord = startLoc;

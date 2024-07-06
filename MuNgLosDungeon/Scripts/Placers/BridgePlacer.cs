@@ -1,18 +1,22 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Munglo.DungeonGenerator
 {
     public class BridgePlacer
     {
         private MapData map;
+        private AddonSettings MasterConfig;
 
         public BridgePlacer(MapData mapData)
         {
             this.map = mapData;
+            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettings;
         }
 
         public void Place()
@@ -23,6 +27,8 @@ namespace Munglo.DungeonGenerator
                 {
                     foreach (int Z in map.Pieces[X][Y].Keys)
                     {
+                        if (map.Pieces[X][Y][Z].Coord.y < MasterConfig.visibleFloorStart || map.Pieces[X][Y][Z].Coord.y > MasterConfig.visibleFloorEnd - 1) { continue; }
+
                         FitBridge(map.Pieces[X][Y][Z]);
                     }
                 }

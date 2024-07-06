@@ -8,7 +8,7 @@ namespace Munglo.DungeonGenerator
     /// Instance this to create a staircase drop from given startpiece.
     /// It checks for possabilty in construction but doesnäät add the keys until the Build() is called
     /// </summary>
-    internal class StairCase
+    internal class StairPlacer
     {
         private readonly SectionBase room;
         private readonly MapPiece parentPiece; // the one we treey to build a staircase to
@@ -29,7 +29,7 @@ namespace Munglo.DungeonGenerator
         /// Starting with neighbour in its direction. then attemps the other directions.
         /// It checks for possabilty in construction but doesn't add the keys until the Build() is called
         /// </summary>
-        internal StairCase(SectionBase section, MapPiece parentPiece, MAPDIRECTION dir)
+        internal StairPlacer(SectionBase section, MapPiece parentPiece, MAPDIRECTION dir)
         {
             this.room = section;
             this.parentPiece = parentPiece;

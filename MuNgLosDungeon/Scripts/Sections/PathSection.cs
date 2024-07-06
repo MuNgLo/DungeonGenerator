@@ -5,23 +5,59 @@ using System.Collections.Generic;
 
 namespace Munglo.DungeonGenerator
 {
-    internal class Path : SectionBase
+    internal class PathSection : SectionBase
     {
         new public int PropCount => TotalPropCount(); // New needed?
-
         private int width = 1;
-
         new public int TileCount => AllPieces().Count; // Does need the new
         new public List<MapPiece> Pieces => AllPieces(); // Does need the new
-
-
-
         private Line[] lines;
         private Line LeftSide => lines[0];
         private Line RightSide => lines[lines.Length - 1];
         private bool isFinished = false;
         internal bool IsValid = false;
         internal int Floor => LeftSide.Floor;
+
+        internal PathSection(MapData mapData, MapPiece step, int sectionID, int width, ulong[] seed, int maxTotal, int maxS, int minS)
+       : base(seed, sectionID, "Corridor", "Corridor", mapData)
+        {
+            orientation = step.Orientation;
+            coord = step.Coord;
+
+            this.width = width;
+            VerifyWidth(step);
+            if (this.width < 1) { return; }
+            SetupLines(step);
+            int breaker = 100;
+            int turntimer = rng.Next(minS, maxS);
+            while (!isFinished)
+            {
+                turntimer--;
+                if (turntimer < 1 && lines[0].Last.isBridge == false) { RollTurn(); turntimer = rng.Next(minS, maxS); }
+                AddStep(maxTotal);
+                if (PathBlocked()) { TrimLines(); isFinished = true; }
+                breaker--;
+                if (breaker < 0)
+                {
+                    isFinished = true;
+                    DungeonGenerator.Log("Path", "CONSTRUCTOR", "Addstep loop hit BREAKER!");
+                }
+                if (LeftSide.Count >= maxTotal) { isFinished = true; }
+            }
+
+            // To short so we fail it
+            if (TileCount < 1)
+            {
+                IsValid = false;
+                return;
+            }
+
+            AddKeys();
+            BuildStartConnection();
+            BuildEndCap();
+            IsValid = true;
+        }
+
 
         public override int TotalPropCount()
         {
@@ -50,47 +86,7 @@ namespace Munglo.DungeonGenerator
             return a;
         }
 
-        internal Path(MapData mapData, MapPiece step, int width, ulong[] seed, int maxTotal, int maxS, int minS) 
-            : base(seed, -1, "Corridor", "Corridor", mapData)
-        {
-            orientation = step.Orientation;
-            coord = step.Coord;
-
-
-
-            this.width = width;
-            VerifyWidth(step);
-            if (this.width < 1) { return; }
-            SetupLines(step);
-            int breaker = 100;
-            int turntimer = rng.Next(minS, maxS);
-            while (!isFinished)
-            {
-                turntimer--;
-                if (turntimer < 1 && lines[0].Last.isBridge == false) { RollTurn(); turntimer = rng.Next(minS, maxS); }
-                AddStep(maxTotal);
-                if (PathBlocked()) { TrimLines(); isFinished = true; }
-                breaker--;
-                if(breaker < 0)
-                {
-                    isFinished = true;
-                    DungeonGenerator.Log("Path", "CONSTRUCTOR", "Addstep loop hit BREAKER!");
-                }
-                if(LeftSide.Count >= maxTotal) {  isFinished= true; }
-            }
-
-            // To short so we fail it
-            if(TileCount < 1)
-            {
-                IsValid = false;
-                return;
-            }
-
-            AddKeys();
-            BuildStartConnection();
-            BuildEndCap();
-            IsValid= true;
-        }
+   
 
         private void TrimLines()
         {

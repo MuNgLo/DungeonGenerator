@@ -43,7 +43,7 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         /// <param name="settings"></param>
         /// <param name="biome"></param>
-        public void GenerateDungeon(GenerationSettingsResource settings, BiomeDefinition biome)
+        public void GenerateDungeon(GenerationSettingsResource settings, BiomeResource biome)
         {
             addon.ChangeMainScreenToDungeon();
             dunVis.BuildDungeon(settings, biome);

@@ -13,30 +13,25 @@ namespace Munglo.DungeonGenerator
     /// </summary>
     public class MapData
     {
-        #region TODO move this to settings
-        private int chanceForWideCorridor = 70;
-        private bool addArches = true;
-        #endregion
-
-
         private Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> pieces;
-        private PRNGMarsenneTwister rng;
         private GenerationSettingsResource mapArgs;
-        private RoomResource startRoom;
-        private RoomResource standardRoom;
+        internal RoomResource startRoom;
+        internal RoomResource standardRoom;
         private List<ISection> sections;
+        private PRNGMarsenneTwister rng;
 
         public List<ISection> Sections => sections;
+        public GenerationSettingsResource MapArgs => mapArgs;
+
         internal Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> Pieces => pieces;
         internal int nbOfPieces => pieces.Values.SelectMany(p => p.Values).Distinct().SelectMany(p => p.Values).Distinct().Count(); // Würkz
-        internal MapData(GenerationSettingsResource p, RoomResource startRoom, RoomResource standardRoom)
+        internal MapData(GenerationSettingsResource args, RoomResource startRoom, RoomResource standardRoom)
         {
-            mapArgs = p;
+            sections = new List<ISection>();
+            pieces = new Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>>();
+            mapArgs = args;
             this.startRoom = startRoom;
             this.standardRoom = standardRoom;
-            pieces = new Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>>();
-            sections = new List<ISection>();
-            rng = new PRNGMarsenneTwister(p.Seed);
         }
         /// <summary>
         /// This generates the data that describes the layout of the dungeon
@@ -47,272 +42,12 @@ namespace Munglo.DungeonGenerator
         internal async Task GenerateMap(Action callback)
         {
             GD.Print("MapData::GenerateMap() Generation started.....");
-            // Build Start StairCase Room
-            ulong[] roomSeed = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
-            RoomBase centerRoom = new RoomBase(this, MapCoordinate.Zero, MAPDIRECTION.NORTH, startRoom, sections.Count, roomSeed);
-            centerRoom.Build();
-            centerRoom.Save();
-            sections.Add(centerRoom);
-            await Task.Delay(100);
-            GD.Print("MapData::GenerateMap() Heart Done.");
-
-            // Do generation per floor
-            for (int floor = 0; floor < mapArgs.nbOfFloors; floor++)
-            {
-                GD.Print($"MapData::GenerateMap() Generating floor[{floor}].");
-
-                // Build corridors out from the Startroom
-                if (mapArgs.corridorPass && mapArgs.corPerStair > 0)
-                {
-                    List<MapPiece> candidates = centerRoom.GetWallPieces(floor);
-                    if (candidates.Count < 1) { continue; }
-                    int spread = candidates.Count / Math.Min(candidates.Count, mapArgs.corPerStair);
-                    GD.Print($"MapData::GenerateMap() Build corridors out from the Startroom candidates.Count[{candidates.Count}]. spread[{spread}]");
-
-                    for (int i = 1; i < mapArgs.corPerStair + 1; i ++)
-                    {
-                        int index = rng.Next(spread*(i-1), spread * i);
-
-                        GD.Print($"MapData::GenerateMap() Adding Corridor.. index[{index}]");
-                        if(index >= candidates.Count) { break; }
-
-                        MapPiece startLocation = GetPiece(candidates[index].Coord + candidates[index].OutsideWallDirection());
-                        AddCorridor(startLocation, candidates[index].OutsideWallDirection(), rng.Next(100) < chanceForWideCorridor ? 2 : 1);
-
-                        // add branches
-                        if (sections.Last() is Path)
-                        {
-                            Path pData = sections.Last() as Path;
-                            for (int b = 0; b < mapArgs.maxBranches; b++)
-                            {
-                                MapPiece branchPoint = pData.GetRandomAlongPathNoCorner(out MAPDIRECTION dir);
-                                if (branchPoint is not null)
-                                {
-                                    AddCorridor(branchPoint, dir, rng.Next(100) < 70 ? 1 : 2);
-                                }
-                            }
-                        }
-                    }
-                }
-                GD.Print($"MapData::GenerateMap() Generating Rooms for floor[{floor}].");
-                BuildRooms();
-                await Task.Delay(100);
-            }// EOF GenerateMap()
-
-            FitSmallArches();
-            // Start Fitting every piece and add debug
-            foreach (int X in pieces.Keys)
-            {
-                foreach (int Y in pieces[X].Keys)
-                {
-                    foreach (int Z in pieces[X][Y].Keys)
-                    {
-                        if (mapArgs.wallPass) { FitRoundedCorners(pieces[X][Y][Z]); }
-                        //FitLocation(pieces[X][Y][Z]);
-                        if (mapArgs.debugPass) { AddDebugKeys(pieces[X][Y][Z]); }
-                    }
-                }
-            }
-
-            LatePassBridges();
-
-            LatePassRooms();
-
-            RemoveAllEmpty();
-            await Task.Delay(100);
-            //ProcGenMKIII.Log("MapData", "GenerateMap", $"NB of Piece[{nbOfPieces}] Unused[{GetPieces(MAPPIECESTATE.UNUSED).Count}] Pending[{GetPieces(MAPPIECESTATE.PENDING).Count}] Locked[{GetPieces(MAPPIECESTATE.LOCKED).Count}]");
+            rng = new PRNGMarsenneTwister(MapArgs.Seed);
+            MapBuilder builder = new MapBuilder(this);
+            await builder.BuildMapData();
             callback.Invoke();
         }
-        /// <summary>
-        /// Instances a BridgePlacer and 
-        /// </summary>
-        private void LatePassBridges()
-        {
-            BridgePlacer bridgeMaker = new BridgePlacer(this);
-            bridgeMaker.Place();
-        }
-
-
-        private void BuildRooms()
-        {
-            // Build Rooms attached to paths
-            if (mapArgs.roomPass)
-            {
-                for (int i = 0; i < sections.Count; i++)
-                {
-                    for (int inx = 0; inx < mapArgs.maxRoomsPerPath; inx++)
-                    {
-                        if(sections[i] is not Path) { continue; }
-                        MapPiece piece = (sections[i] as Path).GetRandomAlongPath(out MAPDIRECTION dir);
-                        if (piece != null && piece.State == MAPPIECESTATE.UNUSED)
-                        {
-                            piece.Orientation = dir;
-                            BuildRoom(piece);
-                        }
-                    }
-                }
-            }
-        }
-        private void BuildRoom(MapPiece piece)
-        {
-            ulong[] roomSeed = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
-            RoomBase room = new RoomBase(this, piece.Coord, piece.Orientation, standardRoom, sections.Count, roomSeed);
-            room.Build();
-            sections.Add(room);
-        }
-        
-        private void LatePassRooms()
-        {
-            // Props pass of rooms
-            foreach (ISection room in sections)
-            {
-                if (room is not RoomBase) { continue; }
-                room.PunchBackDoor();
-                room.BuildProps();
-            }
-        }
-
-        private void AddDebugKeys(MapPiece piece)
-        {
-            piece.AddDebug(new KeyData() { key = PIECEKEYS.DEBUG, dir = piece.Orientation });
-
-            if (piece.HasNorthWall) { piece.AddDebug(new KeyData() { key = PIECEKEYS.WFRED, dir = MAPDIRECTION.NORTH }); }
-            if (piece.HasEastWall) { piece.AddDebug(new KeyData() { key = PIECEKEYS.WFRED, dir = MAPDIRECTION.EAST }); }
-            if (piece.HasSouthWall) { piece.AddDebug(new KeyData() { key = PIECEKEYS.WFRED, dir = MAPDIRECTION.SOUTH }); }
-            if (piece.HasWestWall) { piece.AddDebug(new KeyData() { key = PIECEKEYS.WFRED, dir = MAPDIRECTION.WEST }); }
-        }
-
-        private void FitRoundedCorners(MapPiece piece)
-        {
-            MapPiece adjacentN = GetExistingPiece(piece.Coord.StepNorth); // These need to NOT create new piecess
-            MapPiece adjacentE = GetExistingPiece(piece.Coord.StepEast);
-            MapPiece adjacentS = GetExistingPiece(piece.Coord.StepSouth);
-            MapPiece adjacentW = GetExistingPiece(piece.Coord.StepWest);
-            bool NE = false, SE = false, SW = false, NW = false;
-            //check inner corners
-            if (!piece.HasNorthWall && !piece.HasEastWall) // seems fine
-            {
-                if (adjacentN is not null && adjacentE is not null)
-                {
-                    if (!adjacentN.HasSouthWall && !adjacentE.HasWestWall)
-                    {
-                        if (adjacentN.HasEastWall && adjacentE.HasNorthWall)
-                        {
-                            NE =true;
-                        }
-                    }
-                }
-            }
-            if (!piece.HasSouthWall && !piece.HasEastWall)
-            {
-                if (adjacentE is not null && adjacentS is not null)
-                {
-                    if (!adjacentS.HasNorthWall && !adjacentE.HasWestWall)
-                    {
-                        if (adjacentS.HasEastWall && adjacentE.HasSouthWall)
-                        {
-                            SE = true;
-
-                        
-                        }
-                    }
-                }
-            }
-            if (!piece.HasSouthWall && !piece.HasWestWall)
-            {
-                if (adjacentS is not null && adjacentW is not null)
-                {
-                    if (!adjacentS.HasNorthWall && !adjacentW.HasEastWall)
-                    {
-                        if (adjacentS.HasWestWall && adjacentW.HasSouthWall)
-                        {
-                            SW = true;
-                        }
-                    }
-                }
-            }
-            if (!piece.HasNorthWall && !piece.HasWestWall)
-            {
-                if (adjacentN is not null && adjacentW is not null)
-                {
-                    if (!adjacentN.HasSouthWall && !adjacentW.HasEastWall)
-                    {
-                        NW = true;
-                 
-                    }
-                }
-            }
-
-            // add the keys
-            if (NE)
-            {
-                piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.NORTH }, true);
-                if (piece.hasCieling && addArches)
-                {
-                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.NORTH });
-                }
-            }
-            if (SE)
-            {
-                piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.EAST }, true);
-                if (piece.hasCieling && addArches)
-                {
-                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.EAST });
-                }
-            }
-            if (SW)
-            {
-                piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.SOUTH }, true);
-                if (piece.hasCieling && addArches)
-                {
-                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.SOUTH });
-                }
-            }
-            if (NW)
-            {
-                if (adjacentN.HasWestWall && adjacentW.HasNorthWall)
-                {
-                    piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.WEST }, true);
-                    if (piece.hasCieling && addArches)
-                    {
-                        piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.WEST });
-                    }
-                }
-            }
-        }
-        private void FitSmallArches()
-        {
-            if (!addArches) { return; }
-            foreach (int X in pieces.Keys)
-            {
-                foreach (int Y in pieces[X].Keys)
-                {
-                    foreach (int Z in pieces[X][Y].Keys)
-                    {
-                        if (mapArgs.propPass) { FitSmallArch(pieces[X][Y][Z]); }
-                    }
-                }
-            }
-        }
-        private void FitSmallArch(MapPiece piece)
-        {
-            if (!piece.hasCieling) { return; }
-            // add small arches
-            if (piece.HasNorthWall) { piece.AddProp(new KeyData() { key = PIECEKEYS.AS, dir = MAPDIRECTION.NORTH }); }
-            if (piece.HasEastWall) { piece.AddProp(new KeyData() { key = PIECEKEYS.AS, dir = MAPDIRECTION.EAST }); }
-            if (piece.HasSouthWall) { piece.AddProp(new KeyData() { key = PIECEKEYS.AS, dir = MAPDIRECTION.SOUTH }); }
-            if (piece.HasWestWall) { piece.AddProp(new KeyData() { key = PIECEKEYS.AS, dir = MAPDIRECTION.WEST }); }
-        } 
-   
-
-        private void AddCorridor(MapPiece startpoint, MAPDIRECTION dir, int size, bool canBranch = true)
-        {
-            // make the seed to usefor the path
-            ulong[] bosse = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
-            startpoint.Orientation = dir;
-            Path path = new Path(this, startpoint, size, bosse, mapArgs.corMaxTotal, mapArgs.corMaxStraight, mapArgs.corMinStraight);
-            if (path.IsValid) { sections.Add(path); }
-        }
+      
 
         internal void SavePiece(MapPiece piece)
         {
@@ -414,7 +149,7 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         /// <param name="coord"></param>
         /// <returns></returns>
-        private MapPiece GetExistingPiece(MapCoordinate coord)
+        internal MapPiece GetExistingPiece(MapCoordinate coord)
         {
             if (pieces.ContainsKey(coord.x))
             {
@@ -516,31 +251,7 @@ namespace Munglo.DungeonGenerator
             }
             return startPiece;
         }
-        /// <summary>
-        /// Removes all pieces in mapdata that isEmpty
-        /// Run this as last step of the generation.
-        /// </summary>
-        private void RemoveAllEmpty()
-        {
-            List<MapCoordinate> toDelete = new List<MapCoordinate>();
-            foreach (int X in pieces.Keys)
-            {
-                foreach (int Y in pieces[X].Keys)
-                {
-                    foreach (int Z in pieces[X][Y].Keys)
-                    {
-                        if (pieces[X][Y][Z].isEmpty)
-                        {
-                            toDelete.Add(pieces[X][Y][Z].Coord);
-                        }
-                    }
-                }
-            }
-            foreach (MapCoordinate c in toDelete)
-            {
-                pieces[c.x][c.y].Remove(c.z);
-            }
-        }
+      
         #region Functional to manipulate mappieces
         /// <summary>
         /// Add WD between the pieces using piece1's orientation

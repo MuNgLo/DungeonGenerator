@@ -1,7 +1,11 @@
 using Godot;
 namespace Munglo.DungeonGenerator
 {
-    [GlobalClass, Tool]
+    /// <summary>
+    ///  Addon's internal settings for remembering picks and things
+    ///  Should never be instanced again
+    /// </summary>
+    [Tool]
     public partial class AddonSettings : DungeonAddonResource
     {
         [Export] public string lastUsedProfile = "res://addons/MuNgLosDungeon/Config/def_profile.tres";
@@ -10,5 +14,11 @@ namespace Munglo.DungeonGenerator
 
         public string defaultStartRoom = "res://addons/MuNgLosDungeon/Config/Rooms/DefaultStartRoom.tres";
         public string defaultStandardRoom = "res://addons/MuNgLosDungeon/Config/Rooms/DefaultStandardRoom.tres";
+
+        [ExportCategory("Visual Floors")]
+        [Export] public int visibleFloorStart = 0;
+        [Export] public int maxVisibleFloors = 5;
+        public int visibleFloorEnd => visibleFloorStart + maxVisibleFloors;
+
     }
 }

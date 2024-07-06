@@ -6,7 +6,7 @@ using System.Resources;
 namespace Munglo.DungeonGenerator
 {
     [GlobalClass, Tool]
-    public partial class BiomeDefinition : DungeonAddonResource
+    public partial class BiomeResource : DungeonAddonResource
     {
         [Export] public Vector3I size = Vector3I.One * 6;
         [ExportCategory("Debug")]
@@ -55,7 +55,7 @@ namespace Munglo.DungeonGenerator
         // Without a parameterless constructor, Godot will have problems
         // creating and editing your resource via the inspector.
         //public BiomeDefinition() : this(0, null, null) { }
-        public BiomeDefinition()
+        public BiomeResource()
         {
             //debug defaults
             PIECEKEYS[] defDebugKeys = new PIECEKEYS[]

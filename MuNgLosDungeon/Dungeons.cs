@@ -61,6 +61,7 @@ namespace Munglo.DungeonGenerator
             pop.SetItemChecked(2, Profile.settings.showCeilings);
             pop.SetItemChecked(3, Profile.settings.showProps);
             pop.SetItemChecked(4, Profile.settings.showDebug);
+            pop.SetItemChecked(5, Profile.settings.showArches);
             screen.SetDebugLayer(Profile.showDebugLayer);
         }
         public override void _ExitTree()
@@ -226,6 +227,10 @@ namespace Munglo.DungeonGenerator
                     break;
                 case 4:
                     Profile.settings.showDebug = pop.IsItemChecked(index);
+                    ResourceSaver.Save(Profile.settings);
+                    break;
+                case 5:
+                    Profile.settings.showArches = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
                     break;
                 default:

@@ -106,7 +106,7 @@ namespace Munglo.DungeonGenerator
                 nb.AssignWall(new KeyData() { key = PIECEKEYS.OCCUPIED, dir = dir }, overrideLocked);
                 if (!piece.hasFloor)
                 {
-                    StairCase stairCase = new StairCase(this, piece, dir);
+                    StairPlacer stairCase = new StairPlacer(this, piece, dir);
                     if (stairCase.isValid)
                     {
                         stairCase.Build();
@@ -119,7 +119,7 @@ namespace Munglo.DungeonGenerator
                 if (!piece.hasFloor)
                 {
 
-                    StairCase stairCase = new StairCase(this, piece, dir);
+                    StairPlacer stairCase = new StairPlacer(this, piece, dir);
                     if (stairCase.isValid)
                     {
                         stairCase.Build();

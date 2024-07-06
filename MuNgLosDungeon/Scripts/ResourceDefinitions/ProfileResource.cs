@@ -6,7 +6,7 @@ namespace Munglo.DungeonGenerator
     {
         [Export] public bool showDebugLayer = false;
         [Export] public GenerationSettingsResource settings;
-        [Export] public BiomeDefinition biome;
+        [Export] public BiomeResource biome;
         [Export] public bool useRandomSeed = true;
     }
 }

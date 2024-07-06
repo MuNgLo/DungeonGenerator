@@ -7,7 +7,7 @@ namespace Munglo.DungeonGenerator
     /// </summary>
     internal static class PropHelper
     {
-        internal static void InsertLayer(RoomBase room, MapPiece rp, PIECEKEYS propKey, int layer, MAPDIRECTION dir, int distance = 1)
+        internal static void InsertLayer(RoomSection room, MapPiece rp, PIECEKEYS propKey, int layer, MAPDIRECTION dir, int distance = 1)
         {
             for (int x = 0; x < 6; x++)
             {
@@ -26,7 +26,7 @@ namespace Munglo.DungeonGenerator
         }
 
 
-        internal static void InsertGallery(RoomBase room, MapPiece rp, int layer, MAPDIRECTION dir, int width = 1)
+        internal static void InsertGallery(RoomSection room, MapPiece rp, int layer, MAPDIRECTION dir, int width = 1)
         {
             // Gallery needs at least one wall so check that and error out
             if (!rp.HasNorthWall && !rp.HasEastWall && !rp.HasSouthWall && !rp.HasWestWall)

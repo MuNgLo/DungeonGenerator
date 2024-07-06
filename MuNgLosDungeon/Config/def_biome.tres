@@ -1,147 +1,147 @@
-[gd_resource type="Resource" script_class="BiomeDefinition" load_steps=57 format=3 uid="uid://cvmxd8vcplxu4"]
+[gd_resource type="Resource" script_class="BiomeResource" load_steps=57 format=3 uid="uid://bqsod5hnur3jw"]
 
-[ext_resource type="PackedScene" uid="uid://b0k5luvs28qyn" path="res://addons/MuNgLosDungeon/Scenes/def_ceiling.tscn" id="1_ayiah"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/BiomeEntry.cs" id="2_ijq7a"]
-[ext_resource type="ArrayMesh" uid="uid://4ukiwxvbdo6w" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_DebugMESH.res" id="3_boen2"]
-[ext_resource type="ArrayMesh" uid="uid://bvs0cv3bt8ys5" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ErrorMESH.res" id="4_iitb1"]
-[ext_resource type="ArrayMesh" uid="uid://c5lxvxmcsj0wg" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FaultyMESH.res" id="5_qflqm"]
-[ext_resource type="ArrayMesh" uid="uid://uhhjwvr4ucup" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagGreenMESH.res" id="6_8xak1"]
-[ext_resource type="ArrayMesh" uid="uid://jen6htq17bmr" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagRedMESH.res" id="7_6f1xv"]
-[ext_resource type="ArrayMesh" uid="uid://dip3qmewlum88" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_PathEndMESH.res" id="8_7bsag"]
-[ext_resource type="ArrayMesh" uid="uid://cxctrful7f36o" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_BridgeMESH.res" id="9_t646c"]
-[ext_resource type="ArrayMesh" uid="uid://dhnsne2ie12xf" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairMESH.res" id="10_8kmyt"]
-[ext_resource type="PackedScene" uid="uid://bo1vvej54i8o" path="res://addons/MuNgLosDungeon/Scenes/def_floor.tscn" id="11_s6cho"]
-[ext_resource type="PackedScene" uid="uid://bsedxwapwcs7g" path="res://addons/MuNgLosDungeon/Scenes/def_floor02.tscn" id="12_ymnr2"]
-[ext_resource type="PackedScene" uid="uid://bkoxwnfj3xk1g" path="res://addons/MuNgLosDungeon/Scenes/def_floor03.tscn" id="13_h264d"]
-[ext_resource type="PackedScene" uid="uid://b1jc4ww05tw32" path="res://addons/MuNgLosDungeon/Scenes/def_archsmall.tscn" id="14_kk5m3"]
-[ext_resource type="PackedScene" uid="uid://c47pckvep6emk" path="res://addons/MuNgLosDungeon/Scenes/def_archsmallcorner.tscn" id="15_1a6k8"]
-[ext_resource type="PackedScene" uid="uid://hn50bo75qswv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgesection.tscn" id="16_cc3m5"]
-[ext_resource type="PackedScene" uid="uid://be4pne6q3rspc" path="res://addons/MuNgLosDungeon/Scenes/def_bridgesection02.tscn" id="17_4wtpf"]
-[ext_resource type="PackedScene" uid="uid://byraj4hodkrp7" path="res://addons/MuNgLosDungeon/Scenes/def_bridgefoundation.tscn" id="18_drawq"]
-[ext_resource type="PackedScene" uid="uid://dedlv67rsc2kp" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail.tscn" id="19_o2yyd"]
-[ext_resource type="PackedScene" uid="uid://dxmsx0og05v3r" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn" id="20_3a3kj"]
-[ext_resource type="PackedScene" uid="uid://da4kispjxtxwv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgepost.tscn" id="21_5pa0c"]
-[ext_resource type="PackedScene" uid="uid://b2tla62s2g83v" path="res://addons/MuNgLosDungeon/Scenes/def_balcony.tscn" id="22_2qhls"]
-[ext_resource type="PackedScene" uid="uid://b1m03utkrnrus" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral01.tscn" id="23_75tp0"]
-[ext_resource type="PackedScene" uid="uid://klt0ly4ne60i" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral02.tscn" id="24_832pw"]
-[ext_resource type="PackedScene" uid="uid://c5811pgjgjs7c" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral03.tscn" id="25_ab7su"]
-[ext_resource type="PackedScene" uid="uid://dpliftngpsoho" path="res://addons/MuNgLosDungeon/Scenes/def_stairsplatform.tscn" id="26_iu6xc"]
-[ext_resource type="PackedScene" uid="uid://bch2kn6ntmb4u" path="res://addons/MuNgLosDungeon/Scenes/def_stairs01.tscn" id="27_ep153"]
-[ext_resource type="PackedScene" uid="uid://yqrnyyhsvjgi" path="res://addons/MuNgLosDungeon/Scenes/def_stairs02.tscn" id="28_75yje"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/BiomeDefinition.cs" id="29_cvtkg"]
-[ext_resource type="PackedScene" uid="uid://b8cjyfjwaqgea" path="res://addons/MuNgLosDungeon/Scenes/def_wall01.tscn" id="30_s4716"]
-[ext_resource type="PackedScene" uid="uid://bv6l13mlr0w6b" path="res://addons/MuNgLosDungeon/Scenes/def_wall02.tscn" id="31_i7iy7"]
-[ext_resource type="PackedScene" uid="uid://bel2njfu1ge0j" path="res://addons/MuNgLosDungeon/Scenes/def_wall03.tscn" id="32_cbr53"]
-[ext_resource type="PackedScene" uid="uid://c8jxalblikoj6" path="res://addons/MuNgLosDungeon/Scenes/def_walldooropening.tscn" id="33_dg5fn"]
-[ext_resource type="PackedScene" uid="uid://dp58p4c4wawlc" path="res://addons/MuNgLosDungeon/Scenes/def_walldooropening02.tscn" id="34_hqmsy"]
-[ext_resource type="PackedScene" uid="uid://be4l3oub5omjw" path="res://addons/MuNgLosDungeon/Scenes/def_walldoorwide.tscn" id="35_nqthp"]
-[ext_resource type="PackedScene" uid="uid://dyruxrgt241g7" path="res://addons/MuNgLosDungeon/Scenes/def_wallcornerinner.tscn" id="36_jnqmf"]
+[ext_resource type="PackedScene" uid="uid://b0k5luvs28qyn" path="res://addons/MuNgLosDungeon/Scenes/def_ceiling.tscn" id="1_rl26h"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/Commons/BiomeEntry.cs" id="2_r24ux"]
+[ext_resource type="ArrayMesh" uid="uid://4ukiwxvbdo6w" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_DebugMESH.res" id="3_ki5in"]
+[ext_resource type="ArrayMesh" uid="uid://bvs0cv3bt8ys5" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ErrorMESH.res" id="4_imb2o"]
+[ext_resource type="ArrayMesh" uid="uid://c5lxvxmcsj0wg" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FaultyMESH.res" id="5_kqqkp"]
+[ext_resource type="ArrayMesh" uid="uid://uhhjwvr4ucup" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagGreenMESH.res" id="6_8ak1v"]
+[ext_resource type="ArrayMesh" uid="uid://jen6htq17bmr" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagRedMESH.res" id="7_0fbwg"]
+[ext_resource type="ArrayMesh" uid="uid://dip3qmewlum88" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_PathEndMESH.res" id="8_p3cr6"]
+[ext_resource type="ArrayMesh" uid="uid://cxctrful7f36o" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_BridgeMESH.res" id="9_4uaww"]
+[ext_resource type="ArrayMesh" uid="uid://dhnsne2ie12xf" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairMESH.res" id="10_d663d"]
+[ext_resource type="PackedScene" uid="uid://bo1vvej54i8o" path="res://addons/MuNgLosDungeon/Scenes/def_floor.tscn" id="11_nuabd"]
+[ext_resource type="PackedScene" uid="uid://bsedxwapwcs7g" path="res://addons/MuNgLosDungeon/Scenes/def_floor02.tscn" id="12_0gwl2"]
+[ext_resource type="PackedScene" uid="uid://bkoxwnfj3xk1g" path="res://addons/MuNgLosDungeon/Scenes/def_floor03.tscn" id="13_l7mgl"]
+[ext_resource type="PackedScene" uid="uid://b1jc4ww05tw32" path="res://addons/MuNgLosDungeon/Scenes/def_archsmall.tscn" id="14_dpl6j"]
+[ext_resource type="PackedScene" uid="uid://c47pckvep6emk" path="res://addons/MuNgLosDungeon/Scenes/def_archsmallcorner.tscn" id="15_hqn7l"]
+[ext_resource type="PackedScene" uid="uid://hn50bo75qswv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgesection.tscn" id="16_7xgfo"]
+[ext_resource type="PackedScene" uid="uid://be4pne6q3rspc" path="res://addons/MuNgLosDungeon/Scenes/def_bridgesection02.tscn" id="17_lthqm"]
+[ext_resource type="PackedScene" uid="uid://byraj4hodkrp7" path="res://addons/MuNgLosDungeon/Scenes/def_bridgefoundation.tscn" id="18_lxehh"]
+[ext_resource type="PackedScene" uid="uid://dedlv67rsc2kp" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail.tscn" id="19_ys7ef"]
+[ext_resource type="PackedScene" uid="uid://dxmsx0og05v3r" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn" id="20_xryib"]
+[ext_resource type="PackedScene" uid="uid://da4kispjxtxwv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgepost.tscn" id="21_70h0k"]
+[ext_resource type="PackedScene" uid="uid://b2tla62s2g83v" path="res://addons/MuNgLosDungeon/Scenes/def_balcony.tscn" id="22_6olvy"]
+[ext_resource type="PackedScene" uid="uid://b1m03utkrnrus" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral01.tscn" id="23_xmmnj"]
+[ext_resource type="PackedScene" uid="uid://klt0ly4ne60i" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral02.tscn" id="24_airi8"]
+[ext_resource type="PackedScene" uid="uid://c5811pgjgjs7c" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral03.tscn" id="25_lv2ah"]
+[ext_resource type="PackedScene" uid="uid://dpliftngpsoho" path="res://addons/MuNgLosDungeon/Scenes/def_stairsplatform.tscn" id="26_ij1xl"]
+[ext_resource type="PackedScene" uid="uid://bch2kn6ntmb4u" path="res://addons/MuNgLosDungeon/Scenes/def_stairs01.tscn" id="27_vhtqm"]
+[ext_resource type="PackedScene" uid="uid://yqrnyyhsvjgi" path="res://addons/MuNgLosDungeon/Scenes/def_stairs02.tscn" id="28_00jhy"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/BiomeResource.cs" id="29_3hshx"]
+[ext_resource type="PackedScene" uid="uid://b8cjyfjwaqgea" path="res://addons/MuNgLosDungeon/Scenes/def_wall01.tscn" id="30_gaxtc"]
+[ext_resource type="PackedScene" uid="uid://bv6l13mlr0w6b" path="res://addons/MuNgLosDungeon/Scenes/def_wall02.tscn" id="31_20waq"]
+[ext_resource type="PackedScene" uid="uid://bel2njfu1ge0j" path="res://addons/MuNgLosDungeon/Scenes/def_wall03.tscn" id="32_h1dvv"]
+[ext_resource type="PackedScene" uid="uid://c8jxalblikoj6" path="res://addons/MuNgLosDungeon/Scenes/def_walldooropening.tscn" id="33_2j5du"]
+[ext_resource type="PackedScene" uid="uid://dp58p4c4wawlc" path="res://addons/MuNgLosDungeon/Scenes/def_walldooropening02.tscn" id="34_ouk3r"]
+[ext_resource type="PackedScene" uid="uid://be4l3oub5omjw" path="res://addons/MuNgLosDungeon/Scenes/def_walldoorwide.tscn" id="35_phaba"]
+[ext_resource type="PackedScene" uid="uid://dyruxrgt241g7" path="res://addons/MuNgLosDungeon/Scenes/def_wallcornerinner.tscn" id="36_5e7jp"]
 
-[sub_resource type="Resource" id="Resource_c3ckr"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_hcjvs"]
+script = ExtResource("2_r24ux")
 key = 9
-resources = [ExtResource("1_ayiah")]
+resources = [ExtResource("1_rl26h")]
 
-[sub_resource type="Resource" id="Resource_macw5"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_3gpkb"]
+script = ExtResource("2_r24ux")
 key = 3
-resources = [ExtResource("3_boen2")]
+resources = [ExtResource("3_ki5in")]
 
-[sub_resource type="Resource" id="Resource_6oryr"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_ephk1"]
+script = ExtResource("2_r24ux")
 key = 1
-resources = [ExtResource("4_iitb1")]
+resources = [ExtResource("4_imb2o")]
 
-[sub_resource type="Resource" id="Resource_gwmyy"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_qgcu4"]
+script = ExtResource("2_r24ux")
 key = 2
-resources = [ExtResource("5_qflqm")]
+resources = [ExtResource("5_kqqkp")]
 
-[sub_resource type="Resource" id="Resource_uc0hj"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_e8l86"]
+script = ExtResource("2_r24ux")
 key = 4
-resources = [ExtResource("6_8xak1")]
+resources = [ExtResource("6_8ak1v")]
 
-[sub_resource type="Resource" id="Resource_dtui4"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_7d5xo"]
+script = ExtResource("2_r24ux")
 key = 5
-resources = [ExtResource("7_6f1xv")]
+resources = [ExtResource("7_0fbwg")]
 
-[sub_resource type="Resource" id="Resource_w6chb"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_docgt"]
+script = ExtResource("2_r24ux")
 key = 27
-resources = [ExtResource("8_7bsag")]
+resources = [ExtResource("8_p3cr6")]
 
-[sub_resource type="Resource" id="Resource_yfosm"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_prbbt"]
+script = ExtResource("2_r24ux")
 key = 26
-resources = [ExtResource("9_t646c")]
+resources = [ExtResource("9_4uaww")]
 
-[sub_resource type="Resource" id="Resource_4yluf"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_r61tm"]
+script = ExtResource("2_r24ux")
 key = 25
-resources = [ExtResource("10_8kmyt")]
+resources = [ExtResource("10_d663d")]
 
-[sub_resource type="Resource" id="Resource_x51hy"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_sq8ea"]
+script = ExtResource("2_r24ux")
 key = 7
-resources = [ExtResource("11_s6cho"), ExtResource("12_ymnr2"), ExtResource("13_h264d")]
+resources = [ExtResource("11_nuabd"), ExtResource("12_0gwl2"), ExtResource("13_l7mgl")]
 
-[sub_resource type="Resource" id="Resource_q2enf"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_2b0l0"]
+script = ExtResource("2_r24ux")
 key = 15
-resources = [ExtResource("14_kk5m3")]
+resources = [ExtResource("14_dpl6j")]
 
-[sub_resource type="Resource" id="Resource_bh4g4"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_ubjud"]
+script = ExtResource("2_r24ux")
 key = 16
-resources = [ExtResource("15_1a6k8")]
+resources = [ExtResource("15_hqn7l")]
 
-[sub_resource type="Resource" id="Resource_i2jko"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_j08gh"]
+script = ExtResource("2_r24ux")
 key = 24
-resources = [ExtResource("16_cc3m5"), ExtResource("17_4wtpf"), ExtResource("18_drawq"), ExtResource("19_o2yyd"), ExtResource("20_3a3kj"), ExtResource("21_5pa0c"), ExtResource("22_2qhls")]
+resources = [ExtResource("16_7xgfo"), ExtResource("17_lthqm"), ExtResource("18_lxehh"), ExtResource("19_ys7ef"), ExtResource("20_xryib"), ExtResource("21_70h0k"), ExtResource("22_6olvy")]
 
-[sub_resource type="Resource" id="Resource_ihlj3"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_ks3eu"]
+script = ExtResource("2_r24ux")
 key = 22
-resources = [ExtResource("23_75tp0"), ExtResource("24_832pw"), ExtResource("25_ab7su")]
+resources = [ExtResource("23_xmmnj"), ExtResource("24_airi8"), ExtResource("25_lv2ah")]
 
-[sub_resource type="Resource" id="Resource_maa0o"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_a6w81"]
+script = ExtResource("2_r24ux")
 key = 23
-resources = [ExtResource("26_iu6xc")]
+resources = [ExtResource("26_ij1xl")]
 
-[sub_resource type="Resource" id="Resource_3ffe8"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_0y3vb"]
+script = ExtResource("2_r24ux")
 key = 21
-resources = [ExtResource("27_ep153"), ExtResource("28_75yje")]
+resources = [ExtResource("27_vhtqm"), ExtResource("28_00jhy")]
 
-[sub_resource type="Resource" id="Resource_grd3n"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_ot12k"]
+script = ExtResource("2_r24ux")
 key = 11
-resources = [ExtResource("30_s4716"), ExtResource("31_i7iy7"), ExtResource("32_cbr53")]
+resources = [ExtResource("30_gaxtc"), ExtResource("31_20waq"), ExtResource("32_h1dvv")]
 
-[sub_resource type="Resource" id="Resource_qdxk3"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_monmn"]
+script = ExtResource("2_r24ux")
 key = 12
-resources = [ExtResource("33_dg5fn"), ExtResource("34_hqmsy")]
+resources = [ExtResource("33_2j5du"), ExtResource("34_ouk3r")]
 
-[sub_resource type="Resource" id="Resource_d2kb1"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_va16j"]
+script = ExtResource("2_r24ux")
 key = 13
-resources = [ExtResource("35_nqthp")]
+resources = [ExtResource("35_phaba")]
 
-[sub_resource type="Resource" id="Resource_08kql"]
-script = ExtResource("2_ijq7a")
+[sub_resource type="Resource" id="Resource_wl7py"]
+script = ExtResource("2_r24ux")
 key = 14
-resources = [ExtResource("36_jnqmf")]
+resources = [ExtResource("36_5e7jp")]
 
 [resource]
-script = ExtResource("29_cvtkg")
+script = ExtResource("29_3hshx")
 size = Vector3i(6, 6, 6)
-debug = [SubResource("Resource_macw5"), SubResource("Resource_6oryr"), SubResource("Resource_gwmyy"), SubResource("Resource_uc0hj"), SubResource("Resource_dtui4"), SubResource("Resource_w6chb"), SubResource("Resource_yfosm"), SubResource("Resource_4yluf")]
-walls = [SubResource("Resource_grd3n"), SubResource("Resource_qdxk3"), SubResource("Resource_d2kb1"), SubResource("Resource_08kql")]
-floors = [SubResource("Resource_x51hy")]
-ceilings = [SubResource("Resource_c3ckr")]
-props = [SubResource("Resource_q2enf"), SubResource("Resource_bh4g4"), SubResource("Resource_i2jko"), SubResource("Resource_ihlj3"), SubResource("Resource_maa0o"), SubResource("Resource_3ffe8")]
+debug = [SubResource("Resource_3gpkb"), SubResource("Resource_ephk1"), SubResource("Resource_qgcu4"), SubResource("Resource_e8l86"), SubResource("Resource_7d5xo"), SubResource("Resource_docgt"), SubResource("Resource_prbbt"), SubResource("Resource_r61tm")]
+walls = [SubResource("Resource_ot12k"), SubResource("Resource_monmn"), SubResource("Resource_va16j"), SubResource("Resource_wl7py")]
+floors = [SubResource("Resource_sq8ea")]
+ceilings = [SubResource("Resource_hcjvs")]
+props = [SubResource("Resource_2b0l0"), SubResource("Resource_ubjud"), SubResource("Resource_j08gh"), SubResource("Resource_ks3eu"), SubResource("Resource_a6w81"), SubResource("Resource_0y3vb")]
