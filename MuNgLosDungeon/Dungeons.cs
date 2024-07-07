@@ -127,6 +127,13 @@ namespace Munglo.DungeonGenerator
             if (@event is InputEventMouseButton)
             {
                 InputEventMouseButton b = (InputEventMouseButton)@event;
+
+                if(b.ButtonIndex == MouseButton.Left && b.IsPressed())
+                {
+                    SubViewportContainer cont = screen.GetNode<SubViewportContainer>("SubViewportContainer");
+                    (cont as TestClickInSubView).DoRayCastIntoSubViewport();
+                }
+
                 if (b.ButtonIndex == MouseButton.Right)
                 {
                     if (b.Pressed) { cam.GoFreeLook(); }

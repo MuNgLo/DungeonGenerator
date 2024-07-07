@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
@@ -50,6 +51,12 @@ namespace Munglo.DungeonGenerator
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 10) + "%");
             cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
             mapContainer = FindChild("Generated") as Node3D;
+
+            for (int i = 0; i < settings.nbOfFloors; i++)
+            {
+                GetFloorContainer(i);
+            }
+
             await VisualizeSections();
             //if (autoBuildNavMesh) { BuildNavMesh(); }
         }

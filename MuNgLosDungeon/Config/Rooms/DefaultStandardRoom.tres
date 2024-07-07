@@ -6,11 +6,11 @@
 script = ExtResource("1_cwmmm")
 roomName = "StandardRoom"
 roomStyle = "StdRoom"
-sizeWidthMin = 2
-sizeWidthMax = 6
-sizeDepthMin = 2
-sizeDepthMax = 6
-nbFloorsMin = 2
+sizeWidthMin = 3
+sizeWidthMax = 3
+sizeDepthMin = 4
+sizeDepthMax = 4
+nbFloorsMin = 1
 nbFloorsMax = 2
 defaultResponses = 15
 centerSpiralStairs = false
