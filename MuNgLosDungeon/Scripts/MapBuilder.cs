@@ -15,14 +15,12 @@ namespace Munglo.DungeonGenerator
 
         public MapBuilder(MapData map)
         {
-
             this.map = map;
-
         }
         internal async Task BuildMapData()
         {
             rng = new PRNGMarsenneTwister(Args.Seed);
-            // Build Start StairCase Room
+            // Build Start Room
             ulong[] roomSeed = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
             RoomSection centerRoom = new RoomSection(map, MapCoordinate.Zero, MAPDIRECTION.NORTH, map.startRoom, map.Sections.Count, roomSeed);
             centerRoom.Build();
@@ -65,7 +63,6 @@ namespace Munglo.DungeonGenerator
                         }
                     }
                 }
-                GD.Print($"MapData::GenerateMap() Generating Rooms for floor[{floor}].");
                 BuildRooms();
 
                 FitSmallArches();
@@ -82,11 +79,8 @@ namespace Munglo.DungeonGenerator
                         }
                     }
                 }
-
                 LatePassBridges();
-
                 LatePassRooms();
-
                 RemoveAllEmpty();
                 await Task.Delay(1);
             }

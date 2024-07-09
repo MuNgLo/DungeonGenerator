@@ -9,8 +9,8 @@ namespace Munglo.DungeonGenerator
     {
         new public int PropCount => TotalPropCount(); // New needed?
         private int width = 1;
-        new public int TileCount => AllPieces().Count; // Does need the new
-        new public List<MapPiece> Pieces => AllPieces(); // Does need the new
+        override public int TileCount => AllPieces().Count; // Does need the new
+        override public List<MapPiece> Pieces => AllPieces(); // Does need the new
         private Line[] lines;
         private Line LeftSide => lines[0];
         private Line RightSide => lines[lines.Length - 1];
@@ -55,6 +55,11 @@ namespace Munglo.DungeonGenerator
             AddKeys();
             BuildStartConnection();
             BuildEndCap();
+            //for (int i = 0; i < lines.Length; i++)
+            //{
+            //    pieces.AddRange(lines[i].Steps);
+            //}
+
             IsValid = true;
         }
 

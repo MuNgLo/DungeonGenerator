@@ -370,6 +370,7 @@ namespace Munglo.DungeonGenerator
         }
         public static bool operator ==(MapPiece a, MapPiece b)
         {
+            if (a is null && b is null) { return true; }
             if (a is null || b is null) { return false; }
             return a.coord.x == b.coord.x && a.coord.y == b.coord.y && a.coord.z == b.coord.z;
         }
@@ -377,6 +378,7 @@ namespace Munglo.DungeonGenerator
         {
             if (a is null && b is not null) { return true; }
             if (b is null && a is not null) { return true; }
+            if (a is null && b is null) { return true; }
             if (a.coord.x != b.coord.x || a.coord.y != b.coord.y || a.coord.z != b.coord.z) { return false; }
             return true;
         }

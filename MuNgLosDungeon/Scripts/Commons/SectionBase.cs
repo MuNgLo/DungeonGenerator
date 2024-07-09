@@ -64,8 +64,8 @@ namespace Munglo.DungeonGenerator
         #region Properties
         public int SectionIndex => sectionIndex;
         public string SectionStyle => sectionStyle;
-        public int TileCount => pieces.Count;
-        public List<MapPiece> Pieces => pieces.Cast<MapPiece>().ToList();
+        public virtual int TileCount => pieces.Count;
+        public virtual List<MapPiece> Pieces => pieces.Cast<MapPiece>().ToList();
         public int PropCount => TotalPropCount();
 
         #endregion

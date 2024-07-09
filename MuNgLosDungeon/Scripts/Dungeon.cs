@@ -50,6 +50,16 @@ namespace Munglo.DungeonGenerator
         {
             return new Vector3(Coord.x * 6, Coord.y * 6, Coord.z * 6);
         }
+
+        internal static Vector3 GlobalSnapPosition(Vector3 pos)
+        {
+            Vector3 c = (pos / 6);
+            MapCoordinate coord = new MapCoordinate((int)c.X, (int)c.Y, (int)c.Z);
+
+            return GlobalPosition(coord);
+        }
+
+
         internal static Vector3 GlobalRoomPropPosition(MapCoordinate Coord, Vector3I Location)
         {
             return new Vector3(Coord.x * 6, Coord.y * 6, Coord.z * 6) + Location + new Vector3(-3f,-1.0f,-3f);

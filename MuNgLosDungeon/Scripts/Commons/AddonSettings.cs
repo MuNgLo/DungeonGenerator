@@ -18,7 +18,7 @@ namespace Munglo.DungeonGenerator
         [ExportCategory("Visual Floors")]
         [Export] public int visibleFloorStart = 0;
         [Export] public int maxVisibleFloors = 5;
-        public int visibleFloorEnd => visibleFloorStart + maxVisibleFloors;
+        public int visibleFloorEnd => visibleFloorStart + maxVisibleFloors - 1;
 
     }
 }

@@ -16,12 +16,12 @@ namespace Munglo.DungeonGenerator
         public bool cursorIsInside = false;
         private RichTextLabel notiff;
         private double notiffTTL;
-        private ScreenDungeonVisulaizer dunVis;
+        private ScreenDungeonVisualizer dunVis;
         public Node3D CurrentDungeon => GetNode<Node3D>("SubViewportContainer/SubViewport/Dungeon/Generated");
         public override void _Ready()
         {
             notiff = FindChild("Notification") as RichTextLabel;
-            dunVis = GetNode<ScreenDungeonVisulaizer>("SubViewportContainer/SubViewport/Dungeon");
+            dunVis = GetNode<ScreenDungeonVisualizer>("SubViewportContainer/SubViewport/Dungeon");
         }
         public override void _Process(double delta)
         {
@@ -45,8 +45,12 @@ namespace Munglo.DungeonGenerator
         /// <param name="biome"></param>
         public void GenerateDungeon(GenerationSettingsResource settings, BiomeResource biome)
         {
-            addon.ChangeMainScreenToDungeon();
+            //addon.ChangeMainScreenToDungeon();
             dunVis.BuildDungeon(settings, biome);
+        }
+        public void ReDrawDungeon()
+        {
+            dunVis.ReDrawMap();
         }
         /// <summary>
         /// Clears existing dungoen that is being viewed
