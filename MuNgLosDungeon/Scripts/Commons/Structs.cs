@@ -3,6 +3,28 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 namespace Munglo.DungeonGenerator
 {
+    public struct SectionConnection
+    {
+        public readonly int ParentSection;
+        public readonly int ChildSection;
+        public readonly MapCoordinate Coord;
+        public readonly MAPDIRECTION Dir;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p">Parent</param>
+        /// <param name="c">Child</param>
+        /// <param name="dir"></param>
+        /// <param name="coord"></param>
+        public SectionConnection(int p, int c, MAPDIRECTION dir, MapCoordinate coord)
+        {
+            ParentSection = p;
+            ChildSection = c;
+            Coord = coord;
+            Dir = dir;
+        }
+    }
+
     public struct KeyData
     {
         public PIECEKEYS key;
@@ -15,21 +37,35 @@ namespace Munglo.DungeonGenerator
         }
     }
 
-    public struct RoomProp
+    public struct SectionProp
     {
         public PIECEKEYS key;
         /// <summary>
         /// offset relative to room start location tile and the orientation
         /// </summary>
-        public Vector3I Offset;
+        public Vector3I position;
         public MAPDIRECTION dir;
         public int variantID;
-        public RoomProp(PIECEKEYS key, Vector3I offset, MAPDIRECTION dir, int variantid = -1)
+        public SectionProp(KeyData kData, Vector3I pos)
         {
-            this.key = key ;
-            this.Offset = offset;
-            this.dir = dir ;
-            this.variantID = variantid ;
+            this.key = kData.key;
+            this.dir = kData.dir;
+            this.position = pos;
+            this.variantID = kData.variantID;
+        }
+        public SectionProp(PIECEKEYS key, Vector3I position, MAPDIRECTION dir, int variantid = -1)
+        {
+            this.key = key;
+            this.position = position;
+            this.dir = dir;
+            this.variantID = variantid;
+        }
+        public SectionProp(PIECEKEYS key, Vector3 position, MAPDIRECTION dir, int variantid = -1)
+        {
+            this.key = key;
+            this.position = (Vector3I)position;
+            this.dir = dir;
+            this.variantID = variantid;
         }
     }
 }

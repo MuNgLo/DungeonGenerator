@@ -14,6 +14,8 @@ namespace Munglo.DungeonGenerator
 
 
         [ExportGroup("Passes")]
+        [Export] public bool clearEmpties = true;
+
         [Export] public bool floorPass = true;
         [Export] public bool wallPass = true;
         [Export] public bool ceilingPass = true;

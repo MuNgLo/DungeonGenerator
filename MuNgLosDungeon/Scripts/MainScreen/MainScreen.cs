@@ -45,8 +45,14 @@ namespace Munglo.DungeonGenerator
         /// <param name="biome"></param>
         public void GenerateDungeon(GenerationSettingsResource settings, BiomeResource biome)
         {
-            //addon.ChangeMainScreenToDungeon();
             dunVis.BuildDungeon(settings, biome);
+        }
+
+        public void GenerateSection(GenerationSettingsResource settings, BiomeResource biome)
+        {
+            OptionButton btn = this.GetNode<OptionButton>("ModeSelector");
+
+            dunVis.BuildSection(btn.GetItemText(btn.Selected), settings, biome, ReDrawDungeon);
         }
         public void ReDrawDungeon()
         {

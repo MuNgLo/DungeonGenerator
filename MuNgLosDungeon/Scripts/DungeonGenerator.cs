@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Godot.TextServer;
 using static System.Formats.Asn1.AsnWriter;
+using Munglo.DungeonGenerator.Sections;
 
 namespace Munglo.DungeonGenerator
 {
@@ -210,16 +211,13 @@ namespace Munglo.DungeonGenerator
             }
 
             // Room Prop
-            foreach (MapCoordinate c in room.PropGrids.Keys)
+            foreach (SectionProp c in room.Props)
             {
-                foreach (Vector3I prop in room.PropGrids[c].Keys)
+                SpawnRoomProp(biome, c, true);
+                count++;
+                if (count % 400 == 0)
                 {
-                    SpawnRoomProp(biome, c, room.PropGrids[c][prop], true);
-                    count++;
-                    if (count % 400 == 0)
-                    {
-                        await ToSignal(GetTree(), "process_frame");
-                    }
+                    await ToSignal(GetTree(), "process_frame");
                 }
             }
 
@@ -236,7 +234,7 @@ namespace Munglo.DungeonGenerator
             }
         }
 
-        internal void SpawnRoomProp(BiomeResource biome, MapCoordinate coord, RoomProp propData, bool makeCollider = true)
+        internal void SpawnRoomProp(BiomeResource biome, SectionProp propData, bool makeCollider = true)
         {
             //GD.Print($"DungeonGenerator::SpawnRoomProp()");
             if (Config.showProps)
@@ -248,7 +246,8 @@ namespace Munglo.DungeonGenerator
                     {
                         MoveToEditedScene(prop);
                     }
-                    prop.GlobalPosition = Dungeon.GlobalRoomPropPosition(coord, propData.Offset);
+                    //prop.GlobalPosition = Dungeon.GlobalRoomPropPosition(coord, propData.Offset);
+                    prop.GlobalPosition = propData.position;
 
 
                 };
@@ -358,26 +357,6 @@ namespace Munglo.DungeonGenerator
             {
                 if (piece.keyCeiling.key != PIECEKEYS.NONE && GetByKey(piece.keyCeiling, biome, out Node3D ceiling, makeCollider)) { visualNode.AddChild(ceiling); };
             }
-
-            // generate props
-            if (Config.showProps)
-            {
-                foreach (KeyData keyData in piece.Props)
-                {
-                    if (GetByKey(keyData, biome, out Node3D prop, makeCollider))
-                    {
-                        propParent.AddChild(prop, true);
-                        if (Engine.IsEditorHint())
-                        {
-                            MoveToEditedScene(prop);
-                        }
-                        prop.Position = Dungeon.GlobalPosition(piece);
-                        prop.Show();
-                    }
-                }
-            }
-
-
             return true;
         }
         private void MoveToEditedScene(Node node)

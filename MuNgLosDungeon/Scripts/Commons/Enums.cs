@@ -2,6 +2,10 @@
 namespace Munglo.DungeonGenerator
 {
     /// <summary>
+    /// State enum for the viewer
+    /// </summary>
+    public enum VIEWERMODE { DUNGEON, SECTION }
+    /// <summary>
     /// Unused has noting in it<br></br>
     /// Error something went wrong<br></br>
     /// Faulty don't fit right yet<br></br>

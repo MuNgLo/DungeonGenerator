@@ -53,13 +53,19 @@ namespace Munglo.DungeonGenerator
 
         internal static Vector3 GlobalSnapPosition(Vector3 pos)
         {
-            Vector3 c = (pos / 6);
-            MapCoordinate coord = new MapCoordinate((int)c.X, (int)c.Y, (int)c.Z);
-
+            return GlobalSnapPosition((Vector3I)pos);
+        }
+        internal static Vector3 GlobalSnapPosition(Vector3I pos)
+        {
+            Vector3I c = pos == Vector3I.Zero ? Vector3I.Zero : (pos / 6);
+            MapCoordinate coord = new MapCoordinate(c.X, c.Y, c.Z);
             return GlobalPosition(coord);
         }
-
-
+        internal static MapCoordinate GlobalSnapCoordinate(Vector3I pos)
+        {
+            Vector3I c = pos == Vector3I.Zero ? Vector3I.Zero : (pos / 6);
+            return new MapCoordinate(c.X, c.Y, c.Z);
+        }
         internal static Vector3 GlobalRoomPropPosition(MapCoordinate Coord, Vector3I Location)
         {
             return new Vector3(Coord.x * 6, Coord.y * 6, Coord.z * 6) + Location + new Vector3(-3f,-1.0f,-3f);

@@ -8,9 +8,9 @@ namespace Munglo.DungeonGenerator
     [Tool]
     public partial class Dungeons : EditorPlugin
     {
+        private VIEWERMODE mode = VIEWERMODE.DUNGEON;
         private readonly string screenName = "Dungeon";
         private AddonSettings MasterConfig;
-
         private MainScreen screen;
         private SubViewportContainer subV;
         private CameraControls cam;
@@ -75,43 +75,6 @@ namespace Munglo.DungeonGenerator
             screen.SetDebugLayer(Profile.showDebugLayer);
             (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
         }
-
-        private void WhenMSUpPressed()
-        {
-            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors, 1, 10);
-            MasterConfig.visibleFloorStart = Mathf.Clamp(MasterConfig.visibleFloorStart +1, 0, Profile.settings.nbOfFloors);
-            ResourceSaver.Save(MasterConfig);
-            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
-            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
-            screen.ReDrawDungeon();
-        }
-        private void WhenMSDownPressed()
-        {
-            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors, 1, 10);
-            MasterConfig.visibleFloorStart = Mathf.Clamp(MasterConfig.visibleFloorStart - 1, 0, Profile.settings.nbOfFloors);
-            ResourceSaver.Save(MasterConfig);
-            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
-            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
-            screen.ReDrawDungeon();
-        }
-        private void WhenMSPlusPressed()
-        {
-            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors + 1, 1, 10);
-            ResourceSaver.Save(MasterConfig);
-            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
-            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
-            screen.ReDrawDungeon();
-        }
-        private void WhenMSMinusPressed()
-        {
-            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors - 1, 1, 10);
-            ResourceSaver.Save(MasterConfig);
-            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
-            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
-            screen.ReDrawDungeon();
-        }
-
-
         public override void _ExitTree()
         {
             GD.Print("Unloaded MuNgLo's Dungeon Plugin");
@@ -345,7 +308,16 @@ namespace Munglo.DungeonGenerator
                 Profile.settings.seed3 = GD.RandRange(1111, 9999);
                 Profile.settings.seed4 = GD.RandRange(1111, 9999);
             }
-            screen.GenerateDungeon(Profile.settings, Profile.biome);
+            switch (mode)
+            {
+                case VIEWERMODE.SECTION:
+                    screen.GenerateSection(Profile.settings, Profile.biome);
+                    break;
+                default:
+                case VIEWERMODE.DUNGEON:
+                    screen.GenerateDungeon(Profile.settings, Profile.biome);
+                    break;
+            }
             (screen.FindChild("Build") as TextureButton).ReleaseFocus();
         }
         private void WhenMouseEnterMain()
@@ -355,6 +327,40 @@ namespace Munglo.DungeonGenerator
         private void WhenMouseExitMain()
         {
             screen.cursorIsInside = false;
+        }
+        private void WhenMSUpPressed()
+        {
+            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors, 1, 10);
+            MasterConfig.visibleFloorStart = Mathf.Clamp(MasterConfig.visibleFloorStart + 1, 0, Profile.settings.nbOfFloors);
+            ResourceSaver.Save(MasterConfig);
+            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
+            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
+            screen.ReDrawDungeon();
+        }
+        private void WhenMSDownPressed()
+        {
+            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors, 1, 10);
+            MasterConfig.visibleFloorStart = Mathf.Clamp(MasterConfig.visibleFloorStart - 1, 0, Profile.settings.nbOfFloors);
+            ResourceSaver.Save(MasterConfig);
+            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
+            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
+            screen.ReDrawDungeon();
+        }
+        private void WhenMSPlusPressed()
+        {
+            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors + 1, 1, 10);
+            ResourceSaver.Save(MasterConfig);
+            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
+            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
+            screen.ReDrawDungeon();
+        }
+        private void WhenMSMinusPressed()
+        {
+            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors - 1, 1, 10);
+            ResourceSaver.Save(MasterConfig);
+            (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
+            screen.ScreenNotify($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
+            screen.ReDrawDungeon();
         }
         #endregion
 
@@ -378,6 +384,14 @@ namespace Munglo.DungeonGenerator
             EditorInterface.Singleton.SetMainScreenEditor(screenName);
         }
         
+        public void ChangeMode(VIEWERMODE newMode)
+        {
+            if(newMode != mode)
+            {
+                GD.Print($"Dungeons::ChangeMode() changed to {newMode}");
+                mode = newMode;
+            }
+        }
 
     }// EOF CLASS
 }

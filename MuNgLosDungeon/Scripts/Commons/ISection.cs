@@ -37,6 +37,11 @@ namespace Munglo.DungeonGenerator
         public void Build();
 
         /// <summary>
+        /// Generate the connections between sections
+        /// </summary>
+        public void BuildConnections();
+
+        /// <summary>
         /// Write all the section's pieces to the mapData instance
         /// </summary>
         public void Save();
@@ -52,16 +57,25 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         /// <param name="rp"></param>
         /// <param name="pData"></param>
-        public void AddProp(MapCoordinate coord, RoomProp pData);
+        public void AddProp(SectionProp pData);
         public bool AddPropOnRandomTile(KeyData keyData, out MapPiece pick);
 
-        public Dictionary<MapCoordinate, Dictionary<Vector3I, RoomProp>> PropGrids { get; }
+
+
+        /// <summary>
+        /// Resolve the worldPosition to closest mapCoordinate and return true if it is part of section
+        /// </summary>
+        /// <param name="worldPosition"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool IsInside(Vector3I worldPosition);
+
+        public List<SectionConnection> Connections { get; }
+
+        public List<SectionProp> Props { get; }
         public MapPiece GetRandomPiece();
         public MapPiece GetRandomFloor();
         public void PunchBackDoor();
-
-        public int TotalPropCount();
-
 
         public MapCoordinate Coord { get; }
         public ROOMCONNECTIONRESPONCE defaultConnectionResponses { get; }
@@ -73,7 +87,12 @@ namespace Munglo.DungeonGenerator
         /// <summary>
         /// Puts wall,floor and ceiling keys against other sections
         /// </summary>
-        public void SealSection();
+        public void SealSection(int wallVariant = 0, int floorVariant = 0, int ceilingVariant = 0);
+
+
+        public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
+        public int ConnectionCount { get; }
+
 
     }// EOF INTERFACE
 }

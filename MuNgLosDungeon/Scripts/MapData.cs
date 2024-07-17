@@ -47,7 +47,15 @@ namespace Munglo.DungeonGenerator
             await builder.BuildMapData();
             callback.Invoke();
         }
-      
+
+        internal async Task GenerateSection(string sectionTypeName, Action callback)
+        {
+            GD.Print("MapData::GenerateSection() Generation started.....");
+
+            MapBuilder builder = new MapBuilder(this);
+            await builder.BuildSection(sectionTypeName);
+            callback.Invoke();
+        }
 
         internal void SavePiece(MapPiece piece)
         {
@@ -211,11 +219,11 @@ namespace Munglo.DungeonGenerator
 
         }
 
-        internal bool AddOpeningToSection(MapPiece piece, MAPDIRECTION dir, bool wide, bool overrideLocked)
+        internal void AddOpeningBetweenSections(SectionConnection connection, bool overrideLocked)
         {
-            if (piece.SectionIndex < 0) return false;
-            //ProcGenMKIII.Log("MapData", $"AddOpeningToRoom", $"Room[{piece.RoomIndex}] piece({piece}) {dir}");
-            return sections[piece.SectionIndex].AddOpening(piece.Coord, dir, wide, overrideLocked);
+            MapPiece p1 = GetExistingPiece(connection.Coord);
+            MapPiece p2 = GetExistingPiece(connection.Coord + connection.Dir);
+            AddOpeningBetweenSections(p1, p2, connection.Dir, overrideLocked);
         }
 
         internal void AddOpeningBetweenSections(MapPiece p1, MapPiece p2, MAPDIRECTION dir, bool overrideLocked)
@@ -253,15 +261,7 @@ namespace Munglo.DungeonGenerator
         }
       
         #region Functional to manipulate mappieces
-        /// <summary>
-        /// Add WD between the pieces using piece1's orientation
-        /// piece2 is usually piece1.step(piece1.orientation)
-        /// </summary>
-        public void AddDoor(MapPiece piece1, MapPiece piece2, bool overrideLocked)
-        {
-            piece1.AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = piece1.Orientation }, overrideLocked);
-            piece2.AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(piece1.Orientation) }, overrideLocked);
-        }
+      
 
         internal void AddDoorWide(MapPiece piece1, bool overrideLocked)
         {
@@ -271,6 +271,8 @@ namespace Munglo.DungeonGenerator
             piece1.Neighbour(Dungeon.Flip(piece1.Orientation)).AssignWall(new KeyData() { key = PIECEKEYS.WDW, dir = piece1.Orientation }, overrideLocked);
             piece2.Neighbour(Dungeon.Flip(piece1.Orientation)).AssignWall(new KeyData() { key = PIECEKEYS.OCCUPIED, dir = piece1.Orientation }, overrideLocked);
         }
+
+     
 
         #endregion
     }// EOF CLASS

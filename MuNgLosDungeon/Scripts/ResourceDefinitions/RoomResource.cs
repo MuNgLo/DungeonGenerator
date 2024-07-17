@@ -6,6 +6,7 @@ namespace Munglo.DungeonGenerator
     {
         [Export] public string roomName = string.Empty;
         [Export] public string roomStyle = string.Empty;
+        [Export] public ROOMCONNECTIONRESPONCE defaultResponses = (ROOMCONNECTIONRESPONCE)15;
         [ExportGroup("General")]
         [Export] public int sizeWidthMin = 3;
         [Export] public int sizeWidthMax = 5;
@@ -15,7 +16,11 @@ namespace Munglo.DungeonGenerator
         [Export] public int nbFloorsMin = 1;
         [Export] public int nbFloorsMax = 2;
 
-        [Export] public ROOMCONNECTIONRESPONCE defaultResponses = (ROOMCONNECTIONRESPONCE)15;
+        [ExportGroup("Debug")]
+        [Export] public bool debug = false;
+        [Export] public int nbDoorsPerFloorMin = 0;
+        [Export] public int nbDoorsPerFloorMax = 0;
+
         [ExportGroup("WiP")]
         [Export] public bool centerSpiralStairs = false;
         [Export] public bool firstPieceDoor = true;

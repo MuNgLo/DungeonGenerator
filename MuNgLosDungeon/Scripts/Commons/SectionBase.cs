@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Munglo.DungeonGenerator.PropGrid;
 
 namespace Munglo.DungeonGenerator
 {
@@ -25,15 +27,20 @@ namespace Munglo.DungeonGenerator
         /// <summary>
         /// What type of section is this. Room, Corridor, Void, Pantry?
         /// </summary>
-        private protected readonly string sectionStyle = string.Empty; 
+        private protected string sectionStyle = string.Empty; 
         /// <summary>
         /// The section name. Might not be unique in the Dungeon
         /// </summary>
-        private protected readonly string sectionName = string.Empty;
+        private protected string sectionName = string.Empty;
+
+        private protected List<SectionConnection> connections;
+        public List<SectionConnection> Connections => connections;
+        public int ConnectionCount => connections.Count;
+
 
         private protected List<MapPiece> pieces;
-        private RoomProps props;
-        public Dictionary<MapCoordinate, Dictionary<Vector3I, RoomProp>> PropGrids => props.grids;
+        private SectionProps props;
+        public List<SectionProp> Props => props.props;
 
 
         #endregion
@@ -64,23 +71,21 @@ namespace Munglo.DungeonGenerator
         #region Properties
         public int SectionIndex => sectionIndex;
         public string SectionStyle => sectionStyle;
-        public virtual int TileCount => pieces.Count;
-        public virtual List<MapPiece> Pieces => pieces.Cast<MapPiece>().ToList();
-        public int PropCount => TotalPropCount();
+        public virtual int TileCount => Pieces.Count;
+        public virtual List<MapPiece> Pieces => pieces;
+        public int PropCount => Props.Count;
 
         #endregion
 
-
-
-        public SectionBase(ulong[] seed, int index, string sectionStyle, string sectionName, MapData mapData)
+        public SectionBase(SectionbBuildArguments args)
         {
-            sectionIndex = index;
-            map = mapData;
+            sectionIndex = args.sectionID;
+            map = args.map;
             pieces = new List<MapPiece>();
-            rng = new PRNGMarsenneTwister(seed);
-            props = new RoomProps(this);
+            connections = new List<SectionConnection>();
+            rng = new PRNGMarsenneTwister(args.Seed);
+            props = new SectionProps(this);
         }
-
 
         public virtual void Build()
         {
@@ -94,7 +99,7 @@ namespace Munglo.DungeonGenerator
 
         public virtual bool AddOpening(MapCoordinate coord, MAPDIRECTION dir, bool wide, bool overrideLocked)
         {
-            MapPiece piece = pieces.Find(p => p.Coord == coord);
+            MapPiece piece = Pieces.Find(p => p.Coord == coord);
             if (piece is null)
             {
                 GD.PrintErr($"SectionBase::AddOpening() no piece on coord({coord}) part of room[{sectionIndex}]");
@@ -134,7 +139,7 @@ namespace Munglo.DungeonGenerator
 
         public void Save()
         {
-            foreach (MapPiece piece in pieces)
+            foreach (MapPiece piece in Pieces)
             {
                 map.SavePiece(piece);
             }
@@ -143,29 +148,31 @@ namespace Munglo.DungeonGenerator
         /// Puts wall,floor and ceiling keys against other sections
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public void SealSection()
+        public virtual void SealSection(int wallVariant = 0, int floorVariant = 0, int ceilingVariant = 0)
         {
-            foreach (MapPiece piece in pieces)
+            foreach (MapPiece piece in Pieces)
             {
+                // Skip pieces not part of this section
+                if(piece.SectionIndex != sectionIndex) {  continue; }
                 // Floor
-                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.DOWN)) { piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 }; }
+                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.DOWN)) { piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = floorVariant }; }
                 // Ceiling
-                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.UP)) { piece.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = orientation, variantID = 0 }; }
+                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.UP)) { piece.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = orientation, variantID = ceilingVariant }; }
                 // Walls
                 for (int i = 1; i < 5; i++)
                 {
-                    if (!Pieces.Exists(p => p.Coord == piece.Coord + (MAPDIRECTION)i)) { piece.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = (MAPDIRECTION)i, variantID = 0 }, true); }
+                    if (!Pieces.Exists(p => p.Coord == piece.Coord + (MAPDIRECTION)i)) { piece.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = (MAPDIRECTION)i, variantID = wallVariant }, true); }
                 }
             }
         }
         public List<MapPiece> GetWallPieces(int floor, bool includeCorners = false)
         {
             // Confirmed
-            List<MapPiece> candidates = pieces.FindAll(p => p.sectionfloor == floor && p.HasNorthWall);
+            List<MapPiece> candidates = Pieces.FindAll(p => p.sectionfloor == floor && p.HasNorthWall);
 
-            candidates.AddRange(pieces.FindAll(p => p.sectionfloor == floor && p.HasEastWall && !p.HasNorthWall));
-            candidates.AddRange(pieces.FindAll(p => p.sectionfloor == floor && p.HasSouthWall && !p.HasNorthWall && !p.HasEastWall));
-            candidates.AddRange(pieces.FindAll(p => p.sectionfloor == floor && p.HasWestWall && !p.HasNorthWall && !p.HasEastWall && !p.HasSouthWall));
+            candidates.AddRange(Pieces.FindAll(p => p.sectionfloor == floor && p.HasEastWall && !p.HasNorthWall));
+            candidates.AddRange(Pieces.FindAll(p => p.sectionfloor == floor && p.HasSouthWall && !p.HasNorthWall && !p.HasEastWall));
+            candidates.AddRange(Pieces.FindAll(p => p.sectionfloor == floor && p.HasWestWall && !p.HasNorthWall && !p.HasEastWall && !p.HasSouthWall));
             if (!includeCorners)
             {
                 int count = 0;
@@ -219,7 +226,7 @@ namespace Munglo.DungeonGenerator
         /// <returns></returns>
         private protected MapPiece GetCenterPiece()
         {
-            MapPiece centerOfStartLine = GetCenterOfRow(pieces[0], orientation);
+            MapPiece centerOfStartLine = GetCenterOfRow(Pieces[0], orientation);
             MapPiece centerOfRoom = GetCenterOfRow(centerOfStartLine, Dungeon.TwistLeft(orientation));
             return centerOfRoom;
         }
@@ -228,9 +235,9 @@ namespace Munglo.DungeonGenerator
             List<MapPiece> negP = new List<MapPiece>();
             List<MapPiece> posP = new List<MapPiece>() { piece };
             int breaker = 100;
-            while (pieces.Exists(p => p.Coord == piece.Coord + dir))
+            while (Pieces.Exists(p => p.Coord == piece.Coord + dir))
             {
-                piece = pieces.Find(p => p.Coord == piece.Coord + dir);
+                piece = Pieces.Find(p => p.Coord == piece.Coord + dir);
                 posP.Add(piece);
                 breaker--; if (breaker < 1)
                 {
@@ -241,9 +248,9 @@ namespace Munglo.DungeonGenerator
             breaker = 100;
             dir = Dungeon.Flip(dir);
             piece = posP.First();
-            while (pieces.Exists(p => p.Coord == piece.Coord + dir))
+            while (Pieces.Exists(p => p.Coord == piece.Coord + dir))
             {
-                piece = pieces.Find(p => p.Coord == piece.Coord + dir);
+                piece = Pieces.Find(p => p.Coord == piece.Coord + dir);
                 negP.Add(piece);
                 breaker--; if (breaker < 1)
                 {
@@ -265,9 +272,9 @@ namespace Munglo.DungeonGenerator
         }
 
 
-        public virtual void AddProp(MapCoordinate coord, RoomProp pData)
+        public virtual void AddProp(SectionProp pData)
         {
-            props.Add(coord, pData);
+            Props.Add(pData);
         }
 
         public virtual bool AddPropOnRandomTile(KeyData keyData, out MapPiece pick)
@@ -277,31 +284,44 @@ namespace Munglo.DungeonGenerator
 
         public virtual MapPiece GetRandomPiece()
         {
-            return pieces[rng.Next(0, pieces.Count)];
+            return Pieces[rng.Next(0, Pieces.Count)];
         }
 
         public virtual MapPiece GetRandomFloor()
         {
-            if (!pieces.Exists(p => p.hasFloor))
+            if (!Pieces.Exists(p => p.hasFloor))
             {
                 GD.PushError($"SectionBase::GetRandomFloor() Section[{sectionIndex}] has no Floors!");
                 return null;
             }
-            MapPiece pick = pieces[rng.Next(0, pieces.Count)];
-            while (!pick.hasFloor) { pick = pieces[rng.Next(0, pieces.Count)]; }
+            MapPiece pick = Pieces[rng.Next(0, Pieces.Count)];
+            while (!pick.hasFloor) { pick = Pieces[rng.Next(0, Pieces.Count)]; }
             return pick;
         }
 
         public virtual void PunchBackDoor()
         {
-            throw new NotImplementedException();
+            
         }
 
-        public virtual int TotalPropCount()
+
+        public virtual bool IsInside(Vector3I worldPosition)
         {
-            int count = 0;
-            foreach (var piece in pieces) { count += piece.Props.Count; }
-            return count + PropGrids.Count;
+            MapCoordinate coord = Dungeon.GlobalSnapCoordinate(worldPosition);
+            return Pieces.Exists(p => p.Coord == coord);
         }
-    }
+        public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
+        {
+            connections.Add(new SectionConnection(sectionIndex, otherSectionIndex, dir, coord));
+        }
+        public void BuildConnections()
+        {
+            foreach (SectionConnection connection in connections) 
+            {
+                if(connection.ParentSection != sectionIndex) { continue; }
+                map.AddOpeningBetweenSections(connection, true);
+            }
+        }
+
+    }// EOF CLASS
 }

@@ -1,14 +1,16 @@
-[gd_scene load_steps=30 format=3 uid="uid://66fkglptwkl1"]
+[gd_scene load_steps=31 format=3 uid="uid://66fkglptwkl1"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DuengeonSelector.cs" id="2_tq51n"]
 [ext_resource type="PackedScene" uid="uid://cok3u5man8n7s" path="res://addons/MuNgLosDungeon/ToolMeshCursor3DBox.glb" id="3_8fs6d"]
+[ext_resource type="Environment" uid="uid://bn1cwyorljhq2" path="res://addons/MuNgLosDungeon/ViewerEnv.tres" id="3_ubg15"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ScreenDungeonVisualizer.cs" id="4_ey6f7"]
 [ext_resource type="Texture2D" uid="uid://dtjyxe2ilemxm" path="res://addons/MuNgLosDungeon/Icons/ArrowUp.png" id="15_xmst8"]
 [ext_resource type="Texture2D" uid="uid://dv255qe1oq6xd" path="res://addons/MuNgLosDungeon/Icons/Plus.png" id="16_nrt1g"]
 [ext_resource type="Texture2D" uid="uid://bqy2qf25o7ju4" path="res://addons/MuNgLosDungeon/Icons/Minus.png" id="17_wfx1p"]
 [ext_resource type="Texture2D" uid="uid://dq57hbhbk8mab" path="res://addons/MuNgLosDungeon/Icons/ArrowDown.png" id="18_bqin5"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelection.cs" id="19_nw7on"]
 [ext_resource type="Texture2D" uid="uid://bvpiege84x6yg" path="res://addons/MuNgLosDungeon/Icons/HammerIcon.png" id="26_op7t4"]
 [ext_resource type="Texture2D" uid="uid://h27oxefjs4p7" path="res://addons/MuNgLosDungeon/Icons/ClearIcon.png" id="27_2lruq"]
 [ext_resource type="Texture2D" uid="uid://dbtj37kwtffth" path="res://addons/MuNgLosDungeon/Icons/DebugIcon.png" id="28_a1cq0"]
@@ -20,11 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://wnh4mm6q2vxl" path="res://addons/MuNgLosDungeon/Icons/ExportIcon.png" id="34_3dg3h"]
 
 [sub_resource type="World3D" id="World3D_qk8pl"]
-
-[sub_resource type="Environment" id="Environment_7rjaq"]
-ambient_light_source = 2
-ambient_light_color = Color(0.517647, 0.517647, 0.517647, 1)
-ambient_light_energy = 1.84
+environment = ExtResource("3_ubg15")
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_pbb25"]
 
@@ -50,7 +48,7 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lt7f8"]
 
-[node name="Control" type="Control"]
+[node name="DungeonViewer" type="Control"]
 custom_minimum_size = Vector2(400, 200)
 layout_mode = 3
 anchors_preset = 15
@@ -85,7 +83,6 @@ render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(-0.34031, -0.790434, 0.509315, 0, 0.541644, 0.840608, -0.940313, 0.286067, -0.184327, 3.13087, 5.1674, -1.1331)
-environment = SubResource("Environment_7rjaq")
 current = true
 size = 59.787
 script = ExtResource("1_tt5em")
@@ -98,7 +95,7 @@ shadow_enabled = true
 omni_range = 30.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(0.920716, -0.212285, 0.32744, 0, 0.839089, 0.543995, -0.390233, -0.500865, 0.772562, 8.10012, 9.82025, -14.2333)
+transform = Transform3D(0.307938, 0.679591, -0.66583, 2.53496e-08, 0.699838, 0.714302, 0.951406, -0.219961, 0.215507, 0, 3, 0)
 shadow_enabled = true
 directional_shadow_split_1 = 0.262
 directional_shadow_split_2 = 0.444
@@ -402,3 +399,19 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_lt7f8")
 bbcode_enabled = true
 text = "[center]99[/center]"
 scroll_active = false
+
+[node name="ModeSelector" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 4.0
+offset_right = 286.0
+offset_bottom = 35.0
+item_count = 3
+selected = 0
+popup/item_0/text = "Dungeon"
+popup/item_0/id = 0
+popup/item_1/text = "PathSection"
+popup/item_1/id = 1
+popup/item_2/text = "RoomSection"
+popup/item_2/id = 2
+script = ExtResource("19_nw7on")

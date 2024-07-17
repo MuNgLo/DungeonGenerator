@@ -38,6 +38,18 @@ namespace Munglo.DungeonGenerator
             //BuildData(biome, () => { ShowMap(null, null); }, settings.roomStart, settings.roomDefault);
             BuildData(biome, () => { ReDrawMap(); }, settings.roomStart, settings.roomDefault);
         }
+        public async void BuildSection(string sectionTypeName,  GenerationSettingsResource settings, BiomeResource biome, Action callback)
+        {
+            this.settings = settings;
+            screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 0) + "%");
+            await ToSignal(GetTree(), "process_frame");
+
+            cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
+            this.biome = biome;
+
+            map = new MapData(settings, settings.roomStart, settings.roomDefault);
+            await map.GenerateSection(sectionTypeName, callback);
+        }
         private async void BuildData(BiomeResource biome, Action callback, RoomResource startRoom, RoomResource standardRoom)
         {
             cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
@@ -253,23 +265,28 @@ namespace Munglo.DungeonGenerator
                 }
             }
             // Section Props
-            foreach (MapCoordinate c in section.PropGrids.Keys)
+            foreach (SectionProp c in section.Props)
             {
-                foreach (Vector3I prop in section.PropGrids[c].Keys)
-                {
-                    SpawnSectionProp(biome, c, section.PropGrids[c][prop], true);
-                }
+                SpawnProp(biome, c, true);
             }
         }
-        internal void SpawnSectionProp(BiomeResource biome, MapCoordinate coord, RoomProp propData, bool makeCollider = true)
+        internal void SpawnProp(BiomeResource biome, SectionProp propData, bool makeCollider = true)
         {
             //GD.Print($"DungeonGenerator::SpawnRoomProp()");
             if (settings.showProps)
             {
+                // skip arches 
+                if(!settings.showArches)
+                {
+                    if (propData.key == PIECEKEYS.AS || propData.key == PIECEKEYS.ASIC) { return; }
+                }
+
+
                 if (GetByKey(new KeyData() { key = propData.key, dir = propData.dir, variantID = propData.variantID }, biome, out Node3D prop, makeCollider))
                 {
                     propContainer.AddChild(prop, true);
-                    prop.GlobalPosition = Dungeon.GlobalRoomPropPosition(coord, propData.Offset);
+                    //prop.GlobalPosition = Dungeon.GlobalRoomPropPosition(coord, propData.Offset);
+                    prop.GlobalPosition = propData.position;
                 };
             }
         }
@@ -309,36 +326,10 @@ namespace Munglo.DungeonGenerator
                     }
                 }
                 SpecialCaseRoundedCorners(piece, visualNode, biome, makeCollider);
-                BuildPropsNode(piece, visualNode, biome, makeCollider);
             }
             return true;
         }
-        /// <summary>
-        /// Add the visuals for the things stored as props on the piece
-        /// </summary>
-        /// <param name="piece"></param>
-        /// <param name="visualNode">parent</param>
-        /// <param name="biome"></param>
-        /// <param name="makeCollider"></param>
-        private void BuildPropsNode(MapPiece piece, Node3D propParent, BiomeResource biome, bool makeCollider)
-        {
-            if (settings.showProps)
-            {
-                foreach (KeyData keyData in piece.Props)
-                {
-                    // Skip arches if no show
-                    if (!settings.showArches)
-                    {
-                        if (keyData.key == PIECEKEYS.AS || keyData.key == PIECEKEYS.ASIC) { continue; }
-                    }
-                    if (GetByKey(keyData, biome, out Node3D prop, makeCollider))
-                    {
-                        propParent.AddChild(prop, true);
-                        prop.Show();
-                    }
-                }
-            }
-        }
+    
         /// <summary>
         /// Not flagged as wall but check for rounded corner keys
         /// </summary>
@@ -373,7 +364,7 @@ namespace Munglo.DungeonGenerator
         /// <param name="obj"></param>
         /// <param name="makeCollider"></param>
         /// <returns></returns>
-        internal bool GetByKey(KeyData data, BiomeResource biome, out Node3D obj, bool makeCollider)
+        private bool GetByKey(KeyData data, BiomeResource biome, out Node3D obj, bool makeCollider)
         {
             if (data.key == PIECEKEYS.NONE || data.key == PIECEKEYS.OCCUPIED) { obj = null; return false; }
             Resource res = ResolveAndCache(data, biome);
@@ -468,6 +459,11 @@ namespace Munglo.DungeonGenerator
                 generated.Show();
                 screen.ScreenNotify($"Debug ON");
             }
+        }
+
+        public MapPiece GetMapPiece(MapCoordinate coord)
+        {
+            return map.GetExistingPiece(coord);
         }
     }// eof class
 }

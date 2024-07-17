@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -29,7 +30,24 @@ namespace Munglo.DungeonGenerator
         /// <summary>
         /// The Section instance the piece is part of
         /// </summary>
-        public ISection Section => map.Sections[sectionIndex];
+        public ISection Section
+        {
+            get
+            {
+                if (sectionIndex < 0) {
+                    GD.PushError($"MapPiece[{coord}] has unset sectionIndex! Defaulting to 0 but this need fixing!");
+                    SetError(true);
+                    sectionIndex = 0;
+                }
+                if (sectionIndex >= map.Sections.Count)
+                {
+                    GD.PushError($"MapPiece[{coord}] sectionIndex to high! Defaulting to 0 but this need fixing!");
+                    SetError(true);
+                    sectionIndex = 0;
+                }
+                return map.Sections[sectionIndex];
+            }
+        }
         #region Wall Flags
         private protected WALLS walls = new WALLS();
         internal WALLS Walls => walls;
@@ -69,14 +87,9 @@ namespace Munglo.DungeonGenerator
         internal KeyData WallKeyWest { get => wallkeys[MAPDIRECTION.WEST]; private set => wallkeys[MAPDIRECTION.WEST] = value; }
 
         /// <summary>
-        /// Prop meshes
-        /// </summary>
-        private protected List<KeyData> props = new();
-        /// <summary>
         /// Debug meshes
         /// </summary>
         private protected List<KeyData> debug = new();
-        internal List<KeyData> Props => props;
         internal List<KeyData> Debug => debug;
         #endregion
 
@@ -194,16 +207,7 @@ namespace Munglo.DungeonGenerator
         /// <param name="kData"></param>
         internal void AddProp(KeyData kData)
         {
-            RemoveProp(kData);
-            props.Add(kData);
-        }
-        /// <summary>
-        /// Removes all mathching keys from props.
-        /// </summary>
-        /// <param name="kData"></param>
-        internal void RemoveProp(KeyData kData)
-        {
-            props.RemoveAll(p => p.key == kData.key && p.dir == kData.dir && p.variantID == kData.variantID);
+            Section.AddProp(new SectionProp(kData, (Vector3I)Dungeon.GlobalPosition(this)));
         }
         /// <summary>
         /// Removes all mathching keys from props. Then add one
@@ -257,13 +261,12 @@ namespace Munglo.DungeonGenerator
             debug.RemoveAll(p => p.key == kData.key && p.dir == kData.dir);
         }
         /// <summary>
-        /// checks for any props, floor, ceiling and walls. The floor check can be excluded.
+        /// floor, ceiling and walls. The floor check can be excluded.
         /// </summary>
         /// <param name="ignoreFloor"></param>
         /// <returns></returns>
         private bool CheckIfEmpty(bool ignoreFloor = false)
         {
-            if (props.Count > 0) { return false; }
             if (!ignoreFloor && keyFloor.key != PIECEKEYS.NONE) { return false; }
             if (keyCeiling.key != PIECEKEYS.NONE) { return false; }
             if (HasWestWall || HasSouthWall || HasEastWall || HasNorthWall) { return false; }

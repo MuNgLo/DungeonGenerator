@@ -1,13 +1,14 @@
 ﻿using Godot;
+using Munglo.DungeonGenerator.Sections;
 
-namespace Munglo.DungeonGenerator
+namespace Munglo.DungeonGenerator.PropGrid
 {
     /// <summary>
     /// Contains static and functionally coded helper methods to manage prop insertion easier
     /// </summary>
     internal static class PropHelper
     {
-        internal static void InsertLayer(RoomSection room, MapPiece rp, PIECEKEYS propKey, int layer, MAPDIRECTION dir, int distance = 1)
+        internal static void InsertLayer(RoomSection section, MapPiece rp, PIECEKEYS propKey, int layer, MAPDIRECTION dir, int distance = 1)
         {
             for (int x = 0; x < 6; x++)
             {
@@ -19,14 +20,14 @@ namespace Munglo.DungeonGenerator
                     if (z >= 5 && rp.HasSouthWall) { continue; }
                     if (x % distance == 0 && z % distance == 0)
                     {
-                        room.AddProp(rp.Coord, new RoomProp() { key = propKey, dir = dir, Offset = new Vector3I(x, layer, z) });
+                        section.AddProp(new SectionProp() { key = propKey, dir = dir, position = new Vector3I(x, layer, z) });
                     }
                 }
             }
         }
 
 
-        internal static void InsertGallery(RoomSection room, MapPiece rp, int layer, MAPDIRECTION dir, int width = 1)
+        internal static void InsertGallery(RoomSection section, MapPiece rp, int layer, MAPDIRECTION dir, int width = 1)
         {
             // Gallery needs at least one wall so check that and error out
             if (!rp.HasNorthWall && !rp.HasEastWall && !rp.HasSouthWall && !rp.HasWestWall)
@@ -46,7 +47,7 @@ namespace Munglo.DungeonGenerator
                     {
                         if(z < width + 1)
                         {
-                            room.AddProp(rp.Coord, new RoomProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, Offset = new Vector3I(x, layer, z) });
+                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }
@@ -55,7 +56,7 @@ namespace Munglo.DungeonGenerator
                     {
                         if (x > 5 - width - 1)
                         {
-                            room.AddProp(rp.Coord, new RoomProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, Offset = new Vector3I(x, layer, z) });
+                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }
@@ -65,7 +66,7 @@ namespace Munglo.DungeonGenerator
                     {
                         if (z >  5 - width - 1)
                         {
-                            room.AddProp(rp.Coord, new RoomProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, Offset = new Vector3I(x, layer, z) });
+                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }
@@ -74,7 +75,7 @@ namespace Munglo.DungeonGenerator
                     {
                         if (x < width + 1)
                         {
-                            room.AddProp(rp.Coord, new RoomProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, Offset = new Vector3I(x, layer, z) });
+                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }

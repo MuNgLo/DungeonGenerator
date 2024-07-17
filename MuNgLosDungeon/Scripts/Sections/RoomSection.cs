@@ -1,43 +1,65 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
+using static System.Collections.Specialized.BitVector32;
 
-namespace Munglo.DungeonGenerator
+namespace Munglo.DungeonGenerator.Sections
 {
     public class RoomSection : SectionBase
     {
         private RoomResource roomDef;
         private protected bool centerSpiralStairs;
 
-        internal RoomSection(MapData mapData, MapCoordinate startLoc, MAPDIRECTION dir, RoomResource roomDef, int index, ulong[] seed) : base(seed, index, roomDef.roomStyle, roomDef.roomName, mapData)
+        public RoomSection(SectionbBuildArguments args, RoomResource roomOverride=null) : base(args)
         {
-            this.roomDef = roomDef;
-            coord = startLoc;
-            orientation = dir;
+            coord = args.piece.Coord;
+            orientation = args.piece.Orientation;
+            if (orientation == MAPDIRECTION.ANY) { orientation = (MAPDIRECTION)rng.Next(1, 5); }
+
+            if(roomOverride != null ) { roomDef = roomOverride; } else { roomDef = args.cfg.roomDefault; }
+
+            sectionStyle = roomDef.roomStyle;
+            sectionName = roomDef.roomName;
             centerSpiralStairs = roomDef.centerSpiralStairs;
             defaultConnectionResponses = roomDef.defaultResponses;
             sizeX = rng.Next(roomDef.sizeWidthMin, roomDef.sizeWidthMax + 1);
             sizeZ = rng.Next(roomDef.sizeDepthMin, roomDef.sizeDepthMax + 1);
             sizeY = rng.Next(roomDef.nbFloorsMin, roomDef.nbFloorsMax + 1);
-            if (dir == MAPDIRECTION.ANY) { orientation = (MAPDIRECTION)rng.Next(1, 5); }
-            if (orientation != MAPDIRECTION.NORTH || orientation != MAPDIRECTION.SOUTH)
+
+            
+            ResolveWIdthDepth();
+            SetMinMaxCoord();
+        }
+
+       
+
+        private void ResolveWIdthDepth()
+        {
+            if (orientation != MAPDIRECTION.NORTH && orientation != MAPDIRECTION.SOUTH)
             {
                 int d = sizeZ;
                 sizeZ = sizeX;
                 sizeX = d;
             }
-            SetMinMaxCoord();
         }
-
         #region ISection methods
         public override void Build()
         {
             MapPiece start = map.GetPiece(coord);
             start.State = MAPPIECESTATE.PENDING;
-            pieces.Add(start);
             start.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 };
-            map.SavePiece(start);
+            pieces.Add(start);
+            start.Save();
+            
+            MapPiece parent = map.GetExistingPiece(coord + Dungeon.Flip(orientation));
+            if(parent is not null)
+            {
+                AddConnection(parent.SectionIndex, Dungeon.Flip(orientation), start.Coord, true);
+            }
+
             //ProcGenMKIII.Log("RoomBase", $"BuildRoom", $"Loc{coord}  Size({sizeX}.{sizeY}.{sizeZ}) minX({minX}) maxX({maxX})");
             int breaker = 0;
             while (pieces.Exists(p => p.State == MAPPIECESTATE.PENDING))
@@ -119,9 +141,41 @@ namespace Munglo.DungeonGenerator
                 }
             }
             
-
+            // If debug Run Debug method
+            if(roomDef.debug)
+            {
+                AddDebugThings();
+            }
         }
-  
+
+        private void AddDebugThings()
+        {
+                GD.Print($"GOAL! max[{roomDef.nbDoorsPerFloorMax}] min[{roomDef.nbDoorsPerFloorMin}]  asd");
+            // Doors
+            if (roomDef.nbDoorsPerFloorMax > 0)
+            {
+                if (roomDef.nbDoorsPerFloorMin > roomDef.nbDoorsPerFloorMax) { roomDef.nbDoorsPerFloorMin = roomDef.nbDoorsPerFloorMax; }
+
+
+                    GD.Print("GOAL! 2"); 
+                for (int i = 0; i < sizeY; i++)
+                {
+
+                    int doorCount = roomDef.nbDoorsPerFloorMin == roomDef.nbDoorsPerFloorMax ? roomDef.nbDoorsPerFloorMax : rng.Next(roomDef.nbDoorsPerFloorMin, roomDef.nbDoorsPerFloorMax);
+
+                    List<MapPiece> candidates = GetWallPieces(i);
+                    if (candidates.Count < 1) { continue; }
+                    int spread = candidates.Count / Math.Min(candidates.Count, doorCount);
+                    for (int d = 1; d < doorCount + 1; d++)
+                    {
+                        int index = rng.Next(spread * (d - 1), spread * d);
+                        if (index >= candidates.Count) { break; }
+                        MapPiece loc = candidates[index];
+                        loc.AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = candidates[index].OutsideWallDirection(), variantID = 0 }, true);
+                    }
+                }
+            }
+        }
 
         private void ProcessPiece(MapPiece rp)
         {
@@ -197,36 +251,6 @@ namespace Munglo.DungeonGenerator
             {
                 AddCentralSpiralStairs();
             }
-
-            //RoomPiece lowerLeftest = GetLowerLeftestCorner();
-            //if(lowerLeftest == null) { GD.PrintErr($"RoomBase::BuildProps() Room[{roomIndex}] Failed to find lower left corner! Room.Y[{Coord.y}] firstPiece.Y[{pieces[0].Coord.y}]"); return; }
-
-            //foreach (RoomPiece roomPiece in pieces.FindAll(p=>p.Coord.y == 1 && !p.hasFloor && (p.HasNorthWall || p.HasEastWall || p.HasSouthWall || p.HasWestWall)))
-            //{
-            //    PropHelper.InsertGallery(this, roomPiece, 1, orientation, 2);
-            //}
-
-            //List<RoomPiece> bridges = new List<RoomPiece>();
-
-
-            //foreach (RoomPiece rp in pieces.FindAll(p => p.isBridge))
-            //{
-            //    if (rp.NeighbourNorth.isBridge) { bridges.Add(rp); }
-            //    if (rp.NeighbourEast.isBridge) { bridges.Add(rp); }
-            //    if (rp.NeighbourSouth.isBridge) { bridges.Add(rp); }
-            //    if (rp.NeighbourWest.isBridge) { bridges.Add(rp); }
-            //    //roomPiece.SetError(true);
-            //}
-            //foreach (RoomPiece bp in bridges)
-            //{
-            //    //PropHelper.InsertLayer(this, bp, PIECEKEYS.STAIRPLATFORM, 1, orientation);
-            //}
-
-
-
-       
-
-         
         }
         public override bool AddPropOnRandomTile(KeyData keyData, out MapPiece pick)
         {
@@ -272,7 +296,7 @@ namespace Munglo.DungeonGenerator
 
                 if (nb.SectionIndex != sectionIndex)
                 {
-                    map.AddOpeningBetweenSections(pick, nb, dir, true);
+                    AddConnection(nb.SectionIndex, dir, pick.Coord, true);
                     return;
                 }
 
@@ -292,7 +316,7 @@ namespace Munglo.DungeonGenerator
 
             if (spiralPiece.hasFloor)
             {
-                for (int i = 0; i < sizeY - 1; i++)
+                for (int i = 0; i < sizeY; i++)
                 {
                     // clear floors
                     if (i > 0)
@@ -315,8 +339,8 @@ namespace Munglo.DungeonGenerator
                             MarkGalleryNeighboursAsBridges(spiralPiece);
                         }
                     }
-
-                    AddProp(startCoord + MapCoordinate.Up * i, new RoomProp() { key = PIECEKEYS.STAIRSPIRAL, dir = spiralPiece.Orientation, Offset = new Vector3I(0,0,0), variantID = vID });
+                    //startCoord + MapCoordinate.Up * i
+                    AddProp(new SectionProp() { key = PIECEKEYS.STAIRSPIRAL, dir = spiralPiece.Orientation, position = new Vector3I(0,0,0), variantID = vID });
 
                     if (!pieces.Exists(p => p.Coord == spiralPiece.Coord.StepUp))
                     {

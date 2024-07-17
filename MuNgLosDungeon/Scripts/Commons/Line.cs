@@ -13,8 +13,12 @@ namespace Munglo.DungeonGenerator
         internal int Count => steps.Count;
         internal bool Blocked => isBlocked;
         internal int Floor => steps[0].Coord.y;
-        internal Line(MapPiece startPiece, PRNGMarsenneTwister rng)
+        private protected readonly ISection section;
+        private int SectionIndex => section.SectionIndex;
+
+        internal Line(ISection section, MapPiece startPiece, PRNGMarsenneTwister rng)
         {
+            this.section = section;
             steps = new List<MapPiece>();
             steps.Add(startPiece);
             this.rng = rng;
@@ -121,18 +125,19 @@ namespace Munglo.DungeonGenerator
             MapPiece nextStep = Last.Neighbour(Last.Orientation);
             if (nextStep == null) { DungeonGenerator.Log("Line", "WalkNormal", $"steps.Count[{steps.Count}] nextStep is NULL[{nextStep == null}]"); }
 
-            if (nextStep.State != MAPPIECESTATE.UNUSED && nextStep.SectionIndex < 1)  
+            if (nextStep.State != MAPPIECESTATE.UNUSED && nextStep.SectionIndex < 0)  
             {
                 isBlocked= true;
                 return;
             }
-            else if(nextStep.SectionIndex > 0)
+            else if(nextStep.SectionIndex >= 0 && nextStep.SectionIndex != SectionIndex)
             {
                 // First step into room
                 if (nextStep.Section.BridgeAllowed && maxSteps > steps.Count)
                 {
                     if (mainline)
                     {
+                        section.AddConnection(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
                         nextStep.isBridge = true;
                         nextStep.Orientation = Last.Orientation;
                         nextStep.State = MAPPIECESTATE.PENDING;
@@ -146,40 +151,69 @@ namespace Munglo.DungeonGenerator
                     return;
                 }
             }
+            else if(nextStep.SectionIndex == SectionIndex)
+            {
+                steps.RemoveAll(p=>p.Coord == nextStep.Coord);
+                nextStep.Orientation = Last.Orientation;
+                nextStep.State = MAPPIECESTATE.PENDING;
+                steps.Add(nextStep);
+                return;
+            }
+            nextStep.SectionIndex = SectionIndex;
             nextStep.Orientation = Last.Orientation;
             nextStep.State = MAPPIECESTATE.PENDING;
             steps.Add(nextStep);
+            nextStep.Save();
         }
+        /// <summary>
+        ///  Previous step was a bridge so keep that in mind
+        /// </summary>
+        /// <param name="maxSteps"></param>
+        /// <param name="mainline"></param>
         internal void WalkBridge(int maxSteps, bool mainline)
         {
             MapPiece nextStep = Last.Neighbour(Last.Orientation);
-            if (nextStep == null) { DungeonGenerator.Log("Line", "WalkNormal", $"steps.Count[{steps.Count}] nextStep is NULL[{nextStep == null}]"); }
 
-            if (nextStep.State != MAPPIECESTATE.UNUSED && nextStep.SectionIndex < 1)
+            if (nextStep.SectionIndex < 0)
             {
-                isBlocked = true;
+                // Blank
+                section.AddConnection(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
+                nextStep.SectionIndex = SectionIndex;
+                nextStep.Orientation = Last.Orientation;
+                nextStep.State = MAPPIECESTATE.PENDING;
+                steps.Add(nextStep);
+                nextStep.Save();
                 return;
             }
-            else if (nextStep.SectionIndex > 0)
+            else if (Last.SectionIndex == nextStep.SectionIndex)
             {
-                if (!Last.isBridge)
-                {
-                    isBlocked = true;
-                    return;
-                }
-                if (Last.SectionIndex != nextStep.SectionIndex && nextStep.Section.BridgeAllowed && (maxSteps < steps.Count))
+                // same section
+                nextStep.isBridge = true;
+                nextStep.Orientation = Last.Orientation;
+                nextStep.State = MAPPIECESTATE.PENDING;
+                steps.Add(nextStep);
+                nextStep.Save();
+                return;
+            }
+            else
+            {
+                // different section
+                if (maxSteps < steps.Count || !nextStep.Section.BridgeAllowed)
                 {
                     isBlocked = true;
                     return;
                 }
                 else
                 {
+                    section.AddConnection(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
                     nextStep.isBridge = true;
+                    nextStep.Orientation = Last.Orientation;
+                    nextStep.State = MAPPIECESTATE.PENDING;
+                    steps.Add(nextStep);
+                    nextStep.Save();
+                    return;
                 }
             }
-            nextStep.Orientation = Last.Orientation;
-            nextStep.State = MAPPIECESTATE.PENDING;
-            steps.Add(nextStep);
         }
 
         internal MapPiece[] GetTurners(int width, MAPDIRECTION dir, bool reversed=false)

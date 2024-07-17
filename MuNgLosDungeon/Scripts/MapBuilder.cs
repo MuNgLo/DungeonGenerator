@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
+using Munglo.DungeonGenerator.Sections;
+using System.Reflection;
 
 namespace Munglo.DungeonGenerator
 {
@@ -22,7 +24,15 @@ namespace Munglo.DungeonGenerator
             rng = new PRNGMarsenneTwister(Args.Seed);
             // Build Start Room
             ulong[] roomSeed = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
-            RoomSection centerRoom = new RoomSection(map, MapCoordinate.Zero, MAPDIRECTION.NORTH, map.startRoom, map.Sections.Count, roomSeed);
+            RoomSection centerRoom = new RoomSection(
+                new SectionbBuildArguments()
+                {
+                    map = map,
+                    piece = map.GetPiece(MapCoordinate.Zero),
+                    sectionID = map.Sections.Count,
+                    sectionSeed = roomSeed,
+                    cfg = Args
+                }, Args.roomStart);
             centerRoom.Build();
             centerRoom.Save();
             map.Sections.Add(centerRoom);
@@ -64,27 +74,77 @@ namespace Munglo.DungeonGenerator
                     }
                 }
                 BuildRooms();
-
-                FitSmallArches();
-                // Start Fitting every piece and add debug
-                foreach (int X in map.Pieces.Keys)
-                {
-                    foreach (int Y in map.Pieces[X].Keys)
-                    {
-                        foreach (int Z in map.Pieces[X][Y].Keys)
-                        {
-                            if (Args.wallPass) { FitRoundedCorners(map.Pieces[X][Y][Z]); }
-                            //FitLocation(pieces[X][Y][Z]);
-                            if (Args.debugPass) { AddDebugKeys(map.Pieces[X][Y][Z]); }
-                        }
-                    }
-                }
-                LatePassBridges();
-                LatePassRooms();
-                RemoveAllEmpty();
                 await Task.Delay(1);
             }
+
+            BuildSectionConnections();
+
+            FitSmallArches();
+            // Start Fitting every piece and add debug
+            foreach (int X in map.Pieces.Keys)
+            {
+                foreach (int Y in map.Pieces[X].Keys)
+                {
+                    foreach (int Z in map.Pieces[X][Y].Keys)
+                    {
+                        if (Args.wallPass) { FitRoundedCorners(map.Pieces[X][Y][Z]); }
+                        //FitLocation(pieces[X][Y][Z]);
+                        if (Args.debugPass) { AddDebugKeys(map.Pieces[X][Y][Z]); }
+                    }
+                }
+            }
+            LatePassBridges();
+            LatePassRooms();
+            RemoveAllEmpty();
         }// EOF GenerateMap()
+
+        private void BuildSectionConnections()
+        {
+            foreach (ISection section in map.Sections)
+            {
+                section.PunchBackDoor();
+                section.BuildConnections();
+            }
+        }
+
+        internal async Task BuildSection(string sectionTypeName)
+        {
+            MapPiece piece = map.GetPiece(MapCoordinate.Zero);
+            piece.Orientation = MAPDIRECTION.NORTH;
+
+            SectionbBuildArguments buildArgs = new SectionbBuildArguments() { map = map, piece = piece, sectionID = map.Sections.Count, cfg = Args };
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type type = assembly.GetTypes().First(t => t.Name == sectionTypeName);
+
+            object instance = Activator.CreateInstance(type, new object[] { buildArgs } );
+
+            ISection section = instance as SectionBase;
+
+            GD.Print($"MapBuilder::BuildSection() [{section.GetType().Name}]");
+
+            section.Build();
+            map.Sections.Add(section);
+
+            FitSmallArches();
+            // Start Fitting every piece and add debug
+            foreach (int X in map.Pieces.Keys)
+            {
+                foreach (int Y in map.Pieces[X].Keys)
+                {
+                    foreach (int Z in map.Pieces[X][Y].Keys)
+                    {
+                        if (Args.wallPass) { FitRoundedCorners(map.Pieces[X][Y][Z]); }
+                        //FitLocation(pieces[X][Y][Z]);
+                        if (Args.debugPass) { AddDebugKeys(map.Pieces[X][Y][Z]); }
+                    }
+                }
+            }
+            LatePassBridges();
+            LatePassRooms();
+            RemoveAllEmpty();
+            await Task.Delay(1);
+        }
 
         private void AddDebugKeys(MapPiece piece)
         {
@@ -134,8 +194,6 @@ namespace Munglo.DungeonGenerator
                         if (adjacentS.HasEastWall && adjacentE.HasSouthWall)
                         {
                             SE = true;
-
-
                         }
                     }
                 }
@@ -169,24 +227,36 @@ namespace Munglo.DungeonGenerator
             if (NE)
             {
                 piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.NORTH }, true);
-                piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.NORTH });
+                if (piece.hasCieling)
+                {
+                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.NORTH });
+                }
             }
             if (SE)
             {
                 piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.EAST }, true);
-                piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.EAST });
+                if (piece.hasCieling)
+                {
+                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.EAST });
+                }
             }
             if (SW)
             {
                 piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.SOUTH }, true);
-                piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.SOUTH });
+                if (piece.hasCieling)
+                {
+                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.SOUTH });
+                }
             }
             if (NW)
             {
                 if (adjacentN.HasWestWall && adjacentW.HasNorthWall)
                 {
                     piece.AssignWall(new KeyData() { key = PIECEKEYS.WCI, dir = MAPDIRECTION.WEST }, true);
-                    piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.WEST });
+                    if (piece.hasCieling)
+                    {
+                        piece.AddProp(new KeyData() { key = PIECEKEYS.ASIC, dir = MAPDIRECTION.WEST });
+                    }
                 }
             }
         }
@@ -238,8 +308,17 @@ namespace Munglo.DungeonGenerator
         private void BuildRoom(MapPiece piece)
         {
             ulong[] roomSeed = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
-            RoomSection room = new RoomSection(map, piece.Coord, piece.Orientation, map.standardRoom, map.Sections.Count, roomSeed);
+            RoomSection room = new RoomSection(
+                new SectionbBuildArguments()
+                {
+                    map = map,
+                    piece = piece,
+                    sectionID = map.Sections.Count,
+                    sectionSeed = roomSeed,
+                    cfg = Args
+                });
             room.Build();
+            room.Save();
             map.Sections.Add(room);
         }
 
@@ -249,7 +328,6 @@ namespace Munglo.DungeonGenerator
             foreach (ISection room in map.Sections)
             {
                 if (room is not RoomSection) { continue; }
-                room.PunchBackDoor();
                 room.BuildProps();
             }
         }
@@ -259,8 +337,8 @@ namespace Munglo.DungeonGenerator
             // make the seed to usefor the path
             ulong[] bosse = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
             startpoint.Orientation = dir;
-            PathSection path = new PathSection(map, startpoint, map.Sections.Count, size, bosse, Args.corMaxTotal, Args.corMaxStraight, Args.corMinStraight);
-            if (path.IsValid) { map.Sections.Add(path); }
+            PathSection path = new PathSection(new SectionbBuildArguments() { map = map, piece = startpoint, sectionID = map.Sections.Count, sectionSeed = bosse, cfg = Args });
+            if (path.IsValid) { path.Save(); map.Sections.Add(path); }
         }
 
         /// <summary>
@@ -269,6 +347,7 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         private void RemoveAllEmpty()
         {
+            if (!Args.clearEmpties) { return; }
             List<MapCoordinate> toDelete = new List<MapCoordinate>();
             foreach (int X in map.Pieces.Keys)
             {

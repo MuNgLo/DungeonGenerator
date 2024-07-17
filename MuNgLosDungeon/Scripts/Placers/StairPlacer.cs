@@ -85,37 +85,32 @@ namespace Munglo.DungeonGenerator
         {
             if (!canFit) { return; }
             //GD.Print( $"StairCase::Build() Stair Built! ogOrientation[{ogOrientation}] orientation[{orientation}]");
-            Vector3I offset = new Vector3I(2, 1, 2);
-            Vector3I offset2 = new Vector3I(3, 1, 3);
+            //Vector3I offset = new Vector3I(2, 1, 2);
+            Vector3I offset = Vector3I.Zero;
+            //Vector3I offset2 = new Vector3I(3, 1, 3);
+            Vector3I offset2 = Vector3I.Zero;
             // Since offset is in worldspace we need to tweak it depending on OG Direction
             switch (ogOrientation)
             {
                 case MAPDIRECTION.NORTH:
-                    offset += new Vector3I(0, 0, 2);
+                    offset += new Vector3I(-1, 0, 1);
                     if(variationID == 1) { offset += new Vector3I(2, 0, 0); }
-
                     if (wide) { offset2 += new Vector3I(3, 0, 0); offset += new Vector3I(3, 0, 0); }
-
                     break;
                 case MAPDIRECTION.EAST:
-                    offset += new Vector3I(0, 0, 0);
+                    offset += new Vector3I(-1, 0, -1);
                     if (variationID == 1) { offset += new Vector3I(0, 0, 2); }
-
                     if (wide) { offset2 += new Vector3I(0, 0, 3); offset += new Vector3I(0, 0, 3); }
-
                     break;
                 case MAPDIRECTION.SOUTH:
-                    offset += new Vector3I(2, 0, 0);
+                    offset += new Vector3I(1, 0, -1);
                     if (variationID == 1) { offset += new Vector3I(-2, 0, 0); }
-
                     if (wide) { offset2 += new Vector3I(-3, 0, 0); offset += new Vector3I(-3, 0, 0); }
-
                     break;
                 case MAPDIRECTION.WEST:
-                    offset += new Vector3I(2, 0, 2);
+                    offset += new Vector3I(1, 0, 1);
                     if (variationID == 1) { offset += new Vector3I(0, 0, -2); }
                     if (wide) { offset2 += new Vector3I(0, 0, -3); offset += new Vector3I(0, 0, -3); }
-
                     break;
             }
 
@@ -128,10 +123,10 @@ namespace Munglo.DungeonGenerator
             r2.hasStairs = true;
             
 
-            room.AddProp(r1.Coord, new RoomProp(PIECEKEYS.STAIR, offset, orientation, variationID));
+            room.AddProp(new SectionProp(PIECEKEYS.STAIR, Dungeon.GlobalPosition(r1) +  offset, orientation, variationID));
             if (!r2.hasFloor)
             {
-                room.AddProp(r2.Coord, new RoomProp(PIECEKEYS.STAIR, offset, Dungeon.Flip(orientation), variationID));
+                room.AddProp(new SectionProp(PIECEKEYS.STAIR, Dungeon.GlobalPosition(r2) + offset, Dungeon.Flip(orientation), variationID));
             }
 
 
@@ -143,7 +138,7 @@ namespace Munglo.DungeonGenerator
 
 
 
-            room.AddProp(parentPiece.Coord, new RoomProp(PIECEKEYS.BRIDGE, offset2, ogOrientation, 6));
+            room.AddProp(new SectionProp(PIECEKEYS.BRIDGE, Dungeon.GlobalPosition(parentPiece) + offset2, ogOrientation, 6));
             parentPiece.Save();
         }
 
