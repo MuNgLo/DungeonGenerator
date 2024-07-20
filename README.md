@@ -3,12 +3,15 @@
  
  Put the "MuNgLosDungeon" folder in your addons folder and activate.
  
- Features working
+ Features
 	- Build
 	- Clear
 	- Show flags
-	
-Features planned
 	- Buttons to open configuration resources in inpector
 	- Export to save generated level to a scene
+	- View section of dungeon data
+	
+Features planned
+	- SectionResource with customizable placers
+	- Section droptables for each floor
 	- Profile create/swap support
