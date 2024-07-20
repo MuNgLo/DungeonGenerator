@@ -240,15 +240,15 @@ namespace Munglo.DungeonGenerator
         private void VisualizeSection(ISection section)
         {
             if (section == null) { return; }
-            Node3D parentNode = new Node3D();
+            section.SectionContainer = new Node3D();
             propContainer = new Node3D();
             tileContainer = new Node3D();
-            parentNode.Name = "S" + string.Format("{0:000}", section.SectionIndex);
+            section.SectionContainer.Name = "S" + string.Format("{0:000}", section.SectionIndex);
             propContainer.Name = $"Props[{section.PropCount}]";
             tileContainer.Name = $"Tiles[{section.Pieces.Count}]";
-            GetFloorContainer(section.Coord.y).AddChild(parentNode, true);
-            parentNode.AddChild(propContainer, true);
-            parentNode.AddChild(tileContainer, true);
+            GetFloorContainer(section.Coord.y).AddChild(section.SectionContainer, true);
+            section.SectionContainer.AddChild(propContainer, true);
+            section.SectionContainer.AddChild(tileContainer, true);
             // Section Tiles
             int index = 0;
             foreach (MapPiece rp in section.Pieces)
@@ -264,6 +264,25 @@ namespace Munglo.DungeonGenerator
                     index++;
                 }
             }
+
+            // Run the section prop placers
+            foreach (IPlacer placer in section.Placers)
+            {
+                PackedScene scn = placer.PickRandomProp();
+                placer.Place(section, scn.Instantiate<Node3D>());
+
+                /*
+                for (int i = 0; i < 200; i++)
+                {
+                    Node3D node = scn.Instantiate<Node3D>();
+                    if (placer.Fit(section, node))
+                    {
+                    }
+                }
+                */
+            }
+
+
             // Section Props
             foreach (SectionProp c in section.Props)
             {

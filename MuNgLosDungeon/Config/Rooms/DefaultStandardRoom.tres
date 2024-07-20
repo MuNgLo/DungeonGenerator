@@ -1,21 +1,28 @@
-[gd_resource type="Resource" script_class="RoomResource" load_steps=2 format=3 uid="uid://6ah2ij0d3nxw"]
+[gd_resource type="Resource" script_class="RoomResource" load_steps=5 format=3 uid="uid://6ah2ij0d3nxw"]
 
+[ext_resource type="PackedScene" uid="uid://chlodyfcal74w" path="res://prop_marker.tscn" id="1_7jyxl"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/RoomResource.cs" id="1_cwmmm"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PlacerResource.cs" id="2_34s7r"]
+
+[sub_resource type="Resource" id="Resource_rbcp5"]
+script = ExtResource("2_34s7r")
+props = [ExtResource("1_7jyxl")]
 
 [resource]
 script = ExtResource("1_cwmmm")
 roomName = "StandardRoom"
 roomStyle = "StdRoom"
 defaultResponses = 15
-sizeWidthMin = 3
-sizeWidthMax = 6
-sizeDepthMin = 3
-sizeDepthMax = 6
+sizeWidthMin = 5
+sizeWidthMax = 5
+sizeDepthMin = 5
+sizeDepthMax = 5
 nbFloorsMin = 1
-nbFloorsMax = 3
+nbFloorsMax = 1
 debug = false
 nbDoorsPerFloorMin = 1
-nbDoorsPerFloorMax = 3
+nbDoorsPerFloorMax = 1
+placers = [SubResource("Resource_rbcp5")]
 centerSpiralStairs = false
 firstPieceDoor = false
 backDoorChance = 75

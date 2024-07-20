@@ -46,11 +46,6 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         public void Save();
 
-        /// <summary>
-        /// Generate the inner props of the section
-        /// </summary>
-        public void BuildProps();
-
         public bool AddOpening(MapCoordinate coord, MAPDIRECTION dir, bool wide, bool overrideLocked);
         /// <summary>
         /// Add inner prop to section
@@ -68,7 +63,7 @@ namespace Munglo.DungeonGenerator
         /// <param name="worldPosition"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public bool IsInside(Vector3I worldPosition);
+        public bool IsInside(Vector3 worldPosition);
 
         public List<SectionConnection> Connections { get; }
 
@@ -93,6 +88,9 @@ namespace Munglo.DungeonGenerator
         public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
         public int ConnectionCount { get; }
 
-
+        public Node3D SectionContainer { get; set; }
+        public MapCoordinate MaxCoord { get; }
+        public MapCoordinate MinCoord { get; }
+        public PlacerResource[] Placers { get; }
     }// EOF INTERFACE
 }

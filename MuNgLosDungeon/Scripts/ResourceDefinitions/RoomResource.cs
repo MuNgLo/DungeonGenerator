@@ -22,6 +22,7 @@ namespace Munglo.DungeonGenerator
         [Export] public int nbDoorsPerFloorMax = 0;
 
         [ExportGroup("WiP")]
+        [Export] public PlacerResource[] placers;
         [Export] public bool centerSpiralStairs = false;
         [Export] public bool firstPieceDoor = true;
         [Export] public int backDoorChance = 30;

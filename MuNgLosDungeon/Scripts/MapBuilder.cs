@@ -27,12 +27,13 @@ namespace Munglo.DungeonGenerator
             RoomSection centerRoom = new RoomSection(
                 new SectionbBuildArguments()
                 {
+                    sectionDefinition = Args.roomStart,
                     map = map,
                     piece = map.GetPiece(MapCoordinate.Zero),
                     sectionID = map.Sections.Count,
                     sectionSeed = roomSeed,
                     cfg = Args
-                }, Args.roomStart);
+                });
             centerRoom.Build();
             centerRoom.Save();
             map.Sections.Add(centerRoom);
@@ -93,7 +94,6 @@ namespace Munglo.DungeonGenerator
                     }
                 }
             }
-            LatePassBridges();
             LatePassRooms();
             RemoveAllEmpty();
         }// EOF GenerateMap()
@@ -140,7 +140,6 @@ namespace Munglo.DungeonGenerator
                     }
                 }
             }
-            LatePassBridges();
             LatePassRooms();
             RemoveAllEmpty();
             await Task.Delay(1);
@@ -158,10 +157,10 @@ namespace Munglo.DungeonGenerator
         /// <summary>
         /// Instances a BridgePlacer and 
         /// </summary>
-        private void LatePassBridges()
+        private void PlaceBridges(ISection section)
         {
-            BridgePlacer bridgeMaker = new BridgePlacer(map);
-            bridgeMaker.Place();
+            BridgePlacer bridgeMaker = new BridgePlacer(section, map);
+            bridgeMaker.Place(section);
         }
 
         private void FitRoundedCorners(MapPiece piece)
@@ -311,6 +310,7 @@ namespace Munglo.DungeonGenerator
             RoomSection room = new RoomSection(
                 new SectionbBuildArguments()
                 {
+                    sectionDefinition = Args.roomDefault,
                     map = map,
                     piece = piece,
                     sectionID = map.Sections.Count,
@@ -328,7 +328,7 @@ namespace Munglo.DungeonGenerator
             foreach (ISection room in map.Sections)
             {
                 if (room is not RoomSection) { continue; }
-                room.BuildProps();
+                PlaceBridges(room);
             }
         }
 

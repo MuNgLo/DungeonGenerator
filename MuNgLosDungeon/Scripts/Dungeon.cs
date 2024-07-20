@@ -53,16 +53,11 @@ namespace Munglo.DungeonGenerator
 
         internal static Vector3 GlobalSnapPosition(Vector3 pos)
         {
-            return GlobalSnapPosition((Vector3I)pos);
-        }
-        internal static Vector3 GlobalSnapPosition(Vector3I pos)
-        {
-            Vector3I c = pos == Vector3I.Zero ? Vector3I.Zero : (pos / 6);
-            MapCoordinate coord = new MapCoordinate(c.X, c.Y, c.Z);
-            return GlobalPosition(coord);
+            return GlobalPosition(GlobalSnapCoordinate((Vector3I)pos));
         }
         internal static MapCoordinate GlobalSnapCoordinate(Vector3I pos)
         {
+            pos += new Vector3I(3, 0, 3);
             Vector3I c = pos == Vector3I.Zero ? Vector3I.Zero : (pos / 6);
             return new MapCoordinate(c.X, c.Y, c.Z);
         }

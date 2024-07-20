@@ -4,6 +4,7 @@ namespace Munglo.DungeonGenerator
 {
     public class SectionbBuildArguments
     {
+        public RoomResource sectionDefinition;
         public MapData map;
         public MapPiece piece;
         public int sectionID;

@@ -1,6 +1,12 @@
-[gd_resource type="Resource" script_class="RoomResource" load_steps=2 format=3 uid="uid://c3d25nty3rs6k"]
+[gd_resource type="Resource" script_class="RoomResource" load_steps=5 format=3 uid="uid://c3d25nty3rs6k"]
 
+[ext_resource type="PackedScene" uid="uid://chlodyfcal74w" path="res://prop_marker.tscn" id="1_1qpw0"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/RoomResource.cs" id="1_srpba"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PlacerResource.cs" id="2_2h4ga"]
+
+[sub_resource type="Resource" id="Resource_3w0be"]
+script = ExtResource("2_2h4ga")
+props = [ExtResource("1_1qpw0")]
 
 [resource]
 script = ExtResource("1_srpba")
@@ -11,11 +17,12 @@ sizeWidthMin = 5
 sizeWidthMax = 5
 sizeDepthMin = 5
 sizeDepthMax = 5
-nbFloorsMin = 5
-nbFloorsMax = 5
+nbFloorsMin = 1
+nbFloorsMax = 1
 debug = false
 nbDoorsPerFloorMin = 0
 nbDoorsPerFloorMax = 0
+placers = [SubResource("Resource_3w0be")]
 centerSpiralStairs = false
 firstPieceDoor = false
 backDoorChance = -1

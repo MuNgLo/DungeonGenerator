@@ -13,13 +13,13 @@ namespace Munglo.DungeonGenerator.Sections
         private RoomResource roomDef;
         private protected bool centerSpiralStairs;
 
-        public RoomSection(SectionbBuildArguments args, RoomResource roomOverride=null) : base(args)
+        public RoomSection(SectionbBuildArguments args) : base(args)
         {
             coord = args.piece.Coord;
             orientation = args.piece.Orientation;
             if (orientation == MAPDIRECTION.ANY) { orientation = (MAPDIRECTION)rng.Next(1, 5); }
 
-            if(roomOverride != null ) { roomDef = roomOverride; } else { roomDef = args.cfg.roomDefault; }
+            if(args.sectionDefinition != null ) { roomDef = args.sectionDefinition; } else { roomDef = args.cfg.roomDefault; }
 
             sectionStyle = roomDef.roomStyle;
             sectionName = roomDef.roomName;
@@ -28,7 +28,6 @@ namespace Munglo.DungeonGenerator.Sections
             sizeX = rng.Next(roomDef.sizeWidthMin, roomDef.sizeWidthMax + 1);
             sizeZ = rng.Next(roomDef.sizeDepthMin, roomDef.sizeDepthMax + 1);
             sizeY = rng.Next(roomDef.nbFloorsMin, roomDef.nbFloorsMax + 1);
-
             
             ResolveWIdthDepth();
             SetMinMaxCoord();
@@ -245,13 +244,6 @@ namespace Munglo.DungeonGenerator.Sections
         }
 
 
-        public override void BuildProps()
-        {
-            if (centerSpiralStairs)
-            {
-                AddCentralSpiralStairs();
-            }
-        }
         public override bool AddPropOnRandomTile(KeyData keyData, out MapPiece pick)
         {
             pick = null;

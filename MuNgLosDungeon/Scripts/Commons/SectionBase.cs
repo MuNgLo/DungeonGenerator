@@ -40,6 +40,7 @@ namespace Munglo.DungeonGenerator
 
         private protected List<MapPiece> pieces;
         private SectionProps props;
+        internal SectionProps PropGrid => props;
         public List<SectionProp> Props => props.props;
 
 
@@ -69,6 +70,10 @@ namespace Munglo.DungeonGenerator
         #endregion
 
         #region Properties
+        public MapCoordinate MaxCoord => new MapCoordinate(maxX, MaxY - 1, maxZ);
+        public MapCoordinate MinCoord => new MapCoordinate(minX, MinY, minZ);
+
+
         public int SectionIndex => sectionIndex;
         public string SectionStyle => sectionStyle;
         public virtual int TileCount => Pieces.Count;
@@ -77,6 +82,14 @@ namespace Munglo.DungeonGenerator
 
         #endregion
 
+        private PlacerResource[] placers;
+        public PlacerResource[] Placers => placers;
+
+        public Node3D sectionContainer;
+
+        public Node3D SectionContainer { get => sectionContainer; set => sectionContainer = value; } 
+
+
         public SectionBase(SectionbBuildArguments args)
         {
             sectionIndex = args.sectionID;
@@ -84,15 +97,18 @@ namespace Munglo.DungeonGenerator
             pieces = new List<MapPiece>();
             connections = new List<SectionConnection>();
             rng = new PRNGMarsenneTwister(args.Seed);
-            props = new SectionProps(this);
+            props = new SectionProps(this, args.Seed);
+            if(args.sectionDefinition != null && args.sectionDefinition.placers != null)
+            {
+                placers = args.sectionDefinition.placers;
+            }
+            else
+            {
+                placers = new PlacerResource[0];
+            }
         }
 
         public virtual void Build()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void BuildProps()
         {
             throw new NotImplementedException();
         }
@@ -304,11 +320,18 @@ namespace Munglo.DungeonGenerator
             
         }
 
-
-        public virtual bool IsInside(Vector3I worldPosition)
+        public virtual bool IsInside(Vector3 worldPosition)
         {
-            MapCoordinate coord = Dungeon.GlobalSnapCoordinate(worldPosition);
-            return Pieces.Exists(p => p.Coord == coord);
+            MapCoordinate coord = Dungeon.GlobalSnapCoordinate((Vector3I)worldPosition);
+            if(Pieces.Exists(p => p.Coord == coord))
+            {
+                if(Pieces.Find(p => p.Coord == coord).isEmpty)
+                {
+                    GD.PushError($"SectionBase::IsInside() Empty piece inside section!");
+                }
+                return true;
+            }
+            return false;
         }
         public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
         {

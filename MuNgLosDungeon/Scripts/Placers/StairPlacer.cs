@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons;
+using Godot;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,10 +9,9 @@ namespace Munglo.DungeonGenerator
     /// Instance this to create a staircase drop from given startpiece.
     /// It checks for possabilty in construction but doesnäät add the keys until the Build() is called
     /// </summary>
-    internal class StairPlacer
+    internal class StairPlacer : PlacerBase, IPlacer
     {
-        private readonly SectionBase room;
-        private readonly MapPiece parentPiece; // the one we treey to build a staircase to
+        private readonly MapPiece parentPiece;
         private readonly bool canFit;
 
         private MapPiece locationPiece; // where the stair will be placed
@@ -29,9 +29,8 @@ namespace Munglo.DungeonGenerator
         /// Starting with neighbour in its direction. then attemps the other directions.
         /// It checks for possabilty in construction but doesn't add the keys until the Build() is called
         /// </summary>
-        internal StairPlacer(SectionBase section, MapPiece parentPiece, MAPDIRECTION dir)
+        internal StairPlacer(ISection section, MapPiece parentPiece, MAPDIRECTION dir):base(section)
         {
-            this.room = section;
             this.parentPiece = parentPiece;
             ogOrientation = dir;
             orientation = dir;

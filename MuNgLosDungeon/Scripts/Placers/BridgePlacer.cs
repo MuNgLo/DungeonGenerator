@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons;
+using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +9,18 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace Munglo.DungeonGenerator
 {
-    public class BridgePlacer
+    public class BridgePlacer : PlacerBase, IPlacer
     {
         private MapData map;
         private AddonSettings MasterConfig;
 
-        public BridgePlacer(MapData mapData)
+        public BridgePlacer(ISection section, MapData mapData) : base(section)
         {
             this.map = mapData;
             MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettings;
         }
 
-        public void Place()
+        public override void Place(ISection section)
         {
             foreach (int X in map.Pieces.Keys)
             {
