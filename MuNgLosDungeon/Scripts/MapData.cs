@@ -48,12 +48,12 @@ namespace Munglo.DungeonGenerator
             callback.Invoke();
         }
 
-        internal async Task GenerateSection(string sectionTypeName, Action callback)
+        internal async Task GenerateSection(string sectionTypeName, RoomResource sectionDef, PlacerResource[] placers, Action callback)
         {
             GD.Print("MapData::GenerateSection() Generation started.....");
 
             MapBuilder builder = new MapBuilder(this);
-            await builder.BuildSection(sectionTypeName);
+            await builder.BuildSection(sectionTypeName, sectionDef, placers);
             callback.Invoke();
         }
 

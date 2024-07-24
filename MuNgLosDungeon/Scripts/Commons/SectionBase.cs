@@ -16,6 +16,8 @@ namespace Munglo.DungeonGenerator
         /// The determenistic random number generator for this section
         /// </summary>
         private protected readonly PRNGMarsenneTwister rng;
+        public PRNGMarsenneTwister RNG => rng;
+
         /// <summary>
         /// The parent map data this section belongs to
         /// </summary>
@@ -76,6 +78,7 @@ namespace Munglo.DungeonGenerator
 
         public int SectionIndex => sectionIndex;
         public string SectionStyle => sectionStyle;
+        public string SectionName => sectionName;
         public virtual int TileCount => Pieces.Count;
         public virtual List<MapPiece> Pieces => pieces;
         public int PropCount => Props.Count;
@@ -344,6 +347,12 @@ namespace Munglo.DungeonGenerator
                 if(connection.ParentSection != sectionIndex) { continue; }
                 map.AddOpeningBetweenSections(connection, true);
             }
+        }
+
+        public void AssignPlacer(PlacerResource[] placers)
+        {
+            if (placers == null) { return; }
+            this.placers = placers;
         }
 
     }// EOF CLASS

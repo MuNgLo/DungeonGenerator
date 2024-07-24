@@ -1,29 +1,25 @@
-[gd_resource type="Resource" script_class="RoomResource" load_steps=5 format=3 uid="uid://6ah2ij0d3nxw"]
+[gd_resource type="Resource" script_class="RoomResource" load_steps=4 format=3 uid="uid://6ah2ij0d3nxw"]
 
-[ext_resource type="PackedScene" uid="uid://chlodyfcal74w" path="res://prop_marker.tscn" id="1_7jyxl"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/RoomResource.cs" id="1_cwmmm"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PlacerResource.cs" id="2_34s7r"]
-
-[sub_resource type="Resource" id="Resource_rbcp5"]
-script = ExtResource("2_34s7r")
-props = [ExtResource("1_7jyxl")]
+[ext_resource type="Resource" uid="uid://bxrh1tcbniucb" path="res://addons/MuNgLosDungeon/Config/Placers/def_placer2.tres" id="1_q4ohe"]
+[ext_resource type="Resource" uid="uid://bp3v5g34gbecs" path="res://addons/MuNgLosDungeon/Config/Placers/def_placer.tres" id="1_ydrpe"]
 
 [resource]
 script = ExtResource("1_cwmmm")
-roomName = "StandardRoom"
+sectionName = "StandardRoom"
 roomStyle = "StdRoom"
 defaultResponses = 15
-sizeWidthMin = 5
-sizeWidthMax = 5
-sizeDepthMin = 5
-sizeDepthMax = 5
-nbFloorsMin = 1
-nbFloorsMax = 1
-debug = false
+sizeWidthMin = 9
+sizeWidthMax = 9
+sizeDepthMin = 9
+sizeDepthMax = 9
+nbFloorsMin = 7
+nbFloorsMax = 7
+debug = true
 nbDoorsPerFloorMin = 1
 nbDoorsPerFloorMax = 1
-placers = [SubResource("Resource_rbcp5")]
-centerSpiralStairs = false
+placers = [ExtResource("1_ydrpe"), ExtResource("1_q4ohe")]
+centerSpiralStairs = true
 firstPieceDoor = false
 backDoorChance = 75
 allFloor = false

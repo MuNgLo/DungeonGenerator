@@ -12,6 +12,12 @@ namespace DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons
     {
         private protected readonly ISection room;
         public PlacerBase(ISection room) { this.room = room; }
+
+        public void DoForcedRolls(ISection section)
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual bool Fit(ISection section)
         {
             throw new NotImplementedException();
@@ -21,8 +27,7 @@ namespace DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons
         {
             throw new NotImplementedException();
         }
-
-        public PackedScene PickRandomProp()
+        public bool PickRandomProp(out PackedScene asset, out int count)
         {
             throw new NotImplementedException();
         }

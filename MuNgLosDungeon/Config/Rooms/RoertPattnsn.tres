@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RoomResource" load_steps=2 format=3 uid="uid://b8wo6bkycl84l"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/RoomResource.cs" id="1_oymh1"]
+
+[resource]
+script = ExtResource("1_oymh1")
+sectionName = "123"
+roomStyle = "Dread"
+defaultResponses = 0
+sizeWidthMin = 5
+sizeWidthMax = 8
+sizeDepthMin = 3
+sizeDepthMax = 5
+nbFloorsMin = 1
+nbFloorsMax = 2
+debug = false
+nbDoorsPerFloorMin = 0
+nbDoorsPerFloorMax = 0
+placers = []
+centerSpiralStairs = false
+firstPieceDoor = true
+backDoorChance = 30
+allFloor = false

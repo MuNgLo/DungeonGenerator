@@ -14,6 +14,10 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         public int SectionIndex { get; }
         /// <summary>
+        /// The name of the section. That should be unique for that resource
+        /// </summary>
+        public string SectionName { get; }
+        /// <summary>
         /// What type of section is this. Room, Corridor, Void, Pantry?
         /// </summary>
         public string SectionStyle { get; }
@@ -86,11 +90,14 @@ namespace Munglo.DungeonGenerator
 
 
         public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
+        void AssignPlacer(PlacerResource[] placer);
+
         public int ConnectionCount { get; }
 
         public Node3D SectionContainer { get; set; }
         public MapCoordinate MaxCoord { get; }
         public MapCoordinate MinCoord { get; }
+        public PRNGMarsenneTwister RNG { get; }
         public PlacerResource[] Placers { get; }
     }// EOF INTERFACE
 }

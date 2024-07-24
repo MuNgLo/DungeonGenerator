@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ckpkxvt1uejyn"]
+
+[ext_resource type="Texture2D" uid="uid://b21s7fq44o6ll" path="res://addons/MuNgLosDungeon/Materials/Textures/WallPixelMap.png" id="1_titlb"]
+
+[resource]
+albedo_color = Color(0.0392157, 0.0509804, 0.0588235, 1)
+albedo_texture = ExtResource("1_titlb")
+roughness_texture = ExtResource("1_titlb")

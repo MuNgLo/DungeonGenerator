@@ -6,12 +6,15 @@ namespace Munglo.DungeonGenerator
     public partial class CameraControls : Camera3D
     {
         MainScreen screen;
-        private enum CAMERAMODE { LOCKED, FREELOOK }
+        public enum CAMERAMODE { LOCKED, FREELOOK }
         private CAMERAMODE state = CAMERAMODE.LOCKED;
         [Export] private float speed = 20.0f;
         [Export] private float mouseSensitivity = 10.0f;
         private Vector2 mVel;
         private Vector3 inV;
+
+        public CAMERAMODE State => state;
+
         public override void _EnterTree()
         {
             screen = GetParent().GetParent().GetParent() as MainScreen;

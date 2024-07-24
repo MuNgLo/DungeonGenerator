@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="PlacerResource" load_steps=11 format=3 uid="uid://bp3v5g34gbecs"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PlacerResource.cs" id="1_33fck"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/DropTableEntryResource.cs" id="3_s3ahf"]
+[ext_resource type="PackedScene" uid="uid://cxnyxymsxtnps" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_crate1m.tscn" id="5_ifbdu"]
+[ext_resource type="PackedScene" uid="uid://bygdiq4sj5tq7" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_stool.tscn" id="6_uudbe"]
+[ext_resource type="PackedScene" uid="uid://bpuybu7x2kylu" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_bookshelf.tscn" id="7_gk51w"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/DropTableResource.cs" id="8_tt3fu"]
+
+[sub_resource type="Resource" id="Resource_6nxx4"]
+script = ExtResource("3_s3ahf")
+forcedRoll = true
+Chance = 20
+weight = 42
+asset = ExtResource("5_ifbdu")
+assetCount = 10
+
+[sub_resource type="Resource" id="Resource_fwsur"]
+script = ExtResource("3_s3ahf")
+forcedRoll = true
+Chance = 20
+weight = 49
+asset = ExtResource("6_uudbe")
+assetCount = 1
+
+[sub_resource type="Resource" id="Resource_i2l3i"]
+script = ExtResource("3_s3ahf")
+forcedRoll = true
+Chance = 20
+weight = 80
+asset = ExtResource("7_gk51w")
+assetCount = 4
+
+[sub_resource type="Resource" id="Resource_re5un"]
+script = ExtResource("8_tt3fu")
+entries = [SubResource("Resource_6nxx4"), SubResource("Resource_fwsur"), SubResource("Resource_i2l3i")]
+
+[resource]
+script = ExtResource("1_33fck")
+table = SubResource("Resource_re5un")

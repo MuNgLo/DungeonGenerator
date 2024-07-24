@@ -1,4 +1,5 @@
 #if TOOLS
+using DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons;
 using Godot;
 using System;
 using System.Reflection;
@@ -9,6 +10,7 @@ namespace Munglo.DungeonGenerator
     public partial class Dungeons : EditorPlugin
     {
         private VIEWERMODE mode = VIEWERMODE.DUNGEON;
+        public VIEWERMODE Mode => mode;
         private readonly string screenName = "Dungeon";
         private AddonSettings MasterConfig;
         private MainScreen screen;
@@ -74,6 +76,7 @@ namespace Munglo.DungeonGenerator
             pop.SetItemChecked(5, Profile.settings.showArches);
             screen.SetDebugLayer(Profile.showDebugLayer);
             (screen.FindChild("FloorNumber") as RichTextLabel).Text = "[center]" + MasterConfig.maxVisibleFloors.ToString() + "[/center]";
+            UpdateUIElements();
         }
         public override void _ExitTree()
         {
@@ -134,7 +137,14 @@ namespace Munglo.DungeonGenerator
         }
         public override void _Input(InputEvent @event)
         {
-            if (!screen.cursorIsInside) { return; }
+            if (!screen.cursorIsInside) 
+            { 
+                if(cam.State == CameraControls.CAMERAMODE.FREELOOK)
+                {
+                    cam.GoLocked();
+                }
+                return; 
+            }
             if (@event is InputEventMouseMotion)
             {
                 InputEventMouseMotion m = (InputEventMouseMotion)@event;
@@ -311,7 +321,9 @@ namespace Munglo.DungeonGenerator
             switch (mode)
             {
                 case VIEWERMODE.SECTION:
-                    screen.GenerateSection(Profile.settings, Profile.biome);
+                    RoomResource sectionDef = (screen.FindChild("SectionResourceSelector") as SectionSelector).sectionSelected;
+
+                    screen.GenerateSection(sectionDef, Profile.settings, Profile.biome);
                     break;
                 default:
                 case VIEWERMODE.DUNGEON:
@@ -390,9 +402,27 @@ namespace Munglo.DungeonGenerator
             {
                 GD.Print($"Dungeons::ChangeMode() changed to {newMode}");
                 mode = newMode;
+                UpdateUIElements();
             }
         }
 
+        private void UpdateUIElements()
+        {
+            switch (Mode)
+            {
+                case VIEWERMODE.SECTION:
+                    (screen.FindChild("PlacerResouceSelector") as EditorResourcePicker).Show(); 
+                    (screen.FindChild("SectionResourceSelector") as SectionSelector).Show();
+                    (screen.FindChild("PlacerBar") as Control).Show();
+                    break;
+                case VIEWERMODE.DUNGEON:
+                default:
+                    (screen.FindChild("PlacerResouceSelector") as EditorResourcePicker).Hide();
+                    (screen.FindChild("SectionResourceSelector") as SectionSelector).Hide();
+                    (screen.FindChild("PlacerBar") as Control).Hide();
+                    break;
+            }
+        }
     }// EOF CLASS
 }
 #endif

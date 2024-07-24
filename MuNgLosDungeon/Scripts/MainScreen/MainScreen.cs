@@ -48,15 +48,31 @@ namespace Munglo.DungeonGenerator
             dunVis.BuildDungeon(settings, biome);
         }
 
-        public void GenerateSection(GenerationSettingsResource settings, BiomeResource biome)
+        public void GenerateSection(RoomResource sectionDef, GenerationSettingsResource settings, BiomeResource biome)
         {
             OptionButton btn = this.GetNode<OptionButton>("ModeSelector");
+            EditorResourcePicker picker = this.GetNode<EditorResourcePicker>("PlacerResouceSelector");
 
-            dunVis.BuildSection(btn.GetItemText(btn.Selected), settings, biome, ReDrawDungeon);
+            PlacerResource[] placers = null;
+            if(picker.EditedResource is not null)
+            {
+                placers = new PlacerResource[1] {picker.EditedResource as PlacerResource};
+            }
+
+            dunVis.BuildSection(btn.GetItemText(btn.Selected), sectionDef, placers, settings, biome, ReDrawDungeon);
         }
         public void ReDrawDungeon()
         {
-            dunVis.ReDrawMap();
+            switch (addon.Mode)
+            {
+                case VIEWERMODE.SECTION:
+                    dunVis.ReDrawSection();
+                    break;
+                case VIEWERMODE.DUNGEON:
+                default:
+                    dunVis.ReDrawMap();
+                    break;
+            }
         }
         /// <summary>
         /// Clears existing dungoen that is being viewed

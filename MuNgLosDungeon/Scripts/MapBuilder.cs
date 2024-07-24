@@ -107,19 +107,21 @@ namespace Munglo.DungeonGenerator
             }
         }
 
-        internal async Task BuildSection(string sectionTypeName)
+        internal async Task BuildSection(string sectionTypeName, RoomResource sectionDef, PlacerResource[] placers)
         {
             MapPiece piece = map.GetPiece(MapCoordinate.Zero);
             piece.Orientation = MAPDIRECTION.NORTH;
 
-            SectionbBuildArguments buildArgs = new SectionbBuildArguments() { map = map, piece = piece, sectionID = map.Sections.Count, cfg = Args };
+            SectionbBuildArguments buildArgs = new SectionbBuildArguments() { map = map, piece = piece, sectionID = map.Sections.Count, cfg = Args, sectionDefinition = sectionDef };
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             Type type = assembly.GetTypes().First(t => t.Name == sectionTypeName);
 
-            object instance = Activator.CreateInstance(type, new object[] { buildArgs } );
+            object instance = Activator.CreateInstance(type, new object[] { buildArgs });
 
             ISection section = instance as SectionBase;
+
+            section.AssignPlacer(placers);
 
             GD.Print($"MapBuilder::BuildSection() [{section.GetType().Name}]");
 

@@ -22,9 +22,12 @@ namespace Munglo.DungeonGenerator.Sections
             if(args.sectionDefinition != null ) { roomDef = args.sectionDefinition; } else { roomDef = args.cfg.roomDefault; }
 
             sectionStyle = roomDef.roomStyle;
-            sectionName = roomDef.roomName;
+            sectionName = roomDef.sectionName;
             centerSpiralStairs = roomDef.centerSpiralStairs;
             defaultConnectionResponses = roomDef.defaultResponses;
+
+            roomDef.VerifyValues();
+
             sizeX = rng.Next(roomDef.sizeWidthMin, roomDef.sizeWidthMax + 1);
             sizeZ = rng.Next(roomDef.sizeDepthMin, roomDef.sizeDepthMax + 1);
             sizeY = rng.Next(roomDef.nbFloorsMin, roomDef.nbFloorsMax + 1);

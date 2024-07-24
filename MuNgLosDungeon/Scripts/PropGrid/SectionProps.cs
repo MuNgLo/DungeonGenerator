@@ -81,5 +81,20 @@ namespace Munglo.DungeonGenerator.PropGrid
             }
             return result;
         }
+        internal bool GetRandomFloorPosition(int sectionLevel, PRNGMarsenneTwister rng, out Vector3 pos)
+        {
+            int breaker = 5;
+            pos = Vector3.Down * 1000;
+            List<Vector3> positions = GetFloorPositions(sectionLevel);
+            if(positions.Count < 1) { return false; }
+            while (!section.IsInside(pos))
+            {
+                breaker--;
+                int pick = rng.Next(positions.Count - 1);
+                pos = positions[pick];
+                if(breaker < 0) { return false; }
+            }
+            return true;
+        }
     }// EOF CLASS
 }

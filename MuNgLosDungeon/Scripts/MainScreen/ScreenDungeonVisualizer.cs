@@ -38,7 +38,7 @@ namespace Munglo.DungeonGenerator
             //BuildData(biome, () => { ShowMap(null, null); }, settings.roomStart, settings.roomDefault);
             BuildData(biome, () => { ReDrawMap(); }, settings.roomStart, settings.roomDefault);
         }
-        public async void BuildSection(string sectionTypeName,  GenerationSettingsResource settings, BiomeResource biome, Action callback)
+        public async void BuildSection(string sectionTypeName, RoomResource sectionDef, PlacerResource[] placers, GenerationSettingsResource settings, BiomeResource biome, Action callback)
         {
             this.settings = settings;
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 0) + "%");
@@ -48,8 +48,10 @@ namespace Munglo.DungeonGenerator
             this.biome = biome;
 
             map = new MapData(settings, settings.roomStart, settings.roomDefault);
-            await map.GenerateSection(sectionTypeName, callback);
+            await map.GenerateSection(sectionTypeName, sectionDef, placers, callback);
         }
+
+
         private async void BuildData(BiomeResource biome, Action callback, RoomResource startRoom, RoomResource standardRoom)
         {
             cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
@@ -65,7 +67,7 @@ namespace Munglo.DungeonGenerator
    
         /// <summary>
         /// Updates the visuals
-        /// Obeying the floor start nad floor end
+        /// Obeying the floor start and floor end
         /// </summary>
         public async void ReDrawMap()
         {
@@ -81,6 +83,17 @@ namespace Munglo.DungeonGenerator
                 VisualizeFloor(i);
                 await ToSignal(GetTree(), "process_frame");
             }
+        }
+
+        public void ReDrawSection()
+        {
+            GD.Print($"ScreenDungeonVisulaizer::ReDrawSection()");
+            cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
+            mapContainer = FindChild("Generated") as Node3D;
+            debugContainer = FindChild("GeneratedDebug") as Node3D;
+            GetFloorContainer(0);
+            GetFloorDebugContainer(0);
+            VisualizeFloor(0);
         }
         /// <summary>
         /// Removes the visuals for a specific Floor
@@ -266,30 +279,22 @@ namespace Munglo.DungeonGenerator
             }
 
             // Run the section prop placers
-            foreach (IPlacer placer in section.Placers)
+            if (section.Placers is not null)
             {
-                PackedScene scn = placer.PickRandomProp();
-                placer.Place(section, scn.Instantiate<Node3D>());
-
-                /*
-                for (int i = 0; i < 200; i++)
+                foreach (IPlacer placer in section.Placers)
                 {
-                    Node3D node = scn.Instantiate<Node3D>();
-                    if (placer.Fit(section, node))
-                    {
-                    }
+                    placer.DoForcedRolls(section);
                 }
-                */
             }
 
 
             // Section Props
             foreach (SectionProp c in section.Props)
             {
-                SpawnProp(biome, c, true);
+                SpawnExtra(biome, c, true);
             }
         }
-        internal void SpawnProp(BiomeResource biome, SectionProp propData, bool makeCollider = true)
+        internal void SpawnExtra(BiomeResource biome, SectionProp propData, bool makeCollider = true)
         {
             //GD.Print($"DungeonGenerator::SpawnRoomProp()");
             if (settings.showProps)
@@ -480,6 +485,11 @@ namespace Munglo.DungeonGenerator
             }
         }
 
+        /// <summary>
+        /// Allow lookup of current MapData
+        /// </summary>
+        /// <param name="coord"></param>
+        /// <returns></returns>
         public MapPiece GetMapPiece(MapCoordinate coord)
         {
             return map.GetExistingPiece(coord);

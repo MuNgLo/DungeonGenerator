@@ -1,3 +1,13 @@
 [gd_resource type="Environment" format=3 uid="uid://bn1cwyorljhq2"]
 
 [resource]
+background_mode = 1
+background_color = Color(0.239216, 0.298039, 0.388235, 1)
+tonemap_mode = 2
+tonemap_exposure = 1.61
+tonemap_white = 1.61
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_read_sky_light = false
+glow_intensity = 0.4
