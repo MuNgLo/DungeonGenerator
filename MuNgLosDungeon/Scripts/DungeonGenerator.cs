@@ -45,7 +45,7 @@ namespace Munglo.DungeonGenerator
         public override void _EnterTree()
         {
         }
-        public void BuildDungeon(GenerationSettingsResource settings, BiomeResource biome, RoomResource startRoom, RoomResource standardRoom)
+        public void BuildDungeon(GenerationSettingsResource settings, BiomeResource biome, SectionResource startRoom, SectionResource standardRoom)
         {
             genSettings = settings;
             BuildData(biome, () => { ShowMap(null, null); }, startRoom, standardRoom);
@@ -57,7 +57,7 @@ namespace Munglo.DungeonGenerator
         /// <param name="callback"></param>
         /// <param name="startRoom"></param>
         /// <param name="standardRoom"></param>
-        public void BuildSeededDungeon(int[] seed, GenerationSettingsResource settings, BiomeResource biome, Action callback, RoomResource startRoom, RoomResource standardRoom)
+        public void BuildSeededDungeon(int[] seed, GenerationSettingsResource settings, BiomeResource biome, Action callback, SectionResource startRoom, SectionResource standardRoom)
         {
             genSettings = settings;
             Config.seed1 = seed[0];
@@ -68,7 +68,7 @@ namespace Munglo.DungeonGenerator
             BuildData(biome, () => { callback.Invoke(); }, startRoom, standardRoom);
         }
 
-        private async void BuildData(BiomeResource biome, Action callback, RoomResource startRoom, RoomResource standardRoom)
+        private async void BuildData(BiomeResource biome, Action callback, SectionResource startRoom, SectionResource standardRoom)
         {
             cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
             this.biome = biome;

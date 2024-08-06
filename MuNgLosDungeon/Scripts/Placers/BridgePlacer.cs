@@ -1,26 +1,36 @@
-﻿using DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons;
-using Godot;
+﻿using Godot;
+using Munglo.DungeonGenerator.PropGrid;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Munglo.DungeonGenerator
 {
-    public class BridgePlacer : PlacerBase, IPlacer
+    public class BridgePlacer : IPlacer
     {
-        private MapData map;
+        /// <summary>
+        /// The parent map data this section belongs to
+        /// </summary>
+        private protected readonly MapData map;
         private AddonSettings MasterConfig;
 
-        public BridgePlacer(ISection section, MapData mapData) : base(section)
+        private string resourceName = "BridgePlacer";
+        public string ResourceName { get => resourceName; set => resourceName = value; }
+        public bool isActive { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Chance { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Min { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Max { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        private protected readonly ISection room;
+
+
+        public BridgePlacer(ISection section, MapData mapData)
         {
+            this.room = section;
             this.map = mapData;
             MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettings;
         }
 
-        public override void Place(ISection section)
+        public void Place(ISection section)
         {
             foreach (int X in map.Pieces.Keys)
             {
@@ -209,5 +219,33 @@ namespace Munglo.DungeonGenerator
             }
            
         }
-    }
+
+
+
+        public void DoForcedRolls(ISection section)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool Fit(ISection section)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool Fit(ISection section, Node3D node)
+        {
+            throw new NotImplementedException();
+        }
+        public bool PickRandomProp(out PackedScene asset, out int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void Place(ISection section, Node3D node)
+        {
+            throw new NotImplementedException();
+        }
+
+
+    }// EOF CLASS
 }

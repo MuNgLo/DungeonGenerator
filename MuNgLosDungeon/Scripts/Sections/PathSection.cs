@@ -8,7 +8,6 @@ namespace Munglo.DungeonGenerator.Sections
 {
     public class PathSection : SectionBase
     {
-        private int width = 1;
         override public int TileCount => AllPieces().Count;
         override public List<MapPiece> Pieces => AllPieces();
         private Line[] lines;
@@ -18,28 +17,29 @@ namespace Munglo.DungeonGenerator.Sections
         internal bool IsValid = false;
         internal int Floor => LeftSide.Floor;
 
-        public PathSection(SectionbBuildArguments args) : base(args)
-        {
-            Construct(args.piece, args.cfg);
-        }
-        private void Construct(MapPiece step, GenerationSettingsResource cfg)
-        {
-            sectionName = "Path";
-            sectionStyle = "Connector";
-            orientation = step.Orientation;
-            coord = step.Coord;
+        // Corridor things
+        [ExportGroup("Corridors")]
+        [Export] public int corMaxTotal = 20;
+        [Export] public int corMaxStraight = 5;
+        [Export] public int corMinStraight = 2;
 
-            this.width = 1;
-            VerifyWidth(step);
-            if (this.width < 1) { return; }
+
+        public PathSection(SectionbBuildArguments args) : base(args, false)
+        {
+        }
+
+        public override void Build()
+        {
+            MapPiece step = map.GetPiece(coord);
+            //VerifyWidth(step);
             SetupLines(step);
-            int breaker = cfg.corMaxTotal + 5;
-            int turntimer = rng.Next(cfg.corMinStraight, cfg.corMaxStraight);
+            int breaker = corMaxTotal + 5;
+            int turntimer = rng.Next(corMinStraight, corMaxStraight);
             while (!isFinished)
             {
                 turntimer--;
-                if (turntimer < 1 && lines[0].Last.isBridge == false) { RollTurn(); turntimer = rng.Next(cfg.corMinStraight, cfg.corMaxStraight); }
-                AddStep(cfg.corMaxTotal);
+                if (turntimer < 1 && lines[0].Last.isBridge == false) { RollTurn(); turntimer = rng.Next(corMinStraight, corMaxStraight); }
+                AddStep(corMaxTotal);
                 if (PathBlocked()) { TrimLines(); isFinished = true; }
                 breaker--;
                 if (breaker < 0)
@@ -47,7 +47,7 @@ namespace Munglo.DungeonGenerator.Sections
                     isFinished = true;
                     DungeonGenerator.Log("Path", "CONSTRUCTOR", "Addstep loop hit BREAKER!");
                 }
-                if (LeftSide.Count >= cfg.corMaxTotal) { isFinished = true; }
+                if (LeftSide.Count >= corMaxTotal) { isFinished = true; }
             }
 
             // To short so we fail it
@@ -115,7 +115,7 @@ namespace Munglo.DungeonGenerator.Sections
         /// <returns></returns>
         internal MapPiece GetRandomAlongPath(out MAPDIRECTION dir)
         {
-            if (width < 2)
+            if (sectionDefinition.sizeWidthMax < 2)
             {
                 return LeftSide.GetRandomAlongPath(out dir);
             }
@@ -147,7 +147,7 @@ namespace Munglo.DungeonGenerator.Sections
             LeftSide.Last.AddDebug(new KeyData() { key = PIECEKEYS.DEBUGPATHEND, dir = LeftSide.Last.Orientation });
             RightSide.Last.AddDebug(new KeyData() { key = PIECEKEYS.DEBUGPATHEND, dir = RightSide.Last.Orientation });
 
-            if (width < 2)
+            if (sectionDefinition.sizeWidthMax < 2)
             {
                 CapLineEndsWithWalls();
                 if (endpieceConnection.State == MAPPIECESTATE.PENDING && endpieceConnection.SectionIndex >= 0 && endpieceConnection.SectionIndex != sectionIndex)
@@ -232,7 +232,7 @@ namespace Munglo.DungeonGenerator.Sections
         private void TurnRight()
         {
             MAPDIRECTION newDir = Dungeon.TwistRight(lines[0].Last.Orientation);
-            MapPiece[] turners = RightSide.GetTurners(width, newDir);
+            MapPiece[] turners = RightSide.GetTurners(sizeX, newDir);
             //ProcGenMKIII.Log("Path", "TurnRight", $"turners.Length[{turners.Length}]");
             if (TurnNotBlocked(turners))
             {
@@ -249,7 +249,7 @@ namespace Munglo.DungeonGenerator.Sections
         private void TurnLeft()
         {
             MAPDIRECTION newDir = Dungeon.TwistLeft(lines[0].Last.Orientation);
-            MapPiece[] turners = LeftSide.GetTurners(width, newDir, true);
+            MapPiece[] turners = LeftSide.GetTurners(sizeX, newDir, true);
             //ProcGenMKIII.Log("Path", "TurnLeft", $"turners.Length[{turners.Length}]");
 
             if (TurnNotBlocked(turners))
@@ -295,7 +295,8 @@ namespace Munglo.DungeonGenerator.Sections
 
         private void SetupLines(MapPiece step)
         {
-            lines = new Line[width];
+            //GD.Print($"PathSection::SetupLines() SectionName[{SectionName}]  sectionStyle[{SectionStyle}] sizeX[{sizeX}]");
+            lines = new Line[sizeX];
             step.SectionIndex = sectionIndex;
             step.State = MAPPIECESTATE.PENDING;
 
@@ -315,24 +316,17 @@ namespace Munglo.DungeonGenerator.Sections
         {
             int cleared = 0;
             MAPDIRECTION dir = Dungeon.TwistRight(step.Orientation);
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < sizeX; i++)
             {
                 if (step.State != MAPPIECESTATE.UNUSED)
                 {
-                    width = cleared;
+                    sizeX = cleared;
                     return;
                 }
                 cleared++;
                 step = step.Neighbour(dir);
             }
-            width = cleared;
+            sizeX = cleared;
         }
-
-        public override void Build()
-        {
-            //throw new NotImplementedException();
-        }
-
-    
     }// EOF CLASS
 }

@@ -1,4 +1,5 @@
 ﻿using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
-namespace Munglo.DungeonGenerator
+namespace Munglo.DungeonGenerator.UI
 {
     /// <summary>
     /// The class that builds and updates the visual representation of the mapdata in the Dungeon Viewer
@@ -18,13 +19,14 @@ namespace Munglo.DungeonGenerator
         private MapData map;
         private GenerationSettingsResource settings;
         private AddonSettings MasterConfig;
-        private Dictionary<PIECEKEYS, Dictionary<int, Resource>> cacheKeyedPieces;
+        private System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>> cacheKeyedPieces;
         private Node3D mapContainer;
         private Node3D propContainer;
         private Node3D tileContainer;
         private Node3D debugContainer;
-
         private BiomeResource biome;
+        public MapData Map { get => map; }
+
         public override void _EnterTree()
         {
             screen = GetParent().GetParent().GetParent() as MainScreen;
@@ -38,13 +40,13 @@ namespace Munglo.DungeonGenerator
             //BuildData(biome, () => { ShowMap(null, null); }, settings.roomStart, settings.roomDefault);
             BuildData(biome, () => { ReDrawMap(); }, settings.roomStart, settings.roomDefault);
         }
-        public async void BuildSection(string sectionTypeName, RoomResource sectionDef, PlacerResource[] placers, GenerationSettingsResource settings, BiomeResource biome, Action callback)
+        public async void BuildSection(string sectionTypeName, SectionResource sectionDef, Array<PlacerEntryResource> placers, GenerationSettingsResource settings, BiomeResource biome, Action callback)
         {
             this.settings = settings;
             screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 0) + "%");
             await ToSignal(GetTree(), "process_frame");
 
-            cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
+            cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             this.biome = biome;
 
             map = new MapData(settings, settings.roomStart, settings.roomDefault);
@@ -52,9 +54,9 @@ namespace Munglo.DungeonGenerator
         }
 
 
-        private async void BuildData(BiomeResource biome, Action callback, RoomResource startRoom, RoomResource standardRoom)
+        private async void BuildData(BiomeResource biome, Action callback, SectionResource startRoom, SectionResource standardRoom)
         {
-            cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
+            cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             this.biome = biome;
             if (settings is null)
             {
@@ -72,7 +74,7 @@ namespace Munglo.DungeonGenerator
         public async void ReDrawMap()
         {
             GD.Print($"ScreenDungeonVisulaizer::ReDrawMap()");
-            cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
+            cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             mapContainer = FindChild("Generated") as Node3D;
             debugContainer = FindChild("GeneratedDebug") as Node3D;
             for (int i = 0; i < settings.nbOfFloors; i++)
@@ -88,7 +90,7 @@ namespace Munglo.DungeonGenerator
         public void ReDrawSection()
         {
             GD.Print($"ScreenDungeonVisulaizer::ReDrawSection()");
-            cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>();
+            cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             mapContainer = FindChild("Generated") as Node3D;
             debugContainer = FindChild("GeneratedDebug") as Node3D;
             GetFloorContainer(0);
@@ -281,9 +283,19 @@ namespace Munglo.DungeonGenerator
             // Run the section prop placers
             if (section.Placers is not null)
             {
-                foreach (IPlacer placer in section.Placers)
+                foreach (PlacerEntryResource entry in section.Placers)
                 {
-                    placer.DoForcedRolls(section);
+                    if(entry is null || !entry.active  || entry.placer is null) { continue; }
+                    IPlacer placer = entry.placer;
+
+                    if (placer is not null)
+                    {
+                        if (screen.addon.Mode == VIEWERMODE.SECTION)
+                        {
+                            GD.Print($"ScreenDungeonVisualizer::VisualizeSection() Place on [{placer.ResourceName}]");
+                        }
+                        placer.Place(section);
+                    }
                 }
             }
 
@@ -416,9 +428,9 @@ namespace Munglo.DungeonGenerator
         }
         private Resource ResolveAndCache(KeyData data, BiomeResource biome)
         {
-            if (cacheKeyedPieces == null) { cacheKeyedPieces = new Dictionary<PIECEKEYS, Dictionary<int, Resource>>(); }
+            if (cacheKeyedPieces == null) { cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>(); }
 
-            if (!cacheKeyedPieces.ContainsKey(data.key)) { cacheKeyedPieces[data.key] = new Dictionary<int, Resource>(); }
+            if (!cacheKeyedPieces.ContainsKey(data.key)) { cacheKeyedPieces[data.key] = new System.Collections.Generic.Dictionary<int, Resource>(); }
 
             if (!cacheKeyedPieces[data.key].ContainsKey(data.variantID))
             {
@@ -492,6 +504,11 @@ namespace Munglo.DungeonGenerator
         /// <returns></returns>
         public MapPiece GetMapPiece(MapCoordinate coord)
         {
+            if(map is null || map.Pieces.Count == 0)
+            {
+                GD.PushError("Mapdata needs to be rebuilt");
+                return null;
+            }
             return map.GetExistingPiece(coord);
         }
     }// eof class

@@ -8,11 +8,11 @@ namespace Munglo.DungeonGenerator
 {
     public interface IPlacer
     {
+        public string ResourceName { get; set; }
         public bool PickRandomProp(out PackedScene asset, out int count);
         public void Place(ISection section);
         public void Place(ISection section, Node3D node);
         public bool Fit(ISection section);
         public bool Fit(ISection section, Node3D node);
-        public void DoForcedRolls(ISection section);
     }
 }

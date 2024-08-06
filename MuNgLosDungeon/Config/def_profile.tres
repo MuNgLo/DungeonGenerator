@@ -10,3 +10,4 @@ showDebugLayer = false
 settings = ExtResource("3_051hi")
 biome = ExtResource("1_sjjw2")
 useRandomSeed = true
+SectionResourcePath = "addons/MuNgLosDungeon/Config/Sections/"

@@ -9,6 +9,8 @@ namespace Munglo.DungeonGenerator
     public partial class AddonSettings : DungeonAddonResource
     {
         [Export] public string lastUsedProfile = "res://addons/MuNgLosDungeon/Config/def_profile.tres";
+        [Export] public string ProjectResourcePath = string.Empty;
+        
         public string defaultBiome = "res://addons/MuNgLosDungeon/Config/def_biome.tres";
         public string defaultSettings = "res://addons/MuNgLosDungeon/Config/def_settings.tres";
 

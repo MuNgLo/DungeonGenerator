@@ -31,19 +31,11 @@ animation/remove_immutable_tracks=true
 import_script/path=""
 _subresources={
 "materials": {
-"bBrass": {
-"use_external/enabled": true,
-"use_external/path": "res://addons/MuNgLosDungeon/Materials/TEST.tres"
-},
 "bFloor": {
 "use_external/enabled": true,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defFloorMaterial.tres"
 },
 "bMetalRusty": {
-"use_external/enabled": true,
-"use_external/path": "res://addons/MuNgLosDungeon/Materials/defMetalRusty.tres"
-},
-"bMetalRusty.001": {
 "use_external/enabled": true,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defMetalRusty.tres"
 },

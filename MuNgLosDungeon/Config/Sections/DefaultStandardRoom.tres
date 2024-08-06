@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="SectionResource" load_steps=6 format=3 uid="uid://cpo4pr8osbhnk"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/Commons/PlacerEntryResource.cs" id="1_crbmf"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/SectionResource.cs" id="1_jal31"]
+[ext_resource type="Resource" uid="uid://cw3p0voay7aav" path="res://addons/MuNgLosDungeon/Config/Placers/def_Proptable.tres" id="1_viim0"]
+
+[sub_resource type="Resource" id="Resource_gj1lk"]
+script = ExtResource("1_crbmf")
+active = false
+count = 1
+placer = ExtResource("1_viim0")
+
+[sub_resource type="Resource" id="Resource_sj7x0"]
+script = ExtResource("1_crbmf")
+active = false
+count = 1
+placer = ExtResource("1_viim0")
+
+[resource]
+script = ExtResource("1_jal31")
+sectionName = "Standard Room"
+sectionType = "RoomSection"
+sectionStyle = ""
+defaultResponses = 15
+sizeWidthMin = 3
+sizeWidthMax = 5
+sizeDepthMin = 3
+sizeDepthMax = 5
+nbFloorsMin = 1
+nbFloorsMax = 2
+debug = false
+nbDoorsPerFloorMin = 0
+nbDoorsPerFloorMax = 0
+placers = [SubResource("Resource_gj1lk"), SubResource("Resource_sj7x0")]
+centerSpiralStairs = false
+firstPieceDoor = false
+backDoorChance = 30
+allFloor = false

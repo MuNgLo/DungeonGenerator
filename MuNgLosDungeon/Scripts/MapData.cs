@@ -1,4 +1,5 @@
 ﻿using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,22 @@ namespace Munglo.DungeonGenerator
     /// </summary>
     public class MapData
     {
-        private Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> pieces;
+        private System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>> pieces;
         private GenerationSettingsResource mapArgs;
-        internal RoomResource startRoom;
-        internal RoomResource standardRoom;
+        internal SectionResource startRoom;
+        internal SectionResource standardRoom;
         private List<ISection> sections;
         private PRNGMarsenneTwister rng;
 
         public List<ISection> Sections => sections;
         public GenerationSettingsResource MapArgs => mapArgs;
 
-        internal Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>> Pieces => pieces;
+        internal System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>> Pieces => pieces;
         internal int nbOfPieces => pieces.Values.SelectMany(p => p.Values).Distinct().SelectMany(p => p.Values).Distinct().Count(); // Würkz
-        internal MapData(GenerationSettingsResource args, RoomResource startRoom, RoomResource standardRoom)
+        internal MapData(GenerationSettingsResource args, SectionResource startRoom, SectionResource standardRoom)
         {
             sections = new List<ISection>();
-            pieces = new Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>>();
+            pieces = new System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>>();
             mapArgs = args;
             this.startRoom = startRoom;
             this.standardRoom = standardRoom;
@@ -48,10 +49,9 @@ namespace Munglo.DungeonGenerator
             callback.Invoke();
         }
 
-        internal async Task GenerateSection(string sectionTypeName, RoomResource sectionDef, PlacerResource[] placers, Action callback)
+        internal async Task GenerateSection(string sectionTypeName, SectionResource sectionDef, Array<PlacerEntryResource> placers, Action callback)
         {
-            GD.Print("MapData::GenerateSection() Generation started.....");
-
+            GD.Print($"MapData::GenerateSection() Generation started..... defIsNull[{sectionDef is null}] placersisNull[{placers is null}]");
             MapBuilder builder = new MapBuilder(this);
             await builder.BuildSection(sectionTypeName, sectionDef, placers);
             callback.Invoke();
@@ -206,10 +206,10 @@ namespace Munglo.DungeonGenerator
         /// <param name="verbose"></param>
         private void VerifyPiece(MapCoordinate coord, bool verbose = false)
         {
-            if (pieces == null) { pieces = new Dictionary<int, Dictionary<int, Dictionary<int, MapPiece>>>(); }
+            if (pieces == null) { pieces = new System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>>(); }
 
-            if (!pieces.Keys.Contains(coord.x)) { pieces[coord.x] = new Dictionary<int, Dictionary<int, MapPiece>>(); }
-            if (!pieces[coord.x].Keys.Contains(coord.y)) { pieces[coord.x][coord.y] = new Dictionary<int, MapPiece>(); }
+            if (!pieces.Keys.Contains(coord.x)) { pieces[coord.x] = new System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>(); }
+            if (!pieces[coord.x].Keys.Contains(coord.y)) { pieces[coord.x][coord.y] = new System.Collections.Generic.Dictionary<int, MapPiece>(); }
             if (!pieces[coord.x][coord.y].Keys.Contains(coord.z))
             {
                 if (verbose) { DungeonGenerator.Log(this, "VerifyPieceSpace", $"insert blank piece [{coord.x}.{coord.y}.{coord.z}]"); }

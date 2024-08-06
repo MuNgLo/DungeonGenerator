@@ -1,4 +1,5 @@
 ﻿using Godot;
+using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +91,12 @@ namespace Munglo.DungeonGenerator
 
 
         public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
-        void AssignPlacer(PlacerResource[] placer);
+        /// <summary>
+        /// Assign placers to the section. If placersOverride is valid it will override the SectionResource placers collection
+        /// </summary>
+        /// <param name="sectionDef"></param>
+        /// <param name="placersOverride"></param>
+        void AssignPlacer(SectionResource sectionDef, Array<PlacerEntryResource> placersOverride);
 
         public int ConnectionCount { get; }
 
@@ -98,6 +104,6 @@ namespace Munglo.DungeonGenerator
         public MapCoordinate MaxCoord { get; }
         public MapCoordinate MinCoord { get; }
         public PRNGMarsenneTwister RNG { get; }
-        public PlacerResource[] Placers { get; }
+        public Array<PlacerEntryResource> Placers { get; }
     }// EOF INTERFACE
 }

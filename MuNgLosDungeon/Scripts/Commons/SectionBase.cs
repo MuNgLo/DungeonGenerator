@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Munglo.DungeonGenerator.PropGrid;
+using Godot.Collections;
 
 namespace Munglo.DungeonGenerator
 {
@@ -45,13 +46,22 @@ namespace Munglo.DungeonGenerator
         internal SectionProps PropGrid => props;
         public List<SectionProp> Props => props.props;
 
+        private protected MapCoordinate coord;
+        private protected int MinY => coord.y;
+        private protected int MaxY => coord.y + sizeY;
+        public MapCoordinate Coord => coord;
+
+
+        private Array<PlacerEntryResource> placers;
+        public Array<PlacerEntryResource> Placers => placers;
 
         #endregion
 
         #region Needs some work
-        private protected MapCoordinate coord;
+        private protected SectionResource sectionDefinition;
+
         internal MAPDIRECTION orientation;
-        public MapCoordinate Coord => coord;
+
         public ROOMCONNECTIONRESPONCE defaultConnectionResponses;
 
         ROOMCONNECTIONRESPONCE ISection.defaultConnectionResponses { get => defaultConnectionResponses; }
@@ -67,8 +77,6 @@ namespace Munglo.DungeonGenerator
         private protected int maxX = 0;
         private protected int minZ = 0;
         private protected int maxZ = 0;
-        private protected int MinY => coord.y;
-        private protected int MaxY => coord.y + sizeY;
         #endregion
 
         #region Properties
@@ -85,29 +93,50 @@ namespace Munglo.DungeonGenerator
 
         #endregion
 
-        private PlacerResource[] placers;
-        public PlacerResource[] Placers => placers;
+       
 
         public Node3D sectionContainer;
 
         public Node3D SectionContainer { get => sectionContainer; set => sectionContainer = value; } 
 
 
-        public SectionBase(SectionbBuildArguments args)
+        public SectionBase(SectionbBuildArguments args, bool adjustWidthDepth=true)
         {
-            sectionIndex = args.sectionID;
-            map = args.map;
+            if (args.sectionDefinition is null) { GD.PushError("Section definition was NULL"); return; }
+            
             pieces = new List<MapPiece>();
             connections = new List<SectionConnection>();
             rng = new PRNGMarsenneTwister(args.Seed);
             props = new SectionProps(this, args.Seed);
-            if(args.sectionDefinition != null && args.sectionDefinition.placers != null)
+            
+            map = args.map;
+
+            sectionDefinition = args.sectionDefinition;
+            sectionIndex = args.sectionID;
+            sectionStyle = sectionDefinition.sectionStyle;
+            sectionName = sectionDefinition.sectionName;
+            coord = args.piece.Coord;
+            defaultConnectionResponses = sectionDefinition.defaultResponses;
+
+            orientation = args.piece.Orientation;
+            if (orientation == MAPDIRECTION.ANY) { orientation = (MAPDIRECTION)rng.Next(1, 5); }
+
+            sectionDefinition.VerifyValues();
+            
+            sizeX = rng.Next(sectionDefinition.sizeWidthMin, sectionDefinition.sizeWidthMax + 1);
+            sizeZ = rng.Next(sectionDefinition.sizeDepthMin, sectionDefinition.sizeDepthMax + 1);
+            sizeY = rng.Next(sectionDefinition.nbFloorsMin, sectionDefinition.nbFloorsMax + 1);
+
+            if (adjustWidthDepth) { ResolveWidthDepth(); }
+            SetMinMaxCoord();
+
+            if(args.sectionDefinition.placers != null)
             {
                 placers = args.sectionDefinition.placers;
             }
             else
             {
-                placers = new PlacerResource[0];
+                placers = new Array<PlacerEntryResource>();
             }
         }
 
@@ -349,10 +378,34 @@ namespace Munglo.DungeonGenerator
             }
         }
 
-        public void AssignPlacer(PlacerResource[] placers)
+        public void AssignPlacer(SectionResource sectionDef, Array<PlacerEntryResource> placers)
         {
+            if (sectionDef == null && placers == null)
+            {
+                GD.PushError("SectionBase::AssignPlacer(NULL,NULL) Trying to assign placers to a section but both options are NULL!");
+                return;
+            }
+
+            if (sectionDef != null)
+            { 
+                if(sectionDef.placers != null && sectionDef.placers.Count > 0)
+                {
+                    this.placers = sectionDef.placers;
+                }
+            }
             if (placers == null) { return; }
+            if (placers.Count < 1) { return; }
             this.placers = placers;
+        }
+
+        private void ResolveWidthDepth()
+        {
+            if (orientation != MAPDIRECTION.NORTH && orientation != MAPDIRECTION.SOUTH)
+            {
+                int d = sizeZ;
+                sizeZ = sizeX;
+                sizeX = d;
+            }
         }
 
     }// EOF CLASS

@@ -1,72 +1,105 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Resources;
 
-namespace Munglo.DungeonGenerator
+namespace Munglo.DungeonGenerator.UI
 {
     [Tool]
     internal partial class SectionSelector : OptionButton
     {
+        private MainScreen screen;
+        private ModeSelection modeSelector;
+
         private Dictionary<string, string> resources;
-        public RoomResource sectionSelected;
         public override void _Ready()
         {
-            VisibilityChanged += WhenVisibilityChanged;
+            screen = GetParent() as MainScreen;
+            modeSelector = screen.GetNode<ModeSelection>("ModeSelector");
+
+            modeSelector.ItemSelected += WhenModeSelected;
+            VisibilityChanged += UpdateDropdownList;
             ItemSelected += WhenItemSelected;
             resources = new Dictionary<string, string>();
+            Clear();
+            PoulateResourceCollection();
+            LoadSelected();
         }
 
         private void WhenItemSelected(long index)
         {
-            string itemText = GetItemText((int)index);
-            if(resources.ContainsKey(itemText))
+            LoadSelected();
+            screen.RaiseUpdateUI();
+        }
+        private void WhenModeSelected(long index)
+        {
+            UpdateDropdownList();
+        }
+        private void LoadSelected()
+        {
+            if(ItemCount < 1){return;}
+            if(Selected < 0) { Selected = 0; }
+            GD.Print($"SectionSelector::LoadSelected() Loading[{Selected}]");
+
+            string itemText = GetItemText(Selected == -1 ? 0 : Selected);
+            if(resources == null || resources.Keys.Count < 1)
             {
-                sectionSelected = ResourceLoader.Load(resources[itemText]) as RoomResource;
-                //GD.Print($"SectionSelector::WhenItemSelected() GOAL! sectionSelected[{sectionSelected.sectionName}]");
+                PoulateResourceCollection();
+            }
+            if (resources.ContainsKey(itemText))
+            {
+                screen.SelectSectionResource(ResourceLoader.Load(resources[itemText]) as SectionResource);
             }
         }
 
-        private void WhenVisibilityChanged()
+        private void UpdateDropdownList()
         {
-            if(!Visible) { Clear(); sectionSelected = null; return; }
+            if(!Visible) { Clear(); return; }
+            GD.Print($"SectionSelector::UpdateDropdownList() Selected[{Selected}] ItemCount[{ItemCount}]");
+            PoulateResourceCollection();
+            LoadSelected();
+        }
+        private void PoulateResourceCollection()
+        {
+            string typeName = modeSelector.GetItemText(modeSelector.Selected);
+            GD.Print($"SectionSelector::PoulateResourceCollection() typeName[{typeName}] [{modeSelector.GetSelectedType()}]");
+
+
             resources = new Dictionary<string, string>();
-
-            List< Resource > items = new List< Resource >();
-
-            foreach(string file in DirAccess.GetFilesAt("res://addons/MuNgLosDungeon/Config/Rooms/"))
+            List<Resource> items = new List<Resource>();
+            foreach (string file in DirAccess.GetFilesAt(screen.addon.Profile.SectionResourcePath))
             {
                 if (file.Contains("tres"))
                 {
-                    Resource res = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/Rooms/" + file);// + file.Replace(".tres", ""));
-                    if (res is RoomResource) { items.Add(res); }
+                    Resource res = ResourceLoader.Load(screen.addon.Profile.SectionResourcePath + file);// + file.Replace(".tres", ""));
+                    if (res is SectionResource) {
+                        if(typeName == (res as SectionResource).sectionType)
+                        {
+                            items.Add(res); 
+                        }
+                    }
                 }
             }
-
             if (items.Count > 0)
             {
                 Clear();
                 foreach (Resource res in items)
                 {
 
-                    if(res is RoomResource)
+                    if (res is SectionResource)
                     {
-                        RoomResource room = res as RoomResource;
-                        if(room.sectionName.Length < 1)
+                        SectionResource room = res as SectionResource;
+                        if (room.sectionName.Length < 1)
                         {
                             GD.PushError($"SectionSelector::WhenVisibilityChanged() The RoomResource [{room.ResourcePath}] has an invalid name. Make sure to set a valid name when making SectionResources.");
                             continue;
                         }
-
                         AddItem(room.sectionName);
                         resources[room.sectionName] = room.ResourcePath;
                     }
                 }
-
             }
-
-
-
         }
     }// EOF CLASS
 }

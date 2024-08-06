@@ -10,43 +10,8 @@ namespace Munglo.DungeonGenerator.Sections
 {
     public class RoomSection : SectionBase
     {
-        private RoomResource roomDef;
-        private protected bool centerSpiralStairs;
-
-        public RoomSection(SectionbBuildArguments args) : base(args)
-        {
-            coord = args.piece.Coord;
-            orientation = args.piece.Orientation;
-            if (orientation == MAPDIRECTION.ANY) { orientation = (MAPDIRECTION)rng.Next(1, 5); }
-
-            if(args.sectionDefinition != null ) { roomDef = args.sectionDefinition; } else { roomDef = args.cfg.roomDefault; }
-
-            sectionStyle = roomDef.roomStyle;
-            sectionName = roomDef.sectionName;
-            centerSpiralStairs = roomDef.centerSpiralStairs;
-            defaultConnectionResponses = roomDef.defaultResponses;
-
-            roomDef.VerifyValues();
-
-            sizeX = rng.Next(roomDef.sizeWidthMin, roomDef.sizeWidthMax + 1);
-            sizeZ = rng.Next(roomDef.sizeDepthMin, roomDef.sizeDepthMax + 1);
-            sizeY = rng.Next(roomDef.nbFloorsMin, roomDef.nbFloorsMax + 1);
-            
-            ResolveWIdthDepth();
-            SetMinMaxCoord();
-        }
-
-       
-
-        private void ResolveWIdthDepth()
-        {
-            if (orientation != MAPDIRECTION.NORTH && orientation != MAPDIRECTION.SOUTH)
-            {
-                int d = sizeZ;
-                sizeZ = sizeX;
-                sizeX = d;
-            }
-        }
+        public RoomSection(SectionbBuildArguments args) : base(args) { }
+   
         #region ISection methods
         public override void Build()
         {
@@ -79,7 +44,7 @@ namespace Munglo.DungeonGenerator.Sections
             SealSection();
 
 
-            if (roomDef.firstPieceDoor)
+            if (sectionDefinition.firstPieceDoor)
             {
                 pieces.First().AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(pieces.First().Orientation) }, true);
                 pieces.First().Neighbour(Dungeon.Flip(pieces.First().Orientation)).AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = pieces.First().Orientation }, true);
@@ -144,7 +109,7 @@ namespace Munglo.DungeonGenerator.Sections
             }
             
             // If debug Run Debug method
-            if(roomDef.debug)
+            if(sectionDefinition.debug)
             {
                 AddDebugThings();
             }
@@ -152,19 +117,14 @@ namespace Munglo.DungeonGenerator.Sections
 
         private void AddDebugThings()
         {
-                GD.Print($"GOAL! max[{roomDef.nbDoorsPerFloorMax}] min[{roomDef.nbDoorsPerFloorMin}]  asd");
+            //GD.Print($"GOAL! max[{roomDef.nbDoorsPerFloorMax}] min[{roomDef.nbDoorsPerFloorMin}]  asd");
             // Doors
-            if (roomDef.nbDoorsPerFloorMax > 0)
+            if (sectionDefinition.nbDoorsPerFloorMax > 0)
             {
-                if (roomDef.nbDoorsPerFloorMin > roomDef.nbDoorsPerFloorMax) { roomDef.nbDoorsPerFloorMin = roomDef.nbDoorsPerFloorMax; }
-
-
-                    GD.Print("GOAL! 2"); 
+                if (sectionDefinition.nbDoorsPerFloorMin > sectionDefinition.nbDoorsPerFloorMax) { sectionDefinition.nbDoorsPerFloorMin = sectionDefinition.nbDoorsPerFloorMax; }
                 for (int i = 0; i < sizeY; i++)
                 {
-
-                    int doorCount = roomDef.nbDoorsPerFloorMin == roomDef.nbDoorsPerFloorMax ? roomDef.nbDoorsPerFloorMax : rng.Next(roomDef.nbDoorsPerFloorMin, roomDef.nbDoorsPerFloorMax);
-
+                    int doorCount = sectionDefinition.nbDoorsPerFloorMin == sectionDefinition.nbDoorsPerFloorMax ? sectionDefinition.nbDoorsPerFloorMax : rng.Next(sectionDefinition.nbDoorsPerFloorMin, sectionDefinition.nbDoorsPerFloorMax);
                     List<MapPiece> candidates = GetWallPieces(i);
                     if (candidates.Count < 1) { continue; }
                     int spread = candidates.Count / Math.Min(candidates.Count, doorCount);
@@ -215,7 +175,7 @@ namespace Munglo.DungeonGenerator.Sections
                         nb.SectionIndex = sectionIndex;
                         nb.sectionfloor = Math.Abs(nb.Coord.y - pieces.First().Coord.y);
 
-                        if (nb.sectionfloor == 0 || (roomDef.allFloor && !nb.hasFloor && nb.sectionfloor < sizeY - 1))
+                        if (nb.sectionfloor == 0 || (sectionDefinition.allFloor && !nb.hasFloor && nb.sectionfloor < sizeY - 1))
                         {
                             //nb.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 };
                         }
@@ -265,7 +225,7 @@ namespace Munglo.DungeonGenerator.Sections
         }
         public override void PunchBackDoor()
         {
-            if (roomDef.backDoorChance < 1 || rng.Next(100) > roomDef.backDoorChance)
+            if (sectionDefinition.backDoorChance < 1 || rng.Next(100) > sectionDefinition.backDoorChance)
             {
                 return;
             }

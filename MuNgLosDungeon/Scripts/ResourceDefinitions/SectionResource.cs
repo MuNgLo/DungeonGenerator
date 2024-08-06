@@ -1,13 +1,15 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 namespace Munglo.DungeonGenerator
 {
     [GlobalClass, Tool]
-    public partial class RoomResource : Resource
+    public partial class SectionResource : DungeonAddonResource
     {
         [Export] public string sectionName = string.Empty;
-        [Export] public string roomStyle = string.Empty;
+        [Export] public string sectionType = string.Empty;
+        [Export] public string sectionStyle = string.Empty;
         [Export] public ROOMCONNECTIONRESPONCE defaultResponses = (ROOMCONNECTIONRESPONCE)15;
         [ExportGroup("General")]
         [Export] public int sizeWidthMin { get; set; } = 3;
@@ -24,7 +26,7 @@ namespace Munglo.DungeonGenerator
         [Export] public int nbDoorsPerFloorMax = 0;
 
         [ExportGroup("WiP")]
-        [Export] public PlacerResource[] placers;
+        [Export] public Array<PlacerEntryResource> placers;
         [Export] public bool centerSpiralStairs = false;
         [Export] public bool firstPieceDoor = true;
         [Export] public int backDoorChance = 30;

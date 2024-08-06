@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 using Munglo.DungeonGenerator.Sections;
 using System.Reflection;
+using Godot.Collections;
 
 namespace Munglo.DungeonGenerator
 {
@@ -107,7 +108,7 @@ namespace Munglo.DungeonGenerator
             }
         }
 
-        internal async Task BuildSection(string sectionTypeName, RoomResource sectionDef, PlacerResource[] placers)
+        internal async Task BuildSection(string sectionTypeName, SectionResource sectionDef, Array<PlacerEntryResource> placers)
         {
             MapPiece piece = map.GetPiece(MapCoordinate.Zero);
             piece.Orientation = MAPDIRECTION.NORTH;
@@ -121,7 +122,7 @@ namespace Munglo.DungeonGenerator
 
             ISection section = instance as SectionBase;
 
-            section.AssignPlacer(placers);
+            section.AssignPlacer(sectionDef, placers);
 
             GD.Print($"MapBuilder::BuildSection() [{section.GetType().Name}]");
 
@@ -339,7 +340,13 @@ namespace Munglo.DungeonGenerator
             // make the seed to usefor the path
             ulong[] bosse = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
             startpoint.Orientation = dir;
-            PathSection path = new PathSection(new SectionbBuildArguments() { map = map, piece = startpoint, sectionID = map.Sections.Count, sectionSeed = bosse, cfg = Args });
+
+            SectionResource corr = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/Sections/DefaultCorridor.tres") as SectionResource;
+
+
+            SectionbBuildArguments args = new SectionbBuildArguments() { sectionDefinition = corr, map = map, piece = startpoint, sectionID = map.Sections.Count, sectionSeed = bosse, cfg = Args };
+            PathSection path = new PathSection(args);
+            path.Build();
             if (path.IsValid) { path.Save(); map.Sections.Add(path); }
         }
 

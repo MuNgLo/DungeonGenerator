@@ -28,26 +28,18 @@ namespace Munglo.DungeonGenerator
 
         [ExportGroup("General")]
         [Export] public int nbOfFloors = 1;
-
-
-        [ExportGroup("Size")]
-        [Export] public int SizeX = 30;
-        [Export] public int SizeZ = 30;
-        [Export] public int SizeY = 3;
-
-        // Corridor things
-        [ExportGroup("Corridors")]
-        [Export] public int chanceForWideCorridor = 70;
         [Export] public int corPerFloor = 4;
-        [Export] public int corMaxTotal = 20;
-        [Export] public int corMaxStraight = 5; // Each is 6m
-        [Export] public int corMinStraight = 2;
         [Export] public int maxBranches = 2;
+        [Export] public int chanceForWideCorridor = -1;
 
+        //[ExportGroup("Size")]
+        //[Export] public int SizeX = 30;
+        //[Export] public int SizeZ = 30;
+        //[Export] public int SizeY = 3;
 
         [ExportGroup("Rooms")]
-        [Export] public RoomResource roomStart;
-        [Export] public RoomResource roomDefault;
+        [Export] public SectionResource roomStart;
+        [Export] public SectionResource roomDefault;
         [Export] public int maxRoomsPerPath = 4;
 
         [ExportGroup("Water")]

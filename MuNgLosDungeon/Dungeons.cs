@@ -1,8 +1,7 @@
 #if TOOLS
-using DungeonAddonTester.addons.MuNgLosDungeon.Scripts.Commons;
 using Godot;
 using System;
-using System.Reflection;
+using Munglo.DungeonGenerator.UI;
 
 namespace Munglo.DungeonGenerator
 {
@@ -17,7 +16,7 @@ namespace Munglo.DungeonGenerator
         private SubViewportContainer subV;
         private CameraControls cam;
         private PackedScene mainPrefab = ResourceLoader.Load<PackedScene>("res://addons/MuNgLosDungeon/Scenes/MainScreen.tscn");
-        private ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
+        public ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
         private EditorFileDialog popup;
         #region Overrides
         public override void _EnterTree()
@@ -239,7 +238,6 @@ namespace Munglo.DungeonGenerator
             PopupMenu pop = (screen.FindChild("Show") as MenuButton).GetPopup();
             int index = pop.GetItemIndex((int)id);
             pop.SetItemChecked(index, !pop.IsItemChecked(index));
-            ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
             switch (id)
             {
                 case 0:
@@ -277,7 +275,6 @@ namespace Munglo.DungeonGenerator
             TextureButton btn = screen.FindChild("RNGSeed") as TextureButton;
             Texture2D on = ResourceLoader.Load("res://addons/MuNgLosDungeon/Icons/DiceIcon.png") as Texture2D;
             Texture2D off = ResourceLoader.Load("res://addons/MuNgLosDungeon/Icons/DiceCrossedOutIcon.png") as Texture2D;
-            ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
             if (btn.TextureNormal.ResourcePath == on.ResourcePath)
             {
                 btn.TextureNormal = off;
@@ -296,7 +293,6 @@ namespace Munglo.DungeonGenerator
         private void WhenMSDebugPressed()
         {
             TextureButton btn = screen.FindChild("Debug") as TextureButton;
-            ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
             Profile.showDebugLayer = !Profile.showDebugLayer;
             screen.SetDebugLayer(Profile.showDebugLayer);
             ResourceSaver.Save(Profile);
@@ -310,7 +306,6 @@ namespace Munglo.DungeonGenerator
         private void WhenMSBuildPressed()
         {
             screen.WhenClearPressed();
-            ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
             if(Profile.useRandomSeed)
             {
                 Profile.settings.seed1 = GD.RandRange(1111, 9999);
@@ -321,9 +316,7 @@ namespace Munglo.DungeonGenerator
             switch (mode)
             {
                 case VIEWERMODE.SECTION:
-                    RoomResource sectionDef = (screen.FindChild("SectionResourceSelector") as SectionSelector).sectionSelected;
-
-                    screen.GenerateSection(sectionDef, Profile.settings, Profile.biome);
+                    screen.GenerateSection(screen.SelectedSectionResource, Profile.settings, Profile.biome);
                     break;
                 default:
                 case VIEWERMODE.DUNGEON:
@@ -331,6 +324,7 @@ namespace Munglo.DungeonGenerator
                     break;
             }
             (screen.FindChild("Build") as TextureButton).ReleaseFocus();
+            screen.RaiseUpdateUI();
         }
         private void WhenMouseEnterMain()
         {
@@ -403,6 +397,7 @@ namespace Munglo.DungeonGenerator
                 GD.Print($"Dungeons::ChangeMode() changed to {newMode}");
                 mode = newMode;
                 UpdateUIElements();
+                screen.RaiseUpdateUI();
             }
         }
 
@@ -413,13 +408,15 @@ namespace Munglo.DungeonGenerator
                 case VIEWERMODE.SECTION:
                     (screen.FindChild("PlacerResouceSelector") as EditorResourcePicker).Show(); 
                     (screen.FindChild("SectionResourceSelector") as SectionSelector).Show();
-                    (screen.FindChild("PlacerBar") as Control).Show();
+                    (screen.FindChild("PlacerBar") as Control).Show(); 
+                    (screen.FindChild("PlacerNavigationBar") as Control).Show(); 
                     break;
                 case VIEWERMODE.DUNGEON:
                 default:
                     (screen.FindChild("PlacerResouceSelector") as EditorResourcePicker).Hide();
                     (screen.FindChild("SectionResourceSelector") as SectionSelector).Hide();
                     (screen.FindChild("PlacerBar") as Control).Hide();
+                    (screen.FindChild("PlacerNavigationBar") as Control).Hide();
                     break;
             }
         }

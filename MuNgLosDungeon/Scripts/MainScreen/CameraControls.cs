@@ -1,6 +1,6 @@
 using Godot;
 using System;
-namespace Munglo.DungeonGenerator
+namespace Munglo.DungeonGenerator.UI
 {
     [Tool]
     public partial class CameraControls : Camera3D

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://66fkglptwkl1"]
+[gd_scene load_steps=44 format=3 uid="uid://66fkglptwkl1"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
@@ -14,9 +14,12 @@
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerSelection.cs" id="21_rut2o"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelector.cs" id="21_siix3"]
 [ext_resource type="Texture2D" uid="uid://8555w8eydq84" path="res://addons/MuNgLosDungeon/Icons/ArrowLeft.png" id="23_b3bau"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerNavigationBar.cs" id="23_sw2ff"]
 [ext_resource type="Texture2D" uid="uid://c2o24ip52ufku" path="res://addons/MuNgLosDungeon/Icons/ArrowRight.png" id="24_kk61u"]
 [ext_resource type="Texture2D" uid="uid://bvpiege84x6yg" path="res://addons/MuNgLosDungeon/Icons/HammerIcon.png" id="26_op7t4"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerBar.cs" id="26_xnkuc"]
 [ext_resource type="Texture2D" uid="uid://h27oxefjs4p7" path="res://addons/MuNgLosDungeon/Icons/ClearIcon.png" id="27_2lruq"]
+[ext_resource type="Texture2D" uid="uid://dxdusxtstuc6p" path="res://addons/MuNgLosDungeon/Icons/Trashcan.png" id="27_2scwp"]
 [ext_resource type="Texture2D" uid="uid://dbtj37kwtffth" path="res://addons/MuNgLosDungeon/Icons/DebugIcon.png" id="28_a1cq0"]
 [ext_resource type="Texture2D" uid="uid://s8b4xers08bq" path="res://addons/MuNgLosDungeon/Icons/DiceIcon.png" id="29_286he"]
 [ext_resource type="Texture2D" uid="uid://dwaqs2kxfisr6" path="res://addons/MuNgLosDungeon/Icons/ShowIcon.png" id="29_s37yq"]
@@ -140,6 +143,7 @@ visible = false
 
 [node name="Target" type="Node3D" parent="SubViewportContainer/SubViewport"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Target"]
 material_override = SubResource("StandardMaterial3D_sfpnj")
@@ -161,9 +165,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -14.0
-offset_top = -59.0
+offset_top = -114.0
 offset_right = 14.0
-offset_bottom = -16.0
+offset_bottom = -71.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
@@ -426,6 +430,8 @@ offset_left = 45.0
 offset_top = 4.0
 offset_right = 286.0
 offset_bottom = 35.0
+tooltip_text = "Dungeon: Generate and view whole dungeons
+SectionTypes: Correctly defined Isection Classes will be listed here as an option"
 item_count = 3
 selected = 0
 popup/item_0/text = "Dungeon"
@@ -442,6 +448,7 @@ offset_left = 45.0
 offset_top = 45.0
 offset_right = 286.0
 offset_bottom = 76.0
+tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
 script = ExtResource("21_siix3")
 
 [node name="PlacerResouceSelector" type="EditorResourcePicker" parent="."]
@@ -450,23 +457,24 @@ offset_left = 296.0
 offset_top = 4.0
 offset_right = 537.0
 offset_bottom = 35.0
+tooltip_text = "Select a placer to override the section's assigned placers."
 base_type = "PlacerResource"
 script = ExtResource("21_rut2o")
 
-[node name="PlacerBar" type="Panel" parent="."]
+[node name="PlacerNavigationBar" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 2.0
 offset_top = -30.0
-offset_right = 506.0
+offset_right = 522.0
 offset_bottom = -2.0
 grow_vertical = 0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
+script = ExtResource("23_sw2ff")
 
-[node name="Counter" type="RichTextLabel" parent="PlacerBar"]
+[node name="Counter" type="RichTextLabel" parent="PlacerNavigationBar"]
 layout_mode = 0
 offset_left = 9.0
 offset_top = -19.0
@@ -480,7 +488,7 @@ bbcode_enabled = true
 text = "[center]99[/center]"
 scroll_active = false
 
-[node name="StepLeft" type="TextureButton" parent="PlacerBar"]
+[node name="StepLeft" type="TextureButton" parent="PlacerNavigationBar"]
 layout_mode = 0
 offset_left = 28.0
 offset_top = -16.0
@@ -490,7 +498,7 @@ scale = Vector2(0.1, 0.1)
 tooltip_text = "Previous placer"
 texture_normal = ExtResource("23_b3bau")
 
-[node name="StepRight" type="TextureButton" parent="PlacerBar"]
+[node name="StepRight" type="TextureButton" parent="PlacerNavigationBar"]
 layout_mode = 0
 offset_left = 43.0
 offset_top = -16.0
@@ -500,7 +508,7 @@ scale = Vector2(0.1, 0.1)
 tooltip_text = "Next Placer"
 texture_normal = ExtResource("24_kk61u")
 
-[node name="AddPlacer" type="TextureButton" parent="PlacerBar"]
+[node name="AddPlacer" type="TextureButton" parent="PlacerNavigationBar"]
 layout_mode = 0
 offset_left = 56.0
 offset_top = -16.0
@@ -510,15 +518,19 @@ scale = Vector2(0.1, 0.1)
 tooltip_text = "Add a new Placer"
 texture_normal = ExtResource("16_nrt1g")
 
-[node name="RemovePlacer" type="TextureButton" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 69.0
-offset_top = -16.0
-offset_right = 197.0
-offset_bottom = 112.0
-scale = Vector2(0.1, 0.1)
-tooltip_text = "Remove current Placer"
-texture_normal = ExtResource("17_wfx1p")
+[node name="PlacerBar" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -30.0
+offset_right = 598.0
+offset_bottom = -2.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
+script = ExtResource("26_xnkuc")
 
 [node name="Index" type="RichTextLabel" parent="PlacerBar"]
 layout_mode = 0
@@ -531,26 +543,132 @@ theme_override_font_sizes/normal_font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
 bbcode_enabled = true
-text = "[center]#[/center]"
+text = "[center]0#[/center]"
+scroll_active = false
+
+[node name="CheckButton" type="CheckButton" parent="PlacerBar"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 2.0
+offset_right = 86.0
+offset_bottom = 26.0
+tooltip_text = "Set this placer active or inactive"
+button_pressed = true
+
+[node name="Chance" type="RichTextLabel" parent="PlacerBar"]
+layout_mode = 0
+offset_left = 87.0
+offset_top = 4.0
+offset_right = 128.0
+offset_bottom = 28.0
+tooltip_text = "Chance of this placer to run"
+theme_override_font_sizes/normal_font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
+bbcode_enabled = true
+text = "[center]100%[/center]"
 scroll_active = false
 
 [node name="PlacerName" type="RichTextLabel" parent="PlacerBar"]
 layout_mode = 0
-offset_left = 87.0
+offset_left = 128.0
 offset_top = 4.0
-offset_right = 239.0
+offset_right = 280.0
 offset_bottom = 28.0
 tooltip_text = "What the placer is named"
 theme_override_font_sizes/normal_font_size = 14
 theme_override_styles/focus = SubResource("StyleBoxEmpty_t2yw6")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_j2qfh")
-text = "PlacerName"
+text = "Breakable Barrels"
 scroll_active = false
 
-[node name="CheckButton" type="CheckButton" parent="PlacerBar"]
+[node name="PlacerNameBtn" type="TextureButton" parent="PlacerBar"]
 layout_mode = 0
-offset_left = 43.0
-offset_top = 4.0
-offset_right = 87.0
+offset_left = 128.0
+offset_right = 280.0
 offset_bottom = 28.0
-tooltip_text = "Set this placer active or inactive"
+tooltip_text = "What the placer is named"
+
+[node name="min" type="RichTextLabel" parent="PlacerBar"]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 4.0
+offset_right = 309.0
+offset_bottom = 28.0
+tooltip_text = "min"
+theme_override_font_sizes/normal_font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
+bbcode_enabled = true
+text = "[right]1[/right]"
+scroll_active = false
+
+[node name="divider" type="RichTextLabel" parent="PlacerBar"]
+layout_mode = 0
+offset_left = 309.0
+offset_top = 4.0
+offset_right = 318.0
+offset_bottom = 28.0
+theme_override_font_sizes/normal_font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
+bbcode_enabled = true
+text = "[center]-[/center]"
+scroll_active = false
+
+[node name="max" type="RichTextLabel" parent="PlacerBar"]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 4.0
+offset_right = 343.0
+offset_bottom = 28.0
+tooltip_text = "max"
+theme_override_font_sizes/normal_font_size = 14
+theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
+bbcode_enabled = true
+text = "[left]1[/left]"
+scroll_active = false
+
+[node name="Rule" type="OptionButton" parent="PlacerBar"]
+visible = false
+layout_mode = 0
+offset_left = 343.0
+offset_top = 3.0
+offset_right = 423.0
+offset_bottom = 24.0
+tooltip_text = "How the individual pieces will be placed"
+theme_override_font_sizes/font_size = 9
+item_count = 2
+popup/item_0/text = "Floor"
+popup/item_0/id = 0
+popup/item_1/text = "Corners"
+popup/item_1/id = 1
+
+[node name="SectionSizeModifier" type="OptionButton" parent="PlacerBar"]
+visible = false
+layout_mode = 0
+offset_left = 426.0
+offset_top = 3.0
+offset_right = 511.0
+offset_bottom = 24.0
+tooltip_text = "How much will the section size matter for the amount"
+theme_override_font_sizes/font_size = 9
+item_count = 4
+popup/item_0/text = "Constant"
+popup/item_0/id = 0
+popup/item_1/text = "Light"
+popup/item_1/id = 1
+popup/item_2/text = "Medium"
+popup/item_2/id = 2
+popup/item_3/text = "Full"
+popup/item_3/id = 3
+
+[node name="RemoveBtn" type="TextureButton" parent="PlacerBar"]
+layout_mode = 0
+offset_left = 570.0
+offset_right = 698.0
+offset_bottom = 140.0
+scale = Vector2(0.2, 0.2)
+tooltip_text = "Remove placer from section"
+texture_normal = ExtResource("27_2scwp")

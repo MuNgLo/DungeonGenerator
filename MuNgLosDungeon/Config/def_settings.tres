@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="GenerationSettingsResource" load_steps=4 format=3 uid="uid://6su0i5s3ukgo"]
 
-[ext_resource type="Resource" uid="uid://6ah2ij0d3nxw" path="res://addons/MuNgLosDungeon/Config/Rooms/DefaultStandardRoom.tres" id="1_k2g1b"]
+[ext_resource type="Resource" uid="uid://cpo4pr8osbhnk" path="res://addons/MuNgLosDungeon/Config/Sections/DefaultStandardRoom.tres" id="1_k2g1b"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/GenerationSettingsResource.cs" id="1_t4wih"]
-[ext_resource type="Resource" uid="uid://c3d25nty3rs6k" path="res://addons/MuNgLosDungeon/Config/Rooms/DefaultStartRoom.tres" id="2_yngiv"]
+[ext_resource type="Resource" uid="uid://dk1ltui3mo7xj" path="res://addons/MuNgLosDungeon/Config/Sections/DefaultStartRoom.tres" id="2_yngiv"]
 
 [resource]
 script = ExtResource("1_t4wih")
@@ -10,7 +10,7 @@ showFloors = true
 showWalls = true
 showCeilings = false
 showProps = true
-showDebug = true
+showDebug = false
 showArches = false
 clearEmpties = false
 floorPass = true
@@ -21,21 +21,15 @@ propPass = true
 debugPass = true
 roomPass = true
 waterPass = true
-nbOfFloors = 1
-SizeX = 30
-SizeZ = 30
-SizeY = 3
-chanceForWideCorridor = 70
+nbOfFloors = 20
 corPerFloor = 4
-corMaxTotal = 20
-corMaxStraight = 5
-corMinStraight = 3
 maxBranches = 3
+chanceForWideCorridor = 70
 roomStart = ExtResource("2_yngiv")
 roomDefault = ExtResource("1_k2g1b")
-maxRoomsPerPath = 9
+maxRoomsPerPath = 4
 nbOfWaterPathsPer10 = 8
-seed1 = 6426
-seed2 = 2421
-seed3 = 9795
-seed4 = 2986
+seed1 = 1181
+seed2 = 3289
+seed3 = 2629
+seed4 = 3774

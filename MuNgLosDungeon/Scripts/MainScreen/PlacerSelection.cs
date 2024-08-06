@@ -1,7 +1,7 @@
 ﻿using Godot;
 using System;
 
-namespace Munglo.DungeonGenerator
+namespace Munglo.DungeonGenerator.UI
 {
     [Tool]
     internal partial class PlacerSelection : EditorResourcePicker
@@ -11,7 +11,7 @@ namespace Munglo.DungeonGenerator
             ResourceChanged += WhenResourceChanged;
             ResourceSelected += WhenResouceSelected;
         }
-        private void FocusInpsector()
+        private void FocusInspector()
         {
             if(EditedResource is null) { return; }
             EditorInterface.Singleton.InspectObject(EditedResource);
@@ -20,12 +20,12 @@ namespace Munglo.DungeonGenerator
 
         private void WhenResouceSelected(Resource resource, bool inspect)
         {
-            FocusInpsector();
+            FocusInspector();
         }
 
         private void WhenResourceChanged(Resource resource)
         {
-            FocusInpsector();
+            FocusInspector();
         }
     }// EOF CLASS
 }
