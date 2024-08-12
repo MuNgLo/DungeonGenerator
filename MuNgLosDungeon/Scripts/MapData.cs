@@ -212,7 +212,7 @@ namespace Munglo.DungeonGenerator
             if (!pieces[coord.x].Keys.Contains(coord.y)) { pieces[coord.x][coord.y] = new System.Collections.Generic.Dictionary<int, MapPiece>(); }
             if (!pieces[coord.x][coord.y].Keys.Contains(coord.z))
             {
-                if (verbose) { DungeonGenerator.Log(this, "VerifyPieceSpace", $"insert blank piece [{coord.x}.{coord.y}.{coord.z}]"); }
+                if (verbose) { GD.PrintErr($"VerifyPieceSpace", $"insert blank piece [{coord.x}.{coord.y}.{coord.z}]"); }
 
                 pieces[coord.x][coord.y][coord.z] = new MapPiece(this, coord);
             }

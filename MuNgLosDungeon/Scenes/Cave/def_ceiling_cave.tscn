@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfo02c5yt1wo3"]
+
+[ext_resource type="ArrayMesh" uid="uid://cguopou8bpls3" path="res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_CeilingCave.res" id="1_6kapt"]
+
+[node name="Wall" type="Node3D"]
+
+[node name="DefaultMeshesCeilingMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+mesh = ExtResource("1_6kapt")

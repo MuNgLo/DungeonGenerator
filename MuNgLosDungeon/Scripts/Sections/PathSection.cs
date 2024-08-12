@@ -45,7 +45,7 @@ namespace Munglo.DungeonGenerator.Sections
                 if (breaker < 0)
                 {
                     isFinished = true;
-                    DungeonGenerator.Log("Path", "CONSTRUCTOR", "Addstep loop hit BREAKER!");
+                    GD.PrintErr($"Path", "CONSTRUCTOR", "Addstep loop hit BREAKER!");
                 }
                 if (LeftSide.Count >= corMaxTotal) { isFinished = true; }
             }

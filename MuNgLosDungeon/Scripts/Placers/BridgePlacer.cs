@@ -11,7 +11,7 @@ namespace Munglo.DungeonGenerator
         /// The parent map data this section belongs to
         /// </summary>
         private protected readonly MapData map;
-        private AddonSettings MasterConfig;
+        private AddonSettingsResource MasterConfig;
 
         private string resourceName = "BridgePlacer";
         public string ResourceName { get => resourceName; set => resourceName = value; }
@@ -27,7 +27,7 @@ namespace Munglo.DungeonGenerator
         {
             this.room = section;
             this.map = mapData;
-            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettings;
+            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettingsResource;
         }
 
         public void Place(ISection section)

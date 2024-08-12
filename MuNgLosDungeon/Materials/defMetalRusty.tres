@@ -18,6 +18,8 @@ noise = SubResource("FastNoiseLite_c2w11")
 [resource]
 albedo_color = Color(0.129412, 0.14902, 0.164706, 1)
 albedo_texture = SubResource("NoiseTexture2D_3ovij")
+metallic = 0.89
+metallic_specular = 0.38
 uv1_scale = Vector3(0.35, 0.35, 0.35)
 uv1_triplanar = true
 uv1_world_triplanar = true

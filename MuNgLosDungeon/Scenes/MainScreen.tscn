@@ -6,10 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://cok3u5man8n7s" path="res://addons/MuNgLosDungeon/ToolMeshCursor3DBox.glb" id="3_8fs6d"]
 [ext_resource type="Environment" uid="uid://bn1cwyorljhq2" path="res://addons/MuNgLosDungeon/ViewerEnv.tres" id="3_ubg15"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ScreenDungeonVisualizer.cs" id="4_ey6f7"]
-[ext_resource type="Texture2D" uid="uid://dtjyxe2ilemxm" path="res://addons/MuNgLosDungeon/Icons/ArrowUp.png" id="15_xmst8"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/Notifications.cs" id="7_cfcxe"]
 [ext_resource type="Texture2D" uid="uid://dv255qe1oq6xd" path="res://addons/MuNgLosDungeon/Icons/Plus.png" id="16_nrt1g"]
+[ext_resource type="Texture2D" uid="uid://c1d535us2x45r" path="res://addons/MuNgLosDungeon/Icons/AddonIcon_big.png" id="17_kon6s"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/FloorOptions.cs" id="17_usypf"]
 [ext_resource type="Texture2D" uid="uid://bqy2qf25o7ju4" path="res://addons/MuNgLosDungeon/Icons/Minus.png" id="17_wfx1p"]
-[ext_resource type="Texture2D" uid="uid://dq57hbhbk8mab" path="res://addons/MuNgLosDungeon/Icons/ArrowDown.png" id="18_bqin5"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ModeSelection.cs" id="20_tvmsy"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerSelection.cs" id="21_rut2o"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelector.cs" id="21_siix3"]
@@ -22,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://dxdusxtstuc6p" path="res://addons/MuNgLosDungeon/Icons/Trashcan.png" id="27_2scwp"]
 [ext_resource type="Texture2D" uid="uid://dbtj37kwtffth" path="res://addons/MuNgLosDungeon/Icons/DebugIcon.png" id="28_a1cq0"]
 [ext_resource type="Texture2D" uid="uid://s8b4xers08bq" path="res://addons/MuNgLosDungeon/Icons/DiceIcon.png" id="29_286he"]
+[ext_resource type="Theme" uid="uid://c0br7ijjnpfqo" path="res://addons/MuNgLosDungeon/Config/MainScreenTheme.tres" id="29_j2fmg"]
+[ext_resource type="Texture2D" uid="uid://druq5meumhh8v" path="res://addons/MuNgLosDungeon/Icons/Floorbox.png" id="29_le75x"]
 [ext_resource type="Texture2D" uid="uid://dwaqs2kxfisr6" path="res://addons/MuNgLosDungeon/Icons/ShowIcon.png" id="29_s37yq"]
 [ext_resource type="Texture2D" uid="uid://bbm8d0xvbhdl3" path="res://addons/MuNgLosDungeon/Icons/ProfileIcon.png" id="31_7xw7w"]
 [ext_resource type="Texture2D" uid="uid://cox2hruyd1v8o" path="res://addons/MuNgLosDungeon/Icons/CogIcon.png" id="32_m0fwq"]
@@ -53,12 +56,6 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3qeco"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cfqea"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lt7f8"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvu0x"]
 
@@ -180,6 +177,7 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+script = ExtResource("7_cfcxe")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
@@ -328,101 +326,16 @@ tooltip_text = "Export the generated Dungeon to a scene"
 texture_normal = ExtResource("34_3dg3h")
 stretch_mode = 5
 
-[node name="Panel3" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -120.0
-offset_top = 10.0
-offset_right = -51.0
-offset_bottom = 66.0
-grow_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxEmpty_3qeco")
-
-[node name="Up" type="TextureButton" parent="Panel3"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -12.5
-offset_right = 115.5
-offset_bottom = 128.0
-grow_horizontal = 2
-scale = Vector2(0.2, 0.2)
+[node name="MasterConfig" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 131.0
+offset_right = 38.0
+offset_bottom = 163.0
+scale = Vector2(0.5, 0.5)
 tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("15_xmst8")
+texture_normal = ExtResource("17_kon6s")
 stretch_mode = 5
-
-[node name="Plus" type="TextureButton" parent="Panel3"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -5.0
-offset_top = -5.0
-offset_right = 123.0
-offset_bottom = 123.0
-grow_vertical = 2
-scale = Vector2(0.2, 0.2)
-tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("16_nrt1g")
-stretch_mode = 5
-
-[node name="Minus" type="TextureButton" parent="Panel3"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -21.0
-offset_top = -5.0
-offset_right = 107.0
-offset_bottom = 123.0
-grow_horizontal = 0
-grow_vertical = 2
-scale = Vector2(0.2, 0.2)
-tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("17_wfx1p")
-stretch_mode = 5
-
-[node name="Down" type="TextureButton" parent="Panel3"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -12.5
-offset_top = -10.0
-offset_right = 115.5
-offset_bottom = 118.0
-grow_horizontal = 2
-grow_vertical = 0
-scale = Vector2(0.2, 0.2)
-tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("18_bqin5")
-stretch_mode = 5
-
-[node name="FloorNumber" type="RichTextLabel" parent="Panel3"]
-custom_minimum_size = Vector2(0, 16)
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -10.0
-offset_bottom = 22.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_font_sizes/normal_font_size = 24
-theme_override_styles/focus = SubResource("StyleBoxEmpty_cfqea")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_lt7f8")
-bbcode_enabled = true
-text = "[center]99[/center]"
-scroll_active = false
 
 [node name="ModeSelector" type="OptionButton" parent="."]
 layout_mode = 0
@@ -453,10 +366,10 @@ script = ExtResource("21_siix3")
 
 [node name="PlacerResouceSelector" type="EditorResourcePicker" parent="."]
 layout_mode = 0
-offset_left = 296.0
-offset_top = 4.0
-offset_right = 537.0
-offset_bottom = 35.0
+offset_left = 44.0
+offset_top = 86.0
+offset_right = 285.0
+offset_bottom = 117.0
 tooltip_text = "Select a placer to override the section's assigned placers."
 base_type = "PlacerResource"
 script = ExtResource("21_rut2o")
@@ -672,3 +585,52 @@ offset_bottom = 140.0
 scale = Vector2(0.2, 0.2)
 tooltip_text = "Remove placer from section"
 texture_normal = ExtResource("27_2scwp")
+
+[node name="FloorOptions" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -65.0
+offset_top = 12.0
+offset_right = 65.0
+offset_bottom = 29.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("17_usypf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FloorOptions"]
+layout_mode = 2
+
+[node name="SpinBox" type="SpinBox" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("29_j2fmg")
+select_all_on_focus = true
+
+[node name="Plus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("16_nrt1g")
+stretch_mode = 5
+
+[node name="FloorBox" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("29_le75x")
+stretch_mode = 5
+
+[node name="Minus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("17_wfx1p")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("29_j2fmg")
+text = "1"
+
+[node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
+custom_minimum_size = Vector2(17.46, 0)
+layout_mode = 2

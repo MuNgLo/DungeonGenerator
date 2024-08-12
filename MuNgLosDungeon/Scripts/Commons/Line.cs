@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Godot;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace Munglo.DungeonGenerator
@@ -123,7 +124,7 @@ namespace Munglo.DungeonGenerator
         internal void WalkNormal(int maxSteps, bool mainline)
         {
             MapPiece nextStep = Last.Neighbour(Last.Orientation);
-            if (nextStep == null) { DungeonGenerator.Log("Line", "WalkNormal", $"steps.Count[{steps.Count}] nextStep is NULL[{nextStep == null}]"); }
+            if (nextStep == null) { GD.PrintErr($"Line", "WalkNormal", $"steps.Count[{steps.Count}] nextStep is NULL[{nextStep == null}]"); }
 
             if (nextStep.State != MAPPIECESTATE.UNUSED && nextStep.SectionIndex < 0)  
             {

@@ -18,7 +18,7 @@ namespace Munglo.DungeonGenerator.UI
             screen = GetParent() as MainScreen;
             modeSelector = screen.GetNode<ModeSelection>("ModeSelector");
 
-            modeSelector.ItemSelected += WhenModeSelected;
+            //modeSelector.ItemSelected += WhenModeSelected;
             VisibilityChanged += UpdateDropdownList;
             ItemSelected += WhenItemSelected;
             resources = new Dictionary<string, string>();
@@ -56,23 +56,23 @@ namespace Munglo.DungeonGenerator.UI
         private void UpdateDropdownList()
         {
             if(!Visible) { Clear(); return; }
-            GD.Print($"SectionSelector::UpdateDropdownList() Selected[{Selected}] ItemCount[{ItemCount}]");
             PoulateResourceCollection();
+            GD.Print($"SectionSelector::UpdateDropdownList() Selected[{Selected}] ItemCount[{ItemCount}]");
             LoadSelected();
         }
         private void PoulateResourceCollection()
         {
             string typeName = modeSelector.GetItemText(modeSelector.Selected);
             GD.Print($"SectionSelector::PoulateResourceCollection() typeName[{typeName}] [{modeSelector.GetSelectedType()}]");
-
-
             resources = new Dictionary<string, string>();
             List<Resource> items = new List<Resource>();
-            foreach (string file in DirAccess.GetFilesAt(screen.addon.Profile.SectionResourcePath))
+
+            // Add default resources
+            foreach (string file in DirAccess.GetFilesAt(screen.addon.MasterConfig.SectionResourcePathDefault))
             {
                 if (file.Contains("tres"))
                 {
-                    Resource res = ResourceLoader.Load(screen.addon.Profile.SectionResourcePath + file);// + file.Replace(".tres", ""));
+                    Resource res = ResourceLoader.Load(screen.addon.MasterConfig.SectionResourcePathDefault + file);// + file.Replace(".tres", ""));
                     if (res is SectionResource) {
                         if(typeName == (res as SectionResource).sectionType)
                         {
@@ -81,6 +81,28 @@ namespace Munglo.DungeonGenerator.UI
                     }
                 }
             }
+            // Add project section resources
+            if (screen.addon.VerifySectionsFolder())
+            {
+                foreach (string file in DirAccess.GetFilesAt(screen.addon.MasterConfig.SectionResourcePath))
+                {
+                    if (file.Contains("tres"))
+                    {
+                        Resource res = ResourceLoader.Load(screen.addon.MasterConfig.SectionResourcePath + file);// + file.Replace(".tres", ""));
+                        if (res is SectionResource)
+                        {
+                            if (typeName == (res as SectionResource).sectionType)
+                            {
+                                items.Add(res);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
             if (items.Count > 0)
             {
                 Clear();

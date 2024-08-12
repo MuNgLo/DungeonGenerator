@@ -35,7 +35,7 @@ namespace Munglo.DungeonGenerator.Sections
                 breaker++;
                 if (breaker > 1000)
                 {
-                    DungeonGenerator.Log("RoomBase", $"BuildRoom", $"ProcessPiece loop hit breaker!");
+                    GD.PrintErr($"RoomBase", $"BuildRoom", $"ProcessPiece loop hit breaker!");
                     break;
                 }
             }

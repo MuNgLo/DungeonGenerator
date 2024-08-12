@@ -18,7 +18,7 @@ namespace Munglo.DungeonGenerator.UI
         private MainScreen screen;
         private MapData map;
         private GenerationSettingsResource settings;
-        private AddonSettings MasterConfig;
+        private AddonSettingsResource MasterConfig;
         private System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>> cacheKeyedPieces;
         private Node3D mapContainer;
         private Node3D propContainer;
@@ -30,12 +30,13 @@ namespace Munglo.DungeonGenerator.UI
         public override void _EnterTree()
         {
             screen = GetParent().GetParent().GetParent() as MainScreen;
-            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettings;
+            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettingsResource;
         }
         public async void BuildDungeon(GenerationSettingsResource settings, BiomeResource biome)
         {
+            screen.RaiseNotification($"Building Dungeon");
             this.settings = settings;
-            screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 0) + "%");
+            screen.RaiseNotification($"Generating:" + string.Format("{0:0}", 0) + "%");
             await ToSignal(GetTree(), "process_frame");
             //BuildData(biome, () => { ShowMap(null, null); }, settings.roomStart, settings.roomDefault);
             BuildData(biome, () => { ReDrawMap(); }, settings.roomStart, settings.roomDefault);
@@ -43,7 +44,7 @@ namespace Munglo.DungeonGenerator.UI
         public async void BuildSection(string sectionTypeName, SectionResource sectionDef, Array<PlacerEntryResource> placers, GenerationSettingsResource settings, BiomeResource biome, Action callback)
         {
             this.settings = settings;
-            screen.ScreenNotify($"Generating:" + string.Format("{0:0}", 0) + "%");
+            screen.RaiseNotification($"Generating:" + string.Format("{0:0}", 0) + "%");
             await ToSignal(GetTree(), "process_frame");
 
             cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
@@ -73,6 +74,8 @@ namespace Munglo.DungeonGenerator.UI
         /// </summary>
         public async void ReDrawMap()
         {
+            if (settings is null) { return; }
+            screen.RaiseNotification($"Generating Visuals");
             GD.Print($"ScreenDungeonVisulaizer::ReDrawMap()");
             cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             mapContainer = FindChild("Generated") as Node3D;
@@ -85,6 +88,7 @@ namespace Munglo.DungeonGenerator.UI
                 VisualizeFloor(i);
                 await ToSignal(GetTree(), "process_frame");
             }
+            screen.RaiseNotification($"Done");
         }
 
         public void ReDrawSection()
@@ -212,31 +216,31 @@ namespace Munglo.DungeonGenerator.UI
 
 
       
-
+        /// <summary>
+        /// Only ever add debug visuals for editor debugging
+        /// </summary>
+        /// <param name="piece"></param>
         private void AddDebugVisuals(MapPiece piece)
         {
-            // generate debug
-            if (settings.debugPass)
-            {
-                Node3D floorParent = GetFloorDebugContainer(piece.Coord.y);
+            Node3D floorParent = GetFloorDebugContainer(piece.Coord.y);
 
-                foreach (KeyData keyData in piece.Debug)
-                {
-                    if (GetByKey(keyData, biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
-                }
-                if (piece.isBridge)
-                {
-                    if (GetByKey(
-                        new KeyData() { key = PIECEKEYS.DEBUGBRIDGE, dir = piece.Orientation }
-                        , biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
-                }
-                if (piece.hasStairs)
-                {
-                    if (GetByKey(
-                    new KeyData() { key = PIECEKEYS.DEBUGSTAIR, dir = piece.Orientation }
-                    , biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
-                }
+            foreach (KeyData keyData in piece.Debug)
+            {
+                if (GetByKey(keyData, biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
             }
+            if (piece.isBridge)
+            {
+                if (GetByKey(
+                    new KeyData() { key = PIECEKEYS.DEBUGBRIDGE, dir = piece.Orientation }
+                    , biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
+            }
+            if (piece.hasStairs)
+            {
+                if (GetByKey(
+                new KeyData() { key = PIECEKEYS.DEBUGSTAIR, dir = piece.Orientation }
+                , biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
+            }
+            
         }
 
 
@@ -275,7 +279,10 @@ namespace Munglo.DungeonGenerator.UI
                     tileContainer.AddChild(visualNode, true);
                     visualNode.Position = Dungeon.GlobalPosition(piece);
                     visualNode.Show();
-                    AddDebugVisuals(piece);
+                    if (Engine.IsEditorHint())
+                    {
+                        AddDebugVisuals(piece);
+                    }
                     index++;
                 }
             }
@@ -488,12 +495,12 @@ namespace Munglo.DungeonGenerator.UI
             if (!state)
             {
                 generated.Hide();
-                screen.ScreenNotify($"Debug OFF");
+                screen.RaiseNotification($"Debug OFF");
             }
             else
             {
                 generated.Show();
-                screen.ScreenNotify($"Debug ON");
+                screen.RaiseNotification($"Debug ON");
             }
         }
 

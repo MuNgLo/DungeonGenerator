@@ -5,4 +5,7 @@
 [resource]
 albedo_color = Color(0.0392157, 0.0509804, 0.0588235, 1)
 albedo_texture = ExtResource("1_titlb")
+albedo_texture_force_srgb = true
+metallic_specular = 0.11
 roughness_texture = ExtResource("1_titlb")
+roughness_texture_channel = 4

@@ -12,20 +12,6 @@ namespace Munglo.DungeonGenerator
         [Export] public bool showDebug = true;
         [Export] public bool showArches = true;
 
-
-        [ExportGroup("Passes")]
-        [Export] public bool clearEmpties = true;
-
-        [Export] public bool floorPass = true;
-        [Export] public bool wallPass = true;
-        [Export] public bool ceilingPass = true;
-        [Export] public bool corridorPass = true;
-        [Export] public bool propPass = true;
-        [Export] public bool debugPass = true;
-
-        [Export] public bool roomPass = true;
-        [Export] public bool waterPass = true;
-
         [ExportGroup("General")]
         [Export] public int nbOfFloors = 1;
         [Export] public int corPerFloor = 4;

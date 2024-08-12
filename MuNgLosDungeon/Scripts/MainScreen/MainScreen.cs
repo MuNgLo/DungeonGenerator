@@ -16,8 +16,7 @@ namespace Munglo.DungeonGenerator.UI
         /// Use this to only react to input if cursor is over screen
         /// </summary>
         public bool cursorIsInside = false;
-        private RichTextLabel notiff;
-        private double notiffTTL;
+        
         private ScreenDungeonVisualizer dunVis;
         public Node3D CurrentDungeon => GetNode<Node3D>("SubViewportContainer/SubViewport/Dungeon/Generated");
 
@@ -32,6 +31,7 @@ namespace Munglo.DungeonGenerator.UI
         public ISection SelectedSection => selectedSection;
         public SectionResource SelectedSectionResource => selectedSectionResource;
         public EventHandler OnSelectionChanged;
+        public EventHandler<string> OnNotificationPushed;
         public void ClearSelection()
         {
             selectedMapPiece = null;
@@ -108,15 +108,24 @@ namespace Munglo.DungeonGenerator.UI
 
         public override void _Ready()
         {
-            notiff = FindChild("Notification") as RichTextLabel;
             dunVis = GetNode<ScreenDungeonVisualizer>("SubViewportContainer/SubViewport/Dungeon");
+            GD.Print($"DirExistsAbs [{DirAccess.DirExistsAbsolute(addon.MasterConfig.ProjectResourcePath)}]");
+
+            (FindChild("MasterConfig") as TextureButton).Pressed += PopupInitialSettingsDialougue;
+
+            if(addon.MasterConfig.ProjectResourcePath == string.Empty || !DirAccess.DirExistsAbsolute(addon.MasterConfig.ProjectResourcePath))
+            {
+                PopupInitialSettingsDialougue();
+            }
+
         }
-
-
-        public override void _Process(double delta)
+        
+        private void PopupInitialSettingsDialougue()
         {
-            // Notification timer
-            if(notiffTTL> 0) { notiffTTL -= delta; if (notiffTTL < 0) { notiff.Text = string.Empty; } }
+            PackedScene pScn = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/InitialPopup.tscn") as PackedScene;
+            InitialPopup pop = pScn.Instantiate<InitialPopup>();
+            pop.addon = addon;
+            AddChild(pop);
         }
 
         public void RaiseUpdateUI()
@@ -125,19 +134,13 @@ namespace Munglo.DungeonGenerator.UI
             EventHandler evt = OnMainScreenUIUpdate;
             evt?.Invoke(this, EventArgs.Empty);
         }
-
- 
-
-        /// <summary>
-        /// Show a message on the bottom of the viewer. Only one can be shown so it overwrites the existing one.
-        /// </summary>
-        /// <param name="message"></param>
-        public async void ScreenNotify(string message)
+        public void RaiseNotification(string message)
         {
-            notiff.Text= "[center]" + message + "[/center]";
-            notiffTTL = 2.0;
-            await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+            EventHandler<string> evt = OnNotificationPushed;
+            evt?.Invoke(this, message);
         }
+
+      
         /// <summary>
         /// Generates and display a dungeon in the viewer
         /// </summary>
@@ -150,6 +153,7 @@ namespace Munglo.DungeonGenerator.UI
 
         public void GenerateSection(SectionResource sectionDef, GenerationSettingsResource settings, BiomeResource biome)
         {
+            RaiseNotification($"Building Section {sectionDef.sectionName}");
             OptionButton btn = this.GetNode<OptionButton>("ModeSelector");
             EditorResourcePicker picker = this.GetNode<EditorResourcePicker>("PlacerResouceSelector");
 
@@ -183,12 +187,12 @@ namespace Munglo.DungeonGenerator.UI
         /// </summary>
         internal async void WhenClearPressed()
         {
-            ScreenNotify("CLEARING...");
+            RaiseNotification("CLEARING...");
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             dunVis.ClearLevel();
             dunVis.ClearLevelDebug();
             ClearSelection();
-            ScreenNotify("CLEARED");
+            RaiseNotification("CLEARED");
         }
         /// <summary>
         /// Sets the state of the debug information

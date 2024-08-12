@@ -1,13 +1,23 @@
-[gd_resource type="Environment" format=3 uid="uid://bn1cwyorljhq2"]
+[gd_resource type="Environment" load_steps=4 format=3 uid="uid://bn1cwyorljhq2"]
+
+[sub_resource type="Gradient" id="Gradient_ubm7x"]
+offsets = PackedFloat32Array(0.332006, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_61mng"]
+
+[sub_resource type="NoiseTexture3D" id="NoiseTexture3D_gra6t"]
+color_ramp = SubResource("Gradient_ubm7x")
+noise = SubResource("FastNoiseLite_61mng")
 
 [resource]
 background_mode = 1
 background_color = Color(0.239216, 0.298039, 0.388235, 1)
 tonemap_mode = 2
-tonemap_exposure = 1.61
-tonemap_white = 1.61
+tonemap_exposure = 2.42
+tonemap_white = 5.65
 ssr_enabled = true
 ssao_enabled = true
 ssil_enabled = true
 sdfgi_read_sky_light = false
 glow_intensity = 0.4
+adjustment_color_correction = SubResource("NoiseTexture3D_gra6t")

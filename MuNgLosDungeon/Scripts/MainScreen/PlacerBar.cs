@@ -56,13 +56,13 @@ namespace Munglo.DungeonGenerator.UI
 			if (section.placers.Count > 0)
 			{
 				PlacerEntryResource entry = section.placers[index];
-				IPlacer placer = ResourceLoader.Load(entry.ResourcePath) as IPlacer;
+				
+				//IPlacer placer = ResourceLoader.Load(entry.ResourcePath) as IPlacer;
 
 				GetNode<RichTextLabel>("Index").Text = $"[center]{index}#[/center]";
 				GetNode<Button>("CheckButton").SetPressedNoSignal(entry.active);
 				GetNode<RichTextLabel>("PlacerName").Text = $"{entry.Name}";
 				GetNode<RichTextLabel>("min").Text = $"[right]{entry.count}[/right]";
-
 				
 				GetNode<RichTextLabel>("max").Text = $"[left][/left]";
 				GetNode<RichTextLabel>("Chance").Text = $"[center][/center]";

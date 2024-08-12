@@ -45,7 +45,7 @@ namespace Munglo.DungeonGenerator
             {
 
                 // Build corridors out from the Startroom
-                if (Args.corridorPass && Args.corPerFloor > 0)
+                if (Args.corPerFloor > 0)
                 {
                     List<MapPiece> candidates = centerRoom.GetWallPieces(floor);
                     if (candidates.Count < 1) { continue; }
@@ -89,9 +89,9 @@ namespace Munglo.DungeonGenerator
                 {
                     foreach (int Z in map.Pieces[X][Y].Keys)
                     {
-                        if (Args.wallPass) { FitRoundedCorners(map.Pieces[X][Y][Z]); }
+                        FitRoundedCorners(map.Pieces[X][Y][Z]);
                         //FitLocation(pieces[X][Y][Z]);
-                        if (Args.debugPass) { AddDebugKeys(map.Pieces[X][Y][Z]); }
+                        AddDebugKeys(map.Pieces[X][Y][Z]);
                     }
                 }
             }
@@ -137,9 +137,9 @@ namespace Munglo.DungeonGenerator
                 {
                     foreach (int Z in map.Pieces[X][Y].Keys)
                     {
-                        if (Args.wallPass) { FitRoundedCorners(map.Pieces[X][Y][Z]); }
+                        FitRoundedCorners(map.Pieces[X][Y][Z]);
                         //FitLocation(pieces[X][Y][Z]);
-                        if (Args.debugPass) { AddDebugKeys(map.Pieces[X][Y][Z]); }
+                        AddDebugKeys(map.Pieces[X][Y][Z]);
                     }
                 }
             }
@@ -270,7 +270,7 @@ namespace Munglo.DungeonGenerator
                 {
                     foreach (int Z in map.Pieces[X][Y].Keys)
                     {
-                        if (Args.propPass) { FitSmallArch(map.Pieces[X][Y][Z]); }
+                        FitSmallArch(map.Pieces[X][Y][Z]);
                     }
                 }
             }
@@ -289,19 +289,16 @@ namespace Munglo.DungeonGenerator
         private void BuildRooms()
         {
             // Build Rooms attached to paths
-            if (Args.roomPass)
+            for (int i = 0; i < map.Sections.Count; i++)
             {
-                for (int i = 0; i < map.Sections.Count; i++)
+                for (int inx = 0; inx < Args.maxRoomsPerPath; inx++)
                 {
-                    for (int inx = 0; inx < Args.maxRoomsPerPath; inx++)
+                    if (map.Sections[i] is not PathSection) { continue; }
+                    MapPiece piece = (map.Sections[i] as PathSection).GetRandomAlongPath(out MAPDIRECTION dir);
+                    if (piece != null && piece.State == MAPPIECESTATE.UNUSED)
                     {
-                        if (map.Sections[i] is not PathSection) { continue; }
-                        MapPiece piece = (map.Sections[i] as PathSection).GetRandomAlongPath(out MAPDIRECTION dir);
-                        if (piece != null && piece.State == MAPPIECESTATE.UNUSED)
-                        {
-                            piece.Orientation = dir;
-                            BuildRoom(piece);
-                        }
+                        piece.Orientation = dir;
+                        BuildRoom(piece);
                     }
                 }
             }
@@ -356,7 +353,6 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         private void RemoveAllEmpty()
         {
-            if (!Args.clearEmpties) { return; }
             List<MapCoordinate> toDelete = new List<MapCoordinate>();
             foreach (int X in map.Pieces.Keys)
             {

@@ -10,6 +10,5 @@ namespace Munglo.DungeonGenerator
         [Export] public GenerationSettingsResource settings;
         [Export] public BiomeResource biome;
         [Export] public bool useRandomSeed = true;
-        public string SectionResourcePath = "res://addons/MuNgLosDungeon/Config/Sections/";
     }
 }

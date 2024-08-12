@@ -61,13 +61,13 @@ namespace Munglo.DungeonGenerator.UI
         internal void WheelUp()
         {
             speed = Mathf.Clamp(speed + 2.2f, 2.5f, 50.0f);
-            screen.ScreenNotify($"Speed:" + string.Format("{0:0.0}", speed));
+            screen.RaiseNotification($"Speed:" + string.Format("{0:0.0}", speed));
         }
 
         internal void WheelDown()
         {
             speed = Mathf.Clamp(speed - 2.2f, 2.5f, 50.0f);
-            screen.ScreenNotify($"Speed:" + string.Format("{0:0.0}", speed));
+            screen.RaiseNotification($"Speed:" + string.Format("{0:0.0}", speed));
         }
     }// EOF CLASS
 }

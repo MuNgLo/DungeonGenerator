@@ -1,7 +1,7 @@
 [gd_scene load_steps=22 format=3 uid="uid://fh0u3j608fr6"]
 
 [ext_resource type="ArrayMesh" uid="uid://dl88adxi3l65g" path="res://addons/MuNgLosDungeon/Meshes/DefaultProps_Brazier01.res" id="2_m7j53"]
-[ext_resource type="ArrayMesh" uid="uid://csf13fkbj7ua5" path="res://addons/MuNgLosDungeon/Meshes/DefaultProps_BrazierGrate.res" id="3_pvc74"]
+[ext_resource type="ArrayMesh" uid="uid://bknk7uaunp04" path="res://addons/MuNgLosDungeon/Meshes/DefaultProps_BrazierGrate.res" id="3_pvc74"]
 [ext_resource type="ArrayMesh" uid="uid://b06rw5ydpn1pp" path="res://addons/MuNgLosDungeon/Meshes/DefaultProps_CookingpotBig.res" id="4_wxiqs"]
 [ext_resource type="ArrayMesh" uid="uid://b50o3qfdx44v7" path="res://addons/MuNgLosDungeon/Meshes/DefaultProps_CookingpotBigLid.res" id="5_it7gc"]
 [ext_resource type="ArrayMesh" uid="uid://8umqp13qlg4p" path="res://addons/MuNgLosDungeon/Meshes/DefaultProps_PotFork.res" id="6_wph6n"]
@@ -134,10 +134,8 @@ shape = SubResource("ConcavePolygonShape3D_m20kg")
 shape = SubResource("ConcavePolygonShape3D_06xrk")
 
 [node name="StaticBody3D2" type="StaticBody3D" parent="DefaultPropsBrazier01/DefaultPropsBrazierGrate"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DefaultPropsBrazier01/DefaultPropsBrazierGrate/StaticBody3D2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_86we2")
 
 [node name="DefaultPropsBrazier01Coalbed" type="MeshInstance3D" parent="DefaultPropsBrazier01"]
@@ -149,3 +147,10 @@ skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DefaultPropsBrazier01/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_c6hgt")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.823873, 0)
+light_color = Color(0.760784, 0.796078, 0.713726, 1)
+light_energy = 7.0
+shadow_enabled = true
+omni_range = 14.796

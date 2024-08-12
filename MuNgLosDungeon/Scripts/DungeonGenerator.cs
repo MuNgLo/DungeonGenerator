@@ -11,15 +11,7 @@ using Munglo.DungeonGenerator.Sections;
 
 namespace Munglo.DungeonGenerator
 {
-    /// <summary>
-    /// Keep generation data oriented only and not touch Godot API
-    /// Keep zoning
-    /// debug materials overlay for zoning visuals
-    /// object orient data so mapdata>zonedata>roomdata where room[0] is the non inserted rooms
-    /// insert rooms
-    /// room generation
-    /// </summary>
-    [Tool]
+
     public partial class DungeonGenerator : Node3D
     {
         #region TODO move this to settings
@@ -135,7 +127,7 @@ namespace Munglo.DungeonGenerator
                     tileContainer.AddChild(visualNode, true);
                     visualNode.Position = Dungeon.GlobalPosition(piece);
                     visualNode.Show();
-                    AddDebugVisuals(piece);
+                    //AddDebugVisuals(piece);
                     if (Engine.IsEditorHint())
                     {
                         MoveToEditedScene(visualNode);
@@ -197,7 +189,7 @@ namespace Munglo.DungeonGenerator
 
 
                     visualNode.Show();
-                    AddDebugVisuals(piece);
+                    //AddDebugVisuals(piece);
                     if (Engine.IsEditorHint())
                     {
                         MoveToEditedScene(visualNode);
@@ -254,7 +246,7 @@ namespace Munglo.DungeonGenerator
             }
         }
 
-        private void AddDebugVisuals(MapPiece piece)
+        /*private void AddDebugVisuals(MapPiece piece)
         {
             // generate debug
             if (Config.debugPass)
@@ -276,7 +268,7 @@ namespace Munglo.DungeonGenerator
                     , biome, out Node3D debugProp, false)) { LevelDebug.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
                 }
             }
-        }
+        }*/
 
 
         /// <summary>
@@ -441,17 +433,17 @@ namespace Munglo.DungeonGenerator
             }
             if (!cacheKeyedPieces.ContainsKey(data.key))
             {
-                Log(this, "ResolveAndCache", $"Key [{data.key}] was not found!");
+                GD.PrintErr($"ResolveAndCache Key [{data.key}] was not found!");
                 return null;
             }
             if (!cacheKeyedPieces[data.key].ContainsKey(data.variantID))
             {
                 if (!cacheKeyedPieces[data.key].ContainsKey(0))
                 {
-                    Log(this, "ResolveAndCache", $"Key [{data.key}] Variant [{data.variantID}] was not found! And Default fallback failed!");
+                    GD.PrintErr($"ResolveAndCache", $"Key [{data.key}] Variant [{data.variantID}] was not found! And Default fallback failed!");
                     return null;
                 }
-                Log(this, "ResolveAndCache", $"Key [{data.key}] Variant [{data.variantID}] was not found! Default used as fallback.");
+                GD.PrintErr($"ResolveAndCache", $"Key [{data.key}] Variant [{data.variantID}] was not found! Default used as fallback.");
                 return cacheKeyedPieces[data.key][0];
             }
             return cacheKeyedPieces[data.key][data.variantID];
@@ -479,16 +471,5 @@ namespace Munglo.DungeonGenerator
             await Task.Delay(30);
             GetNode<NavigationRegion3D>("Generated").BakeNavigationMesh();
         }
-        #region Statics
-        internal static void Log(object sender, string methodName, string message = "")
-        {
-            GD.PrintErr($"{sender}::{methodName}()" + (message.Length > 0 ? $"{message}." : ""));
-        }
-        internal static void LogError(object sender, string methodName, string message = "")
-        {
-            GD.PushError($"{sender}::{methodName}()" + (message.Length > 0 ? $"{message}." : ""));
-        }
-      
-        #endregion
     }// EOF CLASS
 }

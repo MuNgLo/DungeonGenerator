@@ -307,7 +307,7 @@ namespace Munglo.DungeonGenerator
         {
             if (state == MAPPIECESTATE.LOCKED && !overideLocked)
             {
-                DungeonGenerator.Log("MapPiece", "AssignWall", $"Attempting to write wall data to locked piece! [{CoordString}] override[{overideLocked}]");
+                GD.PrintErr($"MapPiece", "AssignWall", $"Attempting to write wall data to locked piece! [{CoordString}] override[{overideLocked}]");
                 SetError(true);
                 return;
             }

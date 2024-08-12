@@ -3,9 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://dn21mycjc0sj1" path="res://addons/MuNgLosDungeon/Materials/Textures/defWood.png" id="1_y8u6w"]
 
 [resource]
-albedo_color = Color(0.635294, 0.635294, 0.635294, 1)
+albedo_color = Color(0.270588, 0.270588, 0.270588, 1)
 albedo_texture = ExtResource("1_y8u6w")
-roughness = 0.9
+metallic_specular = 0.08
 roughness_texture = ExtResource("1_y8u6w")
+roughness_texture_channel = 4
 uv1_triplanar = true
 uv1_world_triplanar = true
