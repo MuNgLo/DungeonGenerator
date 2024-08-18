@@ -7,7 +7,7 @@
 
 [sub_resource type="Resource" id="Resource_gj1lk"]
 script = ExtResource("2_etqdo")
-active = true
+active = false
 count = 1
 placer = ExtResource("1_viim0")
 

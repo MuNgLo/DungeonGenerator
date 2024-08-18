@@ -8,10 +8,10 @@
 script = ExtResource("1_t4wih")
 showFloors = true
 showWalls = true
-showCeilings = true
+showCeilings = false
 showProps = true
 showDebug = false
-showArches = true
+showArches = false
 nbOfFloors = 5
 corPerFloor = 4
 maxBranches = 3
