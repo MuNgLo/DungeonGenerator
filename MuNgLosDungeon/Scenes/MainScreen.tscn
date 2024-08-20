@@ -1,9 +1,11 @@
-[gd_scene load_steps=44 format=3 uid="uid://66fkglptwkl1"]
+[gd_scene load_steps=40 format=3 uid="uid://66fkglptwkl1"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DungeonViewerToolbar.cs" id="2_btfr4"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DuengeonSelector.cs" id="2_tq51n"]
 [ext_resource type="PackedScene" uid="uid://cok3u5man8n7s" path="res://addons/MuNgLosDungeon/ToolMeshCursor3DBox.glb" id="3_8fs6d"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionTypeListButton.cs" id="3_bakif"]
 [ext_resource type="Environment" uid="uid://bn1cwyorljhq2" path="res://addons/MuNgLosDungeon/ViewerEnv.tres" id="3_ubg15"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ScreenDungeonVisualizer.cs" id="4_ey6f7"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/Notifications.cs" id="7_cfcxe"]
@@ -11,25 +13,20 @@
 [ext_resource type="Texture2D" uid="uid://c1d535us2x45r" path="res://addons/MuNgLosDungeon/Icons/AddonIcon_big.png" id="17_kon6s"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/FloorOptions.cs" id="17_usypf"]
 [ext_resource type="Texture2D" uid="uid://bqy2qf25o7ju4" path="res://addons/MuNgLosDungeon/Icons/Minus.png" id="17_wfx1p"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ModeSelection.cs" id="20_tvmsy"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerSelection.cs" id="21_rut2o"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelector.cs" id="21_siix3"]
 [ext_resource type="Texture2D" uid="uid://8555w8eydq84" path="res://addons/MuNgLosDungeon/Icons/ArrowLeft.png" id="23_b3bau"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerNavigationBar.cs" id="23_sw2ff"]
 [ext_resource type="Texture2D" uid="uid://c2o24ip52ufku" path="res://addons/MuNgLosDungeon/Icons/ArrowRight.png" id="24_kk61u"]
-[ext_resource type="Texture2D" uid="uid://bvpiege84x6yg" path="res://addons/MuNgLosDungeon/Icons/HammerIcon.png" id="26_op7t4"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerBar.cs" id="26_xnkuc"]
-[ext_resource type="Texture2D" uid="uid://h27oxefjs4p7" path="res://addons/MuNgLosDungeon/Icons/ClearIcon.png" id="27_2lruq"]
 [ext_resource type="Texture2D" uid="uid://dxdusxtstuc6p" path="res://addons/MuNgLosDungeon/Icons/Trashcan.png" id="27_2scwp"]
-[ext_resource type="Texture2D" uid="uid://dbtj37kwtffth" path="res://addons/MuNgLosDungeon/Icons/DebugIcon.png" id="28_a1cq0"]
-[ext_resource type="Texture2D" uid="uid://s8b4xers08bq" path="res://addons/MuNgLosDungeon/Icons/DiceIcon.png" id="29_286he"]
 [ext_resource type="Theme" uid="uid://c0br7ijjnpfqo" path="res://addons/MuNgLosDungeon/Config/MainScreenTheme.tres" id="29_j2fmg"]
 [ext_resource type="Texture2D" uid="uid://druq5meumhh8v" path="res://addons/MuNgLosDungeon/Icons/Floorbox.png" id="29_le75x"]
-[ext_resource type="Texture2D" uid="uid://dwaqs2kxfisr6" path="res://addons/MuNgLosDungeon/Icons/ShowIcon.png" id="29_s37yq"]
 [ext_resource type="Texture2D" uid="uid://bbm8d0xvbhdl3" path="res://addons/MuNgLosDungeon/Icons/ProfileIcon.png" id="31_7xw7w"]
 [ext_resource type="Texture2D" uid="uid://cox2hruyd1v8o" path="res://addons/MuNgLosDungeon/Icons/CogIcon.png" id="32_m0fwq"]
 [ext_resource type="Texture2D" uid="uid://dgb6ce56b7orr" path="res://addons/MuNgLosDungeon/Icons/BiomeIcon.png" id="33_ck4ds"]
 [ext_resource type="Texture2D" uid="uid://wnh4mm6q2vxl" path="res://addons/MuNgLosDungeon/Icons/ExportIcon.png" id="34_3dg3h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xqdge"]
 
 [sub_resource type="World3D" id="World3D_qk8pl"]
 environment = ExtResource("3_ubg15")
@@ -82,12 +79,119 @@ size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("1_t5mpj")
 
+[node name="DungeonViewerToolbar" type="HBoxContainer" parent="." node_paths=PackedStringArray("btnModeToggle", "btnClear", "btnBuild", "btnRandomToggle", "btnView", "btnSectionTypeList", "btnSectionSelector")]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 1.0
+offset_bottom = 25.0
+grow_horizontal = 2
+script = ExtResource("2_btfr4")
+btnModeToggle = NodePath("btnMode")
+btnClear = NodePath("btnClear")
+btnBuild = NodePath("btnBuild")
+btnRandomToggle = NodePath("btnRandom")
+btnView = NodePath("btnView")
+btnSectionTypeList = NodePath("btnSectionTypeList")
+btnSectionSelector = NodePath("SectionResourceSelector")
+
+[node name="btnMode" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "DungeonMode"
+
+[node name="VSeparator" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnClear" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "Clear"
+
+[node name="VSeparator2" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnBuild" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "Build"
+
+[node name="btnRandom" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "Random"
+
+[node name="VSeparator3" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnView" type="MenuButton" parent="DungeonViewerToolbar"]
+layout_mode = 2
+tooltip_text = "Check the things you want to show after a build"
+theme_type_variation = &"FlatMenuButton"
+theme_override_font_sizes/font_size = 11
+toggle_mode = false
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "View"
+item_count = 6
+popup/item_0/text = "Floors"
+popup/item_0/checkable = 1
+popup/item_0/checked = true
+popup/item_1/text = "Walls"
+popup/item_1/checkable = 1
+popup/item_1/checked = true
+popup/item_1/id = 1
+popup/item_2/text = "Ceilings"
+popup/item_2/checkable = 1
+popup/item_2/checked = true
+popup/item_2/id = 2
+popup/item_3/text = "Props"
+popup/item_3/checkable = 1
+popup/item_3/checked = true
+popup/item_3/id = 3
+popup/item_4/text = "Debug"
+popup/item_4/checkable = 1
+popup/item_4/checked = true
+popup/item_4/id = 4
+popup/item_5/text = "Arches"
+popup/item_5/checkable = 1
+popup/item_5/checked = true
+popup/item_5/id = 5
+
+[node name="VSeparator4" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnSectionTypeList" type="OptionButton" parent="DungeonViewerToolbar"]
+layout_mode = 2
+tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
+selected = 0
+item_count = 2
+popup/item_0/text = "PathSection"
+popup/item_1/text = "RoomSection"
+popup/item_1/id = 1
+script = ExtResource("3_bakif")
+
+[node name="SectionResourceSelector" type="OptionButton" parent="DungeonViewerToolbar"]
+layout_mode = 2
+tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
+script = ExtResource("21_siix3")
+
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 custom_minimum_size = Vector2(300, 100)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 27.0
+offset_bottom = 7.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
@@ -98,7 +202,7 @@ process_mode = 3
 own_world_3d = true
 world_3d = SubResource("World3D_qk8pl")
 handle_input_locally = false
-size = Vector2i(1152, 648)
+size = Vector2i(1152, 628)
 render_target_clear_mode = 2
 render_target_update_mode = 4
 
@@ -154,6 +258,55 @@ visible = false
 [node name="ToolMeshCursor3DBox" parent="SubViewportContainer/SubViewport/Cursor" instance=ExtResource("3_8fs6d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
+[node name="FloorOptions" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -65.0
+offset_top = 26.0
+offset_right = 65.0
+offset_bottom = 43.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("17_usypf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FloorOptions"]
+layout_mode = 2
+
+[node name="SpinBox" type="SpinBox" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("29_j2fmg")
+select_all_on_focus = true
+
+[node name="Plus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("16_nrt1g")
+stretch_mode = 5
+
+[node name="FloorBox" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("29_le75x")
+stretch_mode = 5
+
+[node name="Minus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("17_wfx1p")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("29_j2fmg")
+text = "3"
+
+[node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
+custom_minimum_size = Vector2(17.46, 0)
+layout_mode = 2
+
 [node name="Notification" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -179,106 +332,15 @@ scroll_active = false
 autowrap_mode = 0
 script = ExtResource("7_cfcxe")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 2.0
-offset_right = 30.0
-offset_bottom = 162.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
-
-[node name="Build" type="TextureButton" parent="Panel"]
-layout_mode = 1
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 126.0
-offset_bottom = 126.0
-scale = Vector2(0.25, 0.25)
-tooltip_text = "Build: Generate a new Dungeon with current settings"
-texture_normal = ExtResource("26_op7t4")
-stretch_mode = 5
-
-[node name="Clear" type="TextureButton" parent="Panel"]
-layout_mode = 1
-offset_left = -2.0
-offset_top = 32.0
-offset_right = 126.0
-offset_bottom = 160.0
-scale = Vector2(0.25, 0.25)
-tooltip_text = "Clear: Remove everything"
-texture_normal = ExtResource("27_2lruq")
-stretch_mode = 0
-
-[node name="RNGSeed" type="TextureButton" parent="Panel"]
-layout_mode = 1
-offset_left = -2.0
-offset_top = 64.0
-offset_right = 126.0
-offset_bottom = 192.0
-scale = Vector2(0.25, 0.25)
-tooltip_text = "Random Seed: Randomize a new seed each Build or use the same."
-texture_normal = ExtResource("29_286he")
-stretch_mode = 0
-
-[node name="Debug" type="TextureButton" parent="Panel"]
-layout_mode = 1
-offset_left = -2.0
-offset_top = 96.0
-offset_right = 126.0
-offset_bottom = 224.0
-scale = Vector2(0.25, 0.25)
-tooltip_text = "Debug Info: Show the debug info toggle"
-texture_normal = ExtResource("28_a1cq0")
-stretch_mode = 0
-
-[node name="Show" type="MenuButton" parent="Panel"]
-layout_mode = 1
-offset_left = -2.0
-offset_top = 128.0
-offset_right = 134.0
-offset_bottom = 264.0
-scale = Vector2(0.25, 0.25)
-tooltip_text = "Check the things you want to show after a build"
-toggle_mode = false
-shortcut_feedback = false
-shortcut_in_tooltip = false
-icon = ExtResource("29_s37yq")
-item_count = 6
-popup/item_0/text = "Floors"
-popup/item_0/checkable = 1
-popup/item_0/checked = true
-popup/item_0/id = 0
-popup/item_1/text = "Walls"
-popup/item_1/checkable = 1
-popup/item_1/checked = true
-popup/item_1/id = 1
-popup/item_2/text = "Ceilings"
-popup/item_2/checkable = 1
-popup/item_2/checked = true
-popup/item_2/id = 2
-popup/item_3/text = "Props"
-popup/item_3/checkable = 1
-popup/item_3/checked = true
-popup/item_3/id = 3
-popup/item_4/text = "Debug"
-popup/item_4/checkable = 1
-popup/item_4/checked = true
-popup/item_4/id = 4
-popup/item_5/text = "Arches"
-popup/item_5/checkable = 1
-popup/item_5/checked = true
-popup/item_5/id = 5
-
 [node name="Panel2" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -30.0
-offset_top = 2.0
-offset_right = -2.0
-offset_bottom = 162.0
+offset_left = -40.0
+offset_top = 47.0
+offset_right = -12.0
+offset_bottom = 207.0
 grow_horizontal = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
@@ -337,44 +399,7 @@ tooltip_text = "Export the generated Dungeon to a scene"
 texture_normal = ExtResource("17_kon6s")
 stretch_mode = 5
 
-[node name="ModeSelector" type="OptionButton" parent="."]
-layout_mode = 0
-offset_left = 45.0
-offset_top = 4.0
-offset_right = 286.0
-offset_bottom = 35.0
-tooltip_text = "Dungeon: Generate and view whole dungeons
-SectionTypes: Correctly defined Isection Classes will be listed here as an option"
-item_count = 3
-selected = 0
-popup/item_0/text = "Dungeon"
-popup/item_0/id = 0
-popup/item_1/text = "PathSection"
-popup/item_1/id = 1
-popup/item_2/text = "RoomSection"
-popup/item_2/id = 2
-script = ExtResource("20_tvmsy")
-
-[node name="SectionResourceSelector" type="OptionButton" parent="."]
-layout_mode = 0
-offset_left = 45.0
-offset_top = 45.0
-offset_right = 286.0
-offset_bottom = 76.0
-tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
-script = ExtResource("21_siix3")
-
-[node name="PlacerResouceSelector" type="EditorResourcePicker" parent="."]
-layout_mode = 0
-offset_left = 44.0
-offset_top = 86.0
-offset_right = 285.0
-offset_bottom = 117.0
-tooltip_text = "Select a placer to override the section's assigned placers."
-base_type = "PlacerResource"
-script = ExtResource("21_rut2o")
-
-[node name="PlacerNavigationBar" type="Control" parent="."]
+[node name="PlacerNavigationBar" type="Control" parent="." node_paths=PackedStringArray("sectionSelector")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -386,6 +411,7 @@ offset_bottom = -2.0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("23_sw2ff")
+sectionSelector = NodePath("../DungeonViewerToolbar/SectionResourceSelector")
 
 [node name="Counter" type="RichTextLabel" parent="PlacerNavigationBar"]
 layout_mode = 0
@@ -431,7 +457,7 @@ scale = Vector2(0.1, 0.1)
 tooltip_text = "Add a new Placer"
 texture_normal = ExtResource("16_nrt1g")
 
-[node name="PlacerBar" type="Panel" parent="."]
+[node name="PlacerBar" type="Panel" parent="." node_paths=PackedStringArray("sectionSelector")]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -444,6 +470,7 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
 script = ExtResource("26_xnkuc")
+sectionSelector = NodePath("../DungeonViewerToolbar/SectionResourceSelector")
 
 [node name="Index" type="RichTextLabel" parent="PlacerBar"]
 layout_mode = 0
@@ -554,7 +581,6 @@ tooltip_text = "How the individual pieces will be placed"
 theme_override_font_sizes/font_size = 9
 item_count = 2
 popup/item_0/text = "Floor"
-popup/item_0/id = 0
 popup/item_1/text = "Corners"
 popup/item_1/id = 1
 
@@ -569,7 +595,6 @@ tooltip_text = "How much will the section size matter for the amount"
 theme_override_font_sizes/font_size = 9
 item_count = 4
 popup/item_0/text = "Constant"
-popup/item_0/id = 0
 popup/item_1/text = "Light"
 popup/item_1/id = 1
 popup/item_2/text = "Medium"
@@ -585,52 +610,3 @@ offset_bottom = 140.0
 scale = Vector2(0.2, 0.2)
 tooltip_text = "Remove placer from section"
 texture_normal = ExtResource("27_2scwp")
-
-[node name="FloorOptions" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -65.0
-offset_top = 12.0
-offset_right = 65.0
-offset_bottom = 29.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-script = ExtResource("17_usypf")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="FloorOptions"]
-layout_mode = 2
-
-[node name="SpinBox" type="SpinBox" parent="FloorOptions/HBoxContainer"]
-layout_mode = 2
-theme = ExtResource("29_j2fmg")
-select_all_on_focus = true
-
-[node name="Plus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("16_nrt1g")
-stretch_mode = 5
-
-[node name="FloorBox" type="TextureButton" parent="FloorOptions/HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("29_le75x")
-stretch_mode = 5
-
-[node name="Minus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
-layout_mode = 2
-tooltip_text = "Export the generated Dungeon to a scene"
-texture_normal = ExtResource("17_wfx1p")
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="FloorOptions/HBoxContainer"]
-layout_mode = 2
-theme = ExtResource("29_j2fmg")
-text = "1"
-
-[node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
-custom_minimum_size = Vector2(17.46, 0)
-layout_mode = 2

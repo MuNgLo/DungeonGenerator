@@ -7,21 +7,21 @@ using System.Reflection;
 namespace Munglo.DungeonGenerator.UI
 {
     [Tool]
-    public partial class ModeSelection : OptionButton
+    public partial class SectionTypeListButton : OptionButton
     {
-        // Called when the node enters the scene tree for the first time.
+        private MainScreen screen;
+        public EventHandler<Type> OnSectionTypeSelected;
         public override void _EnterTree()
         {
             Clear();
-            AddItem("Dungeon");
             foreach (Type type in GetList())
             {
                 if (type.Name.Contains("<>")) { continue; }
                 if (type.GetInterface(nameof(ISection)) == null) { continue; }
                 AddItem(type.Name);
             }
-            Select(0);
-            GD.Print($"SectionSelection::_Ready() GetList.Count[{GetList().Count}] itemCount[{ItemCount}]");
+            Select(0); // SELECT 0 DEFAULT ONE for starters
+            GD.Print($"SectionTypeListButton::_Ready() GetList.Count[{GetList().Count}] itemCount[{ItemCount}]");
         }
         public override void _ExitTree()
         {
@@ -29,13 +29,20 @@ namespace Munglo.DungeonGenerator.UI
         }
         public override void _Ready()
         {
+            screen = GetParent().GetParent() as MainScreen;
             ItemSelected += WhenItemSelected;
         }
         private void WhenItemSelected(long index)
         {
-            if (index > 0) { GetParent<MainScreen>().addon.ChangeMode(VIEWERMODE.SECTION); return; }
-            GetParent<MainScreen>().addon.ChangeMode(VIEWERMODE.DUNGEON);
-            GetParent<MainScreen>().RaiseUpdateUI();
+            RaiseSectionTypeChanged();
+        }
+        private void RaiseSectionTypeChanged(){
+            EventHandler<Type> evt = OnSectionTypeSelected;
+            if(evt is not null)
+            {
+                Type T = GetSelectedType();
+                evt (this, T);
+            }
         }
 
         private List<Type> GetList()
@@ -55,8 +62,6 @@ namespace Munglo.DungeonGenerator.UI
                                   select t;
 
             string selectedText = GetItemText(Selected);
-
-
             return q.ToList().Find(p=>p.Name == selectedText);
         }
     }// EOF CLASS

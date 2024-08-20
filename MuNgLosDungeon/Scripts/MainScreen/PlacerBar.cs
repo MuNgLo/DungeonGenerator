@@ -5,18 +5,21 @@ using System;
 using System.Reflection;
 namespace Munglo.DungeonGenerator.UI
 {
+	/// <summary>
+    /// This class keeps the placer bar updated. the updates are driven by the PlacerNavigationBar
+    /// </summary>
 	[Tool]
 	public partial class PlacerBar : Control
 	{
+        [Export] SectionSelector sectionSelector;
+
 		private MainScreen MS;
 		private int index = 0;
 		// Called when the node enters the scene tree for the first time.
-		public int Index { set { index = value; UpdateBar(this,null); } }
+		public int Index { set { index = value; IndexChanged(); } }
 		public override void _Ready()
 		{
 			MS = GetParent<MainScreen>();
-			MS.OnSelectionChanged += WhenSelectionChanged;
-			MS.OnMainScreenUIUpdate += UpdateBar;
 			GetNode<TextureButton>("PlacerNameBtn").Pressed += WhenNamePressed;
             GetNode<Button>("CheckButton").Toggled += WhenCheckButtonToggled;
         }
@@ -40,19 +43,11 @@ namespace Munglo.DungeonGenerator.UI
 				EditorInterface.Singleton.InspectObject(section.placers[index]);
 			}
 		}
-
-		private void WhenSelectionChanged(object sender, EventArgs e)
+		private void IndexChanged()
 		{
-			//GD.Print("PlacerBar::WhenSelectionChanged");
-			index = 0;
-			UpdateBar(this,null);
-		}
-
-		private void UpdateBar(object sender, EventArgs e)
-		{
-            GD.Print($"PlacerBar::UpdateBar({index})");
-            if (MS.SelectedSectionResource == null) { return; }
-            SectionResource section = MS.SelectedSectionResource;
+            GD.Print($"PlacerBar::IndexChanged({index})");
+            if (index < 0) { Hide(); return; }
+            SectionResource section = sectionSelector.GetSelectedResource();
 			if (section.placers.Count > 0)
 			{
 				PlacerEntryResource entry = section.placers[index];

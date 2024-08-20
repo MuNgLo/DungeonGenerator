@@ -1,14 +1,6 @@
-[gd_resource type="Resource" script_class="PathResource" load_steps=5 format=3 uid="uid://fwwvfja283kt"]
+[gd_resource type="Resource" script_class="PathResource" load_steps=2 format=3 uid="uid://fwwvfja283kt"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PathResource.cs" id="1_h7b2a"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PlacerEntryResource.cs" id="1_hjyk1"]
-[ext_resource type="Resource" uid="uid://cbkcsslumic5w" path="res://addons/MuNgLosDungeon/Config/Placers/def_Bookshelf.tres" id="1_x4lj5"]
-
-[sub_resource type="Resource" id="Resource_ejrfd"]
-script = ExtResource("1_hjyk1")
-active = true
-count = 1
-placer = ExtResource("1_x4lj5")
 
 [resource]
 script = ExtResource("1_h7b2a")
@@ -25,7 +17,7 @@ nbFloorsMax = 2
 debug = false
 nbDoorsPerFloorMin = 0
 nbDoorsPerFloorMax = 0
-placers = [SubResource("Resource_ejrfd")]
+placers = []
 centerSpiralStairs = false
 firstPieceDoor = true
 backDoorChance = 30

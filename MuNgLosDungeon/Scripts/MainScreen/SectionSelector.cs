@@ -10,60 +10,43 @@ namespace Munglo.DungeonGenerator.UI
     internal partial class SectionSelector : OptionButton
     {
         private MainScreen screen;
-        private ModeSelection modeSelector;
+        private SectionTypeListButton sectionTypeSelector;
 
         private Dictionary<string, string> resources;
         public override void _Ready()
         {
-            screen = GetParent() as MainScreen;
-            modeSelector = screen.GetNode<ModeSelection>("ModeSelector");
-
-            //modeSelector.ItemSelected += WhenModeSelected;
-            VisibilityChanged += UpdateDropdownList;
+            screen = GetParent().GetParent() as MainScreen;
+            sectionTypeSelector = GetParent().GetNode<SectionTypeListButton>("btnSectionTypeList");
+            //screen.OnMainScreenUIUpdate += WhenMainScreenUIUpdate;
+            sectionTypeSelector.OnSectionTypeSelected += WhenSectionTypeSelected;
             ItemSelected += WhenItemSelected;
             resources = new Dictionary<string, string>();
             Clear();
             PoulateResourceCollection();
             LoadSelected();
         }
-
+        private void WhenSectionTypeSelected(object sender, Type T)
+        {
+            if(!Visible) { Clear(); return; }
+            GD.Print($"SectionSelector::WhenSectionTypeSelected() Selected[{Selected}] ItemCount[{ItemCount}]");
+            PoulateResourceCollection();
+            LoadSelected();
+        }
         private void WhenItemSelected(long index)
         {
             LoadSelected();
-            screen.RaiseUpdateUI();
-        }
-        private void WhenModeSelected(long index)
-        {
-            UpdateDropdownList();
         }
         private void LoadSelected()
         {
             if(ItemCount < 1){return;}
             if(Selected < 0) { Selected = 0; }
             GD.Print($"SectionSelector::LoadSelected() Loading[{Selected}]");
-
             string itemText = GetItemText(Selected == -1 ? 0 : Selected);
-            if(resources == null || resources.Keys.Count < 1)
-            {
-                PoulateResourceCollection();
-            }
-            if (resources.ContainsKey(itemText))
-            {
-                screen.SelectSectionResource(ResourceLoader.Load(resources[itemText]) as SectionResource);
-            }
-        }
-
-        private void UpdateDropdownList()
-        {
-            if(!Visible) { Clear(); return; }
-            PoulateResourceCollection();
-            GD.Print($"SectionSelector::UpdateDropdownList() Selected[{Selected}] ItemCount[{ItemCount}]");
-            LoadSelected();
         }
         private void PoulateResourceCollection()
         {
-            string typeName = modeSelector.GetItemText(modeSelector.Selected);
-            GD.Print($"SectionSelector::PoulateResourceCollection() typeName[{typeName}] [{modeSelector.GetSelectedType()}]");
+            string typeName = sectionTypeSelector.GetItemText(sectionTypeSelector.Selected);
+            GD.Print($"SectionSelector::PoulateResourceCollection() typeName[{typeName}] [{sectionTypeSelector.GetSelectedType()}]");
             resources = new Dictionary<string, string>();
             List<Resource> items = new List<Resource>();
 
@@ -99,10 +82,7 @@ namespace Munglo.DungeonGenerator.UI
                     }
                 }
             }
-
-
-
-
+            // Build the selectable list
             if (items.Count > 0)
             {
                 Clear();
@@ -122,6 +102,14 @@ namespace Munglo.DungeonGenerator.UI
                     }
                 }
             }
+        }
+
+        internal SectionResource GetSelectedResource()
+        {
+            string sectionName = GetItemText(Selected == -1 ? 0 : Selected);
+            if(!resources.ContainsKey(sectionName)){ return null; }
+            Resource res = ResourceLoader.Load(resources[sectionName]);//
+            return res as SectionResource;
         }
     }// EOF CLASS
 }

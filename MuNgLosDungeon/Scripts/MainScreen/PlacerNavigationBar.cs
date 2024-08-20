@@ -7,6 +7,7 @@ namespace Munglo.DungeonGenerator.UI
     [Tool]
     public partial class PlacerNavigationBar : Control
     {
+        [Export] SectionSelector sectionSelector;
         private MainScreen MS;
         private PlacerBar placerBar;
         private int index = 0;
@@ -15,7 +16,6 @@ namespace Munglo.DungeonGenerator.UI
         {
             MS = GetParent<MainScreen>();
             placerBar = GetParent().GetNode<PlacerBar>("PlacerBar");
-            MS.OnSelectionChanged += WhenSelectionChange;
             MS.OnMainScreenUIUpdate += WhenMainScreenUIUpdate;
             GetNode<TextureButton>("StepLeft").Pressed += WhenLeftPressed;
             GetNode<TextureButton>("StepRight").Pressed += WhenRightPressed;
@@ -24,24 +24,24 @@ namespace Munglo.DungeonGenerator.UI
 
         private void WhenMainScreenUIUpdate(object sender, EventArgs e)
         {
-            if (MS.SelectedSectionResource == null)
+            if(!sectionSelector.Visible)
             {
                 Hide();
-                GD.Print($"PlacerNavigationBar::WhenMainScreenUIUpdate()  sectionResource is NULL [{MS.SelectedSectionResource is null}]");
+                placerBar.Index = -1;
                 return;
             }
-            else
-            {
-                Show();
-                GD.Print($"PlacerNavigationBar::WhenMainScreenUIUpdate()  sectionResource is [{MS.SelectedSectionResource.ResourcePath}]");
-            }
-            int nbPlacers = MS.SelectedSectionResource.placers.Count;
+            Show();
+            GD.Print($"PlacerNavigationBar::WhenMainScreenUIUpdate()");
+            SectionResource section = sectionSelector.GetSelectedResource();
+            int nbPlacers = section.placers.Count;
+
             if (index < 0) { index = nbPlacers - 1; }
             if (index >= nbPlacers) { index = 0; }
             placerBar.Index = index;
             GetNode<RichTextLabel>("Counter").Text = nbPlacers.ToString();
         }
 
+        /*
         private void WhenSelectionChange(object sender, EventArgs e)
         {
             //GD.Print($"PlacerNavigationBar::WhenSelectionChange()  MS is not null[{MS is not null}]");
@@ -57,7 +57,7 @@ namespace Munglo.DungeonGenerator.UI
             if (index >= nbPlacers) { index = 0; }
             placerBar.Index = index;
         }
-
+        */
 
         private void WhenAddPlacerPressed()
         {

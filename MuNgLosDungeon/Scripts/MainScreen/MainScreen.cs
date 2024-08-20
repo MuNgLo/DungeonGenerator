@@ -9,7 +9,7 @@ namespace Munglo.DungeonGenerator.UI
     /// The mainscreen window center editor to generate/view dungeon data
     /// </summary>
     [Tool]
-    internal partial class MainScreen : Control
+    public partial class MainScreen : Control
     {
         public Dungeons addon;
         /// <summary>
@@ -117,14 +117,15 @@ namespace Munglo.DungeonGenerator.UI
             {
                 PopupInitialSettingsDialougue();
             }
-
+            SetDebugLayer(addon.Profile.showDebugLayer);
+            RaiseUpdateUI();
         }
         
         private void PopupInitialSettingsDialougue()
         {
             PackedScene pScn = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/InitialPopup.tscn") as PackedScene;
             InitialPopup pop = pScn.Instantiate<InitialPopup>();
-            pop.addon = addon;
+            pop.screen = this;
             AddChild(pop);
         }
 
@@ -151,21 +152,12 @@ namespace Munglo.DungeonGenerator.UI
             dunVis.BuildDungeon(settings, biome);
         }
 
-        public void GenerateSection(SectionResource sectionDef, GenerationSettingsResource settings, BiomeResource biome)
+        public void GenerateSection(string sectionTypeName, SectionResource sectionDef, GenerationSettingsResource settings, BiomeResource biome)
         {
             RaiseNotification($"Building Section {sectionDef.sectionName}");
-            OptionButton btn = this.GetNode<OptionButton>("ModeSelector");
-            EditorResourcePicker picker = this.GetNode<EditorResourcePicker>("PlacerResouceSelector");
-
             Array<PlacerEntryResource> placers = sectionDef.placers;
-            if(picker.EditedResource is not null)
-            {
-                placers = new Array<PlacerEntryResource>() { picker.EditedResource as PlacerEntryResource };
-            }
-
             GD.Print($"MainScreen::GenerateSection() defIsNull[{sectionDef is null}] placersisNull[{placers is null}]");
-
-            dunVis.BuildSection(btn.GetItemText(btn.Selected), sectionDef, placers, settings, biome, ReDrawDungeon);
+            dunVis.BuildSection(sectionTypeName, sectionDef, placers, settings, biome, ReDrawDungeon);
         }
 
         public void ReDrawDungeon()

@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1_5xn5v")
 lastUsedProfile = "res://addons/MuNgLosDungeon/Config/def_profile.tres"
-ProjectResourcePath = "res://Test4/"
+ProjectResourcePath = "res://Dungeon/"
 visibleFloorStart = 0
-maxVisibleFloors = 2
+maxVisibleFloors = 3

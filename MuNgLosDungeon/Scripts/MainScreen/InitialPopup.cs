@@ -5,7 +5,7 @@ namespace Munglo.DungeonGenerator.UI
     [Tool]
 	public partial class InitialPopup : Control
 	{
-        public Dungeons addon;
+        public MainScreen screen;
         [Export] private Button changeBtn;
         [Export] private Button closeBtn;
         [Export] private LineEdit pathLine;
@@ -16,11 +16,12 @@ namespace Munglo.DungeonGenerator.UI
 		{
 			changeBtn.Pressed += WhenChangePressed;
             closeBtn.Pressed += QueueFree;
-            pathLine.Text = addon.MasterConfig.ProjectResourcePath;
+            pathLine.Text = screen.addon.MasterConfig.ProjectResourcePath;
 
         }
         private void WhenChangePressed()
         {
+            changeBtn.ReleaseFocus();
             popup = new EditorFileDialog();
             popup.AlwaysOnTop = false;
             popup.Title = "Set Project Resouce Path";
@@ -28,9 +29,7 @@ namespace Munglo.DungeonGenerator.UI
             popup.Access = EditorFileDialog.AccessEnum.Resources;
             popup.PopupWindow = false;
             popup.OkButtonText = "Select Current Folder";
-
-            popup.ResetSize();
-            changeBtn.ReleaseFocus();
+            popup.Size = screen.GetViewport().GetWindow().Size / 2;
             EditorInterface.Singleton.GetBaseControl().GetViewport().AddChild(popup);
             popup.MoveToCenter();
             popup.Confirmed += WhenConfirmed;
@@ -39,9 +38,9 @@ namespace Munglo.DungeonGenerator.UI
         private void WhenConfirmed()
         {
             popup.Confirmed -= WhenConfirmed;
-            addon.MasterConfig.ProjectResourcePath = popup.CurrentPath;
-            ResourceSaver.Save(addon.MasterConfig);
-            pathLine.Text = addon.MasterConfig.ProjectResourcePath;
+            screen.addon.MasterConfig.ProjectResourcePath = popup.CurrentPath;
+            ResourceSaver.Save(screen.addon.MasterConfig);
+            pathLine.Text = screen.addon.MasterConfig.ProjectResourcePath;
             popup.QueueFree();
         }
     }// EOF CLASS

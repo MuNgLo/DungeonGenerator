@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bo1vvej54i8o"]
+[gd_scene load_steps=3 format=3 uid="uid://bkoxwnfj3xk1g"]
 
-[ext_resource type="ArrayMesh" uid="uid://dxg53s3qeh6rn" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FloorMESH.res" id="1_c5uuv"]
+[ext_resource type="ArrayMesh" uid="uid://dw204lqdmh624" path="res://addons/MuNgLosDungeon/Meshes/Standard/Standard_Floor03.res" id="1_av77s"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_taeds"]
 size = Vector3(6, 1, 6)
 
 [node name="Floor" type="Node3D"]
 
-[node name="DefaultMeshesFloorMesh" type="MeshInstance3D" parent="."]
-mesh = ExtResource("1_c5uuv")
+[node name="DefaultMeshesFloor03mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_av77s")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bxyxel5q6eq37"
-path="res://.godot/imported/DefaultCave.blend-e35afe63015e027fb7ce0e6158643840.scn"
+path="res://.godot/imported/Cave.blend-ba639f277412d1051afa9d5f9b7c1120.scn"
 
 [deps]
 
-source_file="res://addons/MuNgLosDungeon/BlendFiles/DefaultCave.blend"
-dest_files=["res://.godot/imported/DefaultCave.blend-e35afe63015e027fb7ce0e6158643840.scn"]
+source_file="res://addons/MuNgLosDungeon/BlendFiles/Cave.blend"
+dest_files=["res://.godot/imported/Cave.blend-ba639f277412d1051afa9d5f9b7c1120.scn"]
 
 [params]
 
@@ -17,6 +17,7 @@ nodes/root_type=""
 nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
@@ -28,6 +29,7 @@ animation/import=true
 animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "materials": {
@@ -44,7 +46,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_ArchCave.res"
 },
 "DefaultCave_ArchCornerCave": {
@@ -54,7 +55,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_ArchCornerCave.res"
 },
 "DefaultCave_CeilingCave": {
@@ -64,7 +64,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_CeilingCave.res"
 },
 "DefaultCave_FloorCave": {
@@ -74,7 +73,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_FloorCave.res"
 },
 "DefaultCave_WallCave": {
@@ -84,7 +82,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallCave.res"
 },
 "DefaultCave_WallCornerCave": {
@@ -94,7 +91,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallCornerCave.res"
 },
 "DefaultCave_WallOpeningCave": {
@@ -104,7 +100,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallOpeningCave.res"
 },
 "DefaultCave_WallWideOpeningCave": {
@@ -114,14 +109,12 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallWideOpeningCave.res"
 }
 }
 }
-gltf/naming_version=1
-gltf/embedded_image_handling=1
 blender/nodes/visible=2
+blender/nodes/active_collection_only=false
 blender/nodes/punctual_lights=true
 blender/nodes/cameras=true
 blender/nodes/custom_properties=true

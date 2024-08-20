@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b8cjyfjwaqgea"]
 
-[ext_resource type="ArrayMesh" uid="uid://caapoldd1f14f" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallMESH.res" id="1_aggge"]
+[ext_resource type="ArrayMesh" uid="uid://b4o3uw8il162a" path="res://addons/MuNgLosDungeon/Meshes/Standard/Standard_Wall01.res" id="1_cncun"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ox2cc"]
 size = Vector3(6, 6, 1)
@@ -9,7 +9,7 @@ size = Vector3(6, 6, 1)
 
 [node name="DefaultMeshesWallMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -2)
-mesh = ExtResource("1_aggge")
+mesh = ExtResource("1_cncun")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="DefaultMeshesWallMesh"]
 

@@ -20,6 +20,8 @@ namespace Munglo.DungeonGenerator
         [ExportCategory("Props")]
         [Export] public BiomeEntry[] props;
 
+        private readonly string standardMeshPath = "res://addons/MuNgLosDungeon/Meshes/Standard/Standard_";
+        private readonly string standardScenePath = "res://addons/MuNgLosDungeon/Scenes/Standard/";
         internal bool GetResource(PIECEKEYS key, int variantID, out Resource result)
         {
             result = null;
@@ -71,14 +73,14 @@ namespace Munglo.DungeonGenerator
             };
             string[] defDebugEntries = new string[]
             {
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_DebugMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ErrorMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FaultyMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagGreenMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagRedMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_PathEndMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_BridgeMESH.res",
-                "res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairMESH.res"
+                standardMeshPath + "dbArrow.res",
+                standardMeshPath + "dbError.res",
+                standardMeshPath + "dbFaulty.res",
+                standardMeshPath + "dbWallFlagGreen.res",
+                standardMeshPath + "dbWallFlagRed.res",
+                standardMeshPath + "dbEnd.res",
+                standardMeshPath + "dbBridge.res",
+                standardMeshPath + "dbStair.res"
             };
             debug = new BiomeEntry[defDebugKeys.Length];
             SetupArray(ref debug, defDebugKeys, defDebugEntries);
@@ -92,10 +94,10 @@ namespace Munglo.DungeonGenerator
               };
             string[][] defWallsEntries = new string[][]
             {
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_wall01.tscn", "res://addons/MuNgLosDungeon/Scenes/def_wall02.tscn", "res://addons/MuNgLosDungeon/Scenes/def_wall03.tscn" },
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_walldooropening.tscn", "res://addons/MuNgLosDungeon/Scenes/def_walldooropening02.tscn" },
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_walldoorwide.tscn" },
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_wallcornerinner.tscn" }
+                new string[]{ standardScenePath + "def_wall01.tscn", standardScenePath + "def_wall02.tscn", standardScenePath + "def_wall03.tscn" },
+                new string[]{ standardScenePath + "def_wallopening01.tscn", standardScenePath + "def_wallopening02.tscn" },
+                new string[]{ standardScenePath + "def_wallopeningwide.tscn" },
+                new string[]{ standardScenePath + "def_wallcorner.tscn" }
             };
             walls = new BiomeEntry[defWallsKeys.Length];
             SetupArray(ref walls, defWallsKeys, defWallsEntries);
@@ -106,7 +108,7 @@ namespace Munglo.DungeonGenerator
               };
             string[][] defFloorsEntries = new string[][]
             {
-                new string[] { "res://addons/MuNgLosDungeon/Scenes/def_floor.tscn", "res://addons/MuNgLosDungeon/Scenes/def_floor02.tscn", "res://addons/MuNgLosDungeon/Scenes/def_floor03.tscn" }
+                new string[] { standardScenePath + "def_floor01.tscn", standardScenePath + "def_floor02.tscn", standardScenePath + "def_floor03.tscn" }
             };
             floors = new BiomeEntry[defFloorsKeys.Length];
             SetupArray(ref floors, defFloorsKeys, defFloorsEntries);
@@ -117,7 +119,7 @@ namespace Munglo.DungeonGenerator
               };
             string[] defCeilingsEntries = new string[]
             {
-                "res://addons/MuNgLosDungeon/Scenes/def_ceiling.tscn"
+                standardScenePath + "def_ceiling.tscn"
             };
             ceilings = new BiomeEntry[defCeilingsKeys.Length];
             SetupArray(ref ceilings, defCeilingsKeys, defCeilingsEntries);
@@ -133,8 +135,8 @@ namespace Munglo.DungeonGenerator
               };
             string[][] defPropsEntries = new string[][]
             {
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_archsmall.tscn" },
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_archsmallcorner.tscn" },
+                new string[]{ standardScenePath + "def_arch.tscn" },
+                new string[]{ standardScenePath + "def_archcorner.tscn" },
                 new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_bridgesection.tscn", "res://addons/MuNgLosDungeon/Scenes/def_bridgesection02.tscn",
                     "res://addons/MuNgLosDungeon/Scenes/def_bridgefoundation.tscn", 
                     "res://addons/MuNgLosDungeon/Scenes/def_bridgerail.tscn", "res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn", 

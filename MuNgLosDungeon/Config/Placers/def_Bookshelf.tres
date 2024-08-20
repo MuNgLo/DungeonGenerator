@@ -8,10 +8,10 @@
 [sub_resource type="Resource" id="Resource_k7h1r"]
 script = ExtResource("3_pu2my")
 forcedRoll = true
-Chance = 60
-weight = 60
+Chance = 100
+weight = 100
 asset = ExtResource("2_vdfkp")
-assetCount = 1
+assetCount = 5
 
 [sub_resource type="Resource" id="Resource_2kvpo"]
 script = ExtResource("4_lu4l0")

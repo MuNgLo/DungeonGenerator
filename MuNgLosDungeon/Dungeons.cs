@@ -2,6 +2,7 @@
 using Godot;
 using System;
 using Munglo.DungeonGenerator.UI;
+using System.Diagnostics;
 
 namespace Munglo.DungeonGenerator
 {
@@ -40,51 +41,50 @@ namespace Munglo.DungeonGenerator
             cam = screen.FindChild("Camera3D") as CameraControls;
 
             // Hook up mainscreen UI 
-            // Left Side
-            (screen.FindChild("Build") as TextureButton).Pressed += WhenMSBuildPressed;
-            (screen.FindChild("Clear") as TextureButton).Pressed += WhenMSClearPressed;
-            (screen.FindChild("Debug") as TextureButton).Pressed += WhenMSDebugPressed;
-            (screen.FindChild("RNGSeed") as TextureButton).Pressed += WhenMSRNGSeedPressed;
-            (screen.FindChild("Show") as MenuButton).GetPopup().IdPressed += WhenMSShowChanged;
             // The other side
             (screen.FindChild("Profile") as TextureButton).Pressed += WhenMSProfilePressed;
             (screen.FindChild("Settings") as TextureButton).Pressed += WhenMSSettingsPressed;
             (screen.FindChild("Biome") as TextureButton).Pressed += WhenMSBiomePressed;
             (screen.FindChild("Export") as TextureButton).Pressed += WhenMSExportPressed;
-   
 
-
-            // Update the UI to current states
-            if (!Profile.useRandomSeed)
-            {
-                Texture2D off = ResourceLoader.Load("res://addons/MuNgLosDungeon/Icons/DiceCrossedOutIcon.png") as Texture2D;
-                (screen.FindChild("RNGSeed") as TextureButton).TextureNormal = off;
-            }
-            PopupMenu pop = (screen.FindChild("Show") as MenuButton).GetPopup();
-            pop.HideOnCheckableItemSelection = false;
-            pop.HideOnItemSelection = false;
-            pop.HideOnStateItemSelection = false;
-            pop.SetItemChecked(0, Profile.settings.showFloors);
-            pop.SetItemChecked(1, Profile.settings.showWalls);
-            pop.SetItemChecked(2, Profile.settings.showCeilings);
-            pop.SetItemChecked(3, Profile.settings.showProps);
-            pop.SetItemChecked(4, Profile.settings.showDebug);
-            pop.SetItemChecked(5, Profile.settings.showArches);
-            screen.SetDebugLayer(Profile.showDebugLayer);
-            UpdateUIElements();
+            //RunDebugTestThings();
         }
+
+        Button testBTN;
+        private void RunDebugTestThings()
+        {
+            testBTN = new Button(){Text = "Debug" };
+            AddControlToContainer(CustomControlContainer.SpatialEditorMenu, testBTN);
+            testBTN.Pressed += DebugDumpToScene;
+        }
+
+        private void DebugDumpToScene(){
+            PackedScene sceneToSave = new PackedScene();
+            //GD.Print($"ExportConfirmed() O1[{screen.CurrentDungeon.GetChildren()[0].Owner}] O2[{screen.CurrentDungeon.GetChildren()[1].Owner}]");
+
+            Node copy = testBTN.GetParent().GetParent().GetParent().GetParent().GetParent();
+
+
+            Error err = sceneToSave.Pack(copy); 
+            if (err != Error.Ok)
+            {
+                GD.PrintErr($"Dungeons::DebugDumpToScene() err[{err}]");
+            }
+            //sceneToSave.ResourcePath = popup.CurrentPath;
+            sceneToSave.ResourcePath = "DebugDump2.tscn";
+            ResourceSaver.Save(sceneToSave);
+        }
+
         public override void _ExitTree()
         {
+            if(testBTN is not null){
+                RemoveControlFromContainer(CustomControlContainer.SpatialEditorMenu, testBTN);
+            }
+
             GD.Print("Unloaded MuNgLo's Dungeon Plugin");
             subV.MouseEntered -= WhenMouseEnterMain;
             subV.MouseExited -= WhenMouseExitMain;
             // Release mainscreen UI
-            // Left side
-            (screen.FindChild("Build") as TextureButton).Pressed -= WhenMSBuildPressed;
-            (screen.FindChild("Clear") as TextureButton).Pressed -= WhenMSClearPressed;
-            (screen.FindChild("Debug") as TextureButton).Pressed -= WhenMSDebugPressed;
-            (screen.FindChild("RNGSeed") as TextureButton).Pressed -= WhenMSRNGSeedPressed;
-            (screen.FindChild("Show") as MenuButton).GetPopup().IdPressed -= WhenMSShowChanged;
             // The other Side
             (screen.FindChild("Profile") as TextureButton).Pressed -= WhenMSProfilePressed;
             (screen.FindChild("Settings") as TextureButton).Pressed -= WhenMSSettingsPressed;
@@ -173,18 +173,20 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         private void WhenMSExportPressed()
         {
+            (screen.FindChild("Export") as TextureButton).ReleaseFocus();
+
             popup = new EditorFileDialog();
             popup.AlwaysOnTop = true;
             popup.Title = "Export Dungeon";
             popup.FileMode = EditorFileDialog.FileModeEnum.SaveFile;
             popup.Access = EditorFileDialog.AccessEnum.Resources;
-            popup.PopupWindow = false;
+            popup.PopupWindow = true;
             popup.OkButtonText = "Save";
-            popup.ResetSize();
-            (screen.FindChild("Export") as TextureButton).ReleaseFocus();
+            popup.Confirmed += WhenExportConfirmed;
+            //popup.ResetSize();
+            popup.Size = screen.GetViewport().GetWindow().Size / 2;
             EditorInterface.Singleton.GetBaseControl().GetViewport().AddChild(popup);
             popup.MoveToCenter();
-            popup.Confirmed += WhenExportConfirmed;
             popup.Show();
         }
         /// <summary>
@@ -239,99 +241,8 @@ namespace Munglo.DungeonGenerator
             EditorInterface.Singleton.InspectObject(Profile);
             (screen.FindChild("Build") as TextureButton).ReleaseFocus();
         }
-        private void WhenMSShowChanged(long id)
-        {
-            PopupMenu pop = (screen.FindChild("Show") as MenuButton).GetPopup();
-            int index = pop.GetItemIndex((int)id);
-            pop.SetItemChecked(index, !pop.IsItemChecked(index));
-            switch (id)
-            {
-                case 0:
-                    Profile.settings.showFloors = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                case 1:
-                    Profile.settings.showWalls = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                case 2:
-                    Profile.settings.showCeilings = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                case 3:
-                    Profile.settings.showProps = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                case 4:
-                    Profile.settings.showDebug = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                case 5:
-                    Profile.settings.showArches = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                default:
-                    break;
-            }
-            (screen.FindChild("Show") as MenuButton).ReleaseFocus();
-            screen.ReDrawDungeon();
-        }
-        private void WhenMSRNGSeedPressed()
-        {
-            TextureButton btn = screen.FindChild("RNGSeed") as TextureButton;
-            Texture2D on = ResourceLoader.Load("res://addons/MuNgLosDungeon/Icons/DiceIcon.png") as Texture2D;
-            Texture2D off = ResourceLoader.Load("res://addons/MuNgLosDungeon/Icons/DiceCrossedOutIcon.png") as Texture2D;
-            if (btn.TextureNormal.ResourcePath == on.ResourcePath)
-            {
-                btn.TextureNormal = off;
-                Profile.useRandomSeed = false;
-                ResourceSaver.Save(Profile);
-            }
-            else
-            {
-                btn.TextureNormal = on;
-                Profile.useRandomSeed = true;
-            }
-            screen.RaiseNotification("Generate " + (Profile.useRandomSeed ? "Random" : "Seeded"));
-            ResourceSaver.Save(Profile);
-            btn.ReleaseFocus();
-        }
-        private void WhenMSDebugPressed()
-        {
-            TextureButton btn = screen.FindChild("Debug") as TextureButton;
-            Profile.showDebugLayer = !Profile.showDebugLayer;
-            screen.SetDebugLayer(Profile.showDebugLayer);
-            ResourceSaver.Save(Profile);
-            btn.ReleaseFocus();
-        }
-        private void WhenMSClearPressed()
-        {
-            screen.WhenClearPressed();
-            (screen.FindChild("Clear") as TextureButton).ReleaseFocus();
-        }
-        private void WhenMSBuildPressed()
-        {
-            screen.WhenClearPressed();
-            if(Profile.useRandomSeed)
-            {
-                Profile.settings.seed1 = GD.RandRange(1111, 9999);
-                Profile.settings.seed2 = GD.RandRange(1111, 9999);
-                Profile.settings.seed3 = GD.RandRange(1111, 9999);
-                Profile.settings.seed4 = GD.RandRange(1111, 9999);
-            }
-            switch (mode)
-            {
-                case VIEWERMODE.SECTION:
-                    screen.GenerateSection(screen.SelectedSectionResource, Profile.settings, Profile.biome);
-                    break;
-                default:
-                case VIEWERMODE.DUNGEON:
-                    screen.GenerateDungeon(Profile.settings, Profile.biome);
-                    break;
-            }
-            (screen.FindChild("Build") as TextureButton).ReleaseFocus();
-            screen.RaiseUpdateUI();
-        }
+        
+ 
         private void WhenMouseEnterMain()
         {
             screen.cursorIsInside = true;
@@ -362,35 +273,19 @@ namespace Munglo.DungeonGenerator
         {
             EditorInterface.Singleton.SetMainScreenEditor(screenName);
         }
-        
+        /// <summary>
+        /// Toggles mode between dungeon and section. Defaults to dungeon.
+        /// </summary>
+        public void ChangeMode(){
+            ChangeMode(mode == VIEWERMODE.DUNGEON ? VIEWERMODE.SECTION : VIEWERMODE.DUNGEON);
+        }
         public void ChangeMode(VIEWERMODE newMode)
         {
             if(newMode != mode)
             {
                 GD.Print($"Dungeons::ChangeMode() changed to {newMode}");
                 mode = newMode;
-                UpdateUIElements();
                 screen.RaiseUpdateUI();
-            }
-        }
-
-        private void UpdateUIElements()
-        {
-            switch (Mode)
-            {
-                case VIEWERMODE.SECTION:
-                    (screen.FindChild("PlacerResouceSelector") as EditorResourcePicker).Show(); 
-                    (screen.FindChild("SectionResourceSelector") as SectionSelector).Show();
-                    (screen.FindChild("PlacerBar") as Control).Show(); 
-                    (screen.FindChild("PlacerNavigationBar") as Control).Show(); 
-                    break;
-                case VIEWERMODE.DUNGEON:
-                default:
-                    (screen.FindChild("PlacerResouceSelector") as EditorResourcePicker).Hide();
-                    (screen.FindChild("SectionResourceSelector") as SectionSelector).Hide();
-                    (screen.FindChild("PlacerBar") as Control).Hide();
-                    (screen.FindChild("PlacerNavigationBar") as Control).Hide();
-                    break;
             }
         }
     }// EOF CLASS

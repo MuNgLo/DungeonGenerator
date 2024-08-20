@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ProfileResource" load_steps=4 format=3 uid="uid://c18oe4qok4s1t"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/ProfileResource.cs" id="1_aoufu"]
-[ext_resource type="Resource" uid="uid://bqsod5hnur3jw" path="res://addons/MuNgLosDungeon/Config/def_biome.tres" id="1_f3jop"]
+[ext_resource type="Resource" uid="uid://djwgxq0sin8ef" path="res://addons/MuNgLosDungeon/Config/def_biome.tres" id="1_f3jop"]
 [ext_resource type="Resource" uid="uid://6su0i5s3ukgo" path="res://addons/MuNgLosDungeon/Config/def_settings.tres" id="3_051hi"]
 
 [resource]
