@@ -1,10 +1,9 @@
-[gd_scene load_steps=40 format=3 uid="uid://66fkglptwkl1"]
+[gd_scene load_steps=28 format=3 uid="uid://66fkglptwkl1"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DungeonViewerToolbar.cs" id="2_btfr4"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DuengeonSelector.cs" id="2_tq51n"]
-[ext_resource type="PackedScene" uid="uid://cok3u5man8n7s" path="res://addons/MuNgLosDungeon/ToolMeshCursor3DBox.glb" id="3_8fs6d"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/Selection/SelectOnClick.cs" id="2_tq51n"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionTypeListButton.cs" id="3_bakif"]
 [ext_resource type="Environment" uid="uid://bn1cwyorljhq2" path="res://addons/MuNgLosDungeon/ViewerEnv.tres" id="3_ubg15"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ScreenDungeonVisualizer.cs" id="4_ey6f7"]
@@ -14,11 +13,6 @@
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/FloorOptions.cs" id="17_usypf"]
 [ext_resource type="Texture2D" uid="uid://bqy2qf25o7ju4" path="res://addons/MuNgLosDungeon/Icons/Minus.png" id="17_wfx1p"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelector.cs" id="21_siix3"]
-[ext_resource type="Texture2D" uid="uid://8555w8eydq84" path="res://addons/MuNgLosDungeon/Icons/ArrowLeft.png" id="23_b3bau"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerNavigationBar.cs" id="23_sw2ff"]
-[ext_resource type="Texture2D" uid="uid://c2o24ip52ufku" path="res://addons/MuNgLosDungeon/Icons/ArrowRight.png" id="24_kk61u"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerBar.cs" id="26_xnkuc"]
-[ext_resource type="Texture2D" uid="uid://dxdusxtstuc6p" path="res://addons/MuNgLosDungeon/Icons/Trashcan.png" id="27_2scwp"]
 [ext_resource type="Theme" uid="uid://c0br7ijjnpfqo" path="res://addons/MuNgLosDungeon/Config/MainScreenTheme.tres" id="29_j2fmg"]
 [ext_resource type="Texture2D" uid="uid://druq5meumhh8v" path="res://addons/MuNgLosDungeon/Icons/Floorbox.png" id="29_le75x"]
 [ext_resource type="Texture2D" uid="uid://bbm8d0xvbhdl3" path="res://addons/MuNgLosDungeon/Icons/ProfileIcon.png" id="31_7xw7w"]
@@ -53,18 +47,6 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tvu0x"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rm48x"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l21lc"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m0yvs"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t2yw6"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j2qfh"]
 
 [node name="DungeonViewer" type="Control"]
 custom_minimum_size = Vector2(400, 200)
@@ -251,12 +233,7 @@ material_override = SubResource("StandardMaterial3D_sfpnj")
 mesh = SubResource("SphereMesh_sqo4d")
 skeleton = NodePath("../..")
 
-[node name="Cursor" type="Node3D" parent="SubViewportContainer/SubViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.62, 0)
-visible = false
-
-[node name="ToolMeshCursor3DBox" parent="SubViewportContainer/SubViewport/Cursor" instance=ExtResource("3_8fs6d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+[node name="Gizmos" type="Node3D" parent="SubViewportContainer/SubViewport"]
 
 [node name="FloorOptions" type="CenterContainer" parent="."]
 layout_mode = 1
@@ -282,26 +259,23 @@ select_all_on_focus = true
 
 [node name="Plus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Export the generated Dungeon to a scene"
 texture_normal = ExtResource("16_nrt1g")
 stretch_mode = 5
 
 [node name="FloorBox" type="TextureButton" parent="FloorOptions/HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Export the generated Dungeon to a scene"
 texture_normal = ExtResource("29_le75x")
 stretch_mode = 5
 
 [node name="Minus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
 layout_mode = 2
-tooltip_text = "Export the generated Dungeon to a scene"
 texture_normal = ExtResource("17_wfx1p")
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="FloorOptions/HBoxContainer"]
+[node name="EndVisibleFloor" type="Label" parent="FloorOptions/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("29_j2fmg")
-text = "3"
+text = "4"
 
 [node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
 custom_minimum_size = Vector2(17.46, 0)
@@ -398,215 +372,3 @@ scale = Vector2(0.5, 0.5)
 tooltip_text = "Export the generated Dungeon to a scene"
 texture_normal = ExtResource("17_kon6s")
 stretch_mode = 5
-
-[node name="PlacerNavigationBar" type="Control" parent="." node_paths=PackedStringArray("sectionSelector")]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -30.0
-offset_right = 522.0
-offset_bottom = -2.0
-grow_vertical = 0
-mouse_filter = 2
-script = ExtResource("23_sw2ff")
-sectionSelector = NodePath("../DungeonViewerToolbar/SectionResourceSelector")
-
-[node name="Counter" type="RichTextLabel" parent="PlacerNavigationBar"]
-layout_mode = 0
-offset_left = 9.0
-offset_top = -19.0
-offset_right = 29.0
-offset_bottom = -1.0
-tooltip_text = "How many placers this section has"
-theme_override_font_sizes/normal_font_size = 12
-theme_override_styles/focus = SubResource("StyleBoxEmpty_tvu0x")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_rm48x")
-bbcode_enabled = true
-text = "[center]99[/center]"
-scroll_active = false
-
-[node name="StepLeft" type="TextureButton" parent="PlacerNavigationBar"]
-layout_mode = 0
-offset_left = 28.0
-offset_top = -16.0
-offset_right = 156.0
-offset_bottom = 112.0
-scale = Vector2(0.1, 0.1)
-tooltip_text = "Previous placer"
-texture_normal = ExtResource("23_b3bau")
-
-[node name="StepRight" type="TextureButton" parent="PlacerNavigationBar"]
-layout_mode = 0
-offset_left = 43.0
-offset_top = -16.0
-offset_right = 171.0
-offset_bottom = 112.0
-scale = Vector2(0.1, 0.1)
-tooltip_text = "Next Placer"
-texture_normal = ExtResource("24_kk61u")
-
-[node name="AddPlacer" type="TextureButton" parent="PlacerNavigationBar"]
-layout_mode = 0
-offset_left = 56.0
-offset_top = -16.0
-offset_right = 184.0
-offset_bottom = 112.0
-scale = Vector2(0.1, 0.1)
-tooltip_text = "Add a new Placer"
-texture_normal = ExtResource("16_nrt1g")
-
-[node name="PlacerBar" type="Panel" parent="." node_paths=PackedStringArray("sectionSelector")]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -30.0
-offset_right = 598.0
-offset_bottom = -2.0
-grow_vertical = 0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
-script = ExtResource("26_xnkuc")
-sectionSelector = NodePath("../DungeonViewerToolbar/SectionResourceSelector")
-
-[node name="Index" type="RichTextLabel" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 4.0
-offset_right = 43.0
-offset_bottom = 28.0
-tooltip_text = "Index for this Placer within the section"
-theme_override_font_sizes/normal_font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
-bbcode_enabled = true
-text = "[center]0#[/center]"
-scroll_active = false
-
-[node name="CheckButton" type="CheckButton" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 42.0
-offset_top = 2.0
-offset_right = 86.0
-offset_bottom = 26.0
-tooltip_text = "Set this placer active or inactive"
-button_pressed = true
-
-[node name="Chance" type="RichTextLabel" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 87.0
-offset_top = 4.0
-offset_right = 128.0
-offset_bottom = 28.0
-tooltip_text = "Chance of this placer to run"
-theme_override_font_sizes/normal_font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
-bbcode_enabled = true
-text = "[center]100%[/center]"
-scroll_active = false
-
-[node name="PlacerName" type="RichTextLabel" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 128.0
-offset_top = 4.0
-offset_right = 280.0
-offset_bottom = 28.0
-tooltip_text = "What the placer is named"
-theme_override_font_sizes/normal_font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxEmpty_t2yw6")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_j2qfh")
-text = "Breakable Barrels"
-scroll_active = false
-
-[node name="PlacerNameBtn" type="TextureButton" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 128.0
-offset_right = 280.0
-offset_bottom = 28.0
-tooltip_text = "What the placer is named"
-
-[node name="min" type="RichTextLabel" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 284.0
-offset_top = 4.0
-offset_right = 309.0
-offset_bottom = 28.0
-tooltip_text = "min"
-theme_override_font_sizes/normal_font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
-bbcode_enabled = true
-text = "[right]1[/right]"
-scroll_active = false
-
-[node name="divider" type="RichTextLabel" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 309.0
-offset_top = 4.0
-offset_right = 318.0
-offset_bottom = 28.0
-theme_override_font_sizes/normal_font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
-bbcode_enabled = true
-text = "[center]-[/center]"
-scroll_active = false
-
-[node name="max" type="RichTextLabel" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 318.0
-offset_top = 4.0
-offset_right = 343.0
-offset_bottom = 28.0
-tooltip_text = "max"
-theme_override_font_sizes/normal_font_size = 14
-theme_override_styles/focus = SubResource("StyleBoxEmpty_l21lc")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_m0yvs")
-bbcode_enabled = true
-text = "[left]1[/left]"
-scroll_active = false
-
-[node name="Rule" type="OptionButton" parent="PlacerBar"]
-visible = false
-layout_mode = 0
-offset_left = 343.0
-offset_top = 3.0
-offset_right = 423.0
-offset_bottom = 24.0
-tooltip_text = "How the individual pieces will be placed"
-theme_override_font_sizes/font_size = 9
-item_count = 2
-popup/item_0/text = "Floor"
-popup/item_1/text = "Corners"
-popup/item_1/id = 1
-
-[node name="SectionSizeModifier" type="OptionButton" parent="PlacerBar"]
-visible = false
-layout_mode = 0
-offset_left = 426.0
-offset_top = 3.0
-offset_right = 511.0
-offset_bottom = 24.0
-tooltip_text = "How much will the section size matter for the amount"
-theme_override_font_sizes/font_size = 9
-item_count = 4
-popup/item_0/text = "Constant"
-popup/item_1/text = "Light"
-popup/item_1/id = 1
-popup/item_2/text = "Medium"
-popup/item_2/id = 2
-popup/item_3/text = "Full"
-popup/item_3/id = 3
-
-[node name="RemoveBtn" type="TextureButton" parent="PlacerBar"]
-layout_mode = 0
-offset_left = 570.0
-offset_right = 698.0
-offset_bottom = 140.0
-scale = Vector2(0.2, 0.2)
-tooltip_text = "Remove placer from section"
-texture_normal = ExtResource("27_2scwp")

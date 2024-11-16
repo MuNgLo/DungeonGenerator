@@ -288,7 +288,7 @@ namespace Munglo.DungeonGenerator.UI
             }
 
             // Run the section prop placers
-            if (section.Placers is not null)
+            /*if (section.Placers is not null)
             {
                 foreach (PlacerEntryResource entry in section.Placers)
                 {
@@ -304,7 +304,7 @@ namespace Munglo.DungeonGenerator.UI
                         placer.Place(section);
                     }
                 }
-            }
+            }*/
 
 
             // Section Props

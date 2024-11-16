@@ -8,20 +8,20 @@ namespace Munglo.DungeonGenerator.UI
     public partial class PlacerNavigationBar : Control
     {
         [Export] SectionSelector sectionSelector;
-        private MainScreen MS;
+        private BottomScreen BS;
         private PlacerBar placerBar;
         private int index = 0;
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
         {
-            MS = GetParent<MainScreen>();
+            BS = GetParent<BottomScreen>();
             placerBar = GetParent().GetNode<PlacerBar>("PlacerBar");
-            MS.OnMainScreenUIUpdate += WhenMainScreenUIUpdate;
-            GetNode<TextureButton>("StepLeft").Pressed += WhenLeftPressed;
-            GetNode<TextureButton>("StepRight").Pressed += WhenRightPressed;
-            GetNode<TextureButton>("AddPlacer").Pressed += WhenAddPlacerPressed;
+            //BS.OnMainScreenUIUpdate += WhenMainScreenUIUpdate;
+            //GetNode<TextureButton>("StepLeft").Pressed += WhenLeftPressed;
+            //GetNode<TextureButton>("StepRight").Pressed += WhenRightPressed;
+            //GetNode<TextureButton>("AddPlacer").Pressed += WhenAddPlacerPressed;
         }
-
+/*
         private void WhenMainScreenUIUpdate(object sender, EventArgs e)
         {
             if(!sectionSelector.Visible)
@@ -40,6 +40,7 @@ namespace Munglo.DungeonGenerator.UI
             placerBar.Index = index;
             GetNode<RichTextLabel>("Counter").Text = nbPlacers.ToString();
         }
+*/
 
         /*
         private void WhenSelectionChange(object sender, EventArgs e)
@@ -59,10 +60,11 @@ namespace Munglo.DungeonGenerator.UI
         }
         */
 
+/*
         private void WhenAddPlacerPressed()
         {
-            if (MS.SelectedSectionResource == null) { return; }
-            SectionResource sectionResource = MS.SelectedSectionResource;
+            if (BS.SelectedSectionResource == null) { return; }
+            SectionResource sectionResource = BS.SelectedSectionResource;
             sectionResource.placers.Add(new PlacerEntryResource());
             ResourceSaver.Save(sectionResource);
         }
@@ -71,8 +73,8 @@ namespace Munglo.DungeonGenerator.UI
 
         private void WhenRightPressed()
         {
-            if (MS.SelectedSectionResource == null) { return; }
-            int nbPlacers = MS.SelectedSectionResource.placers.Count;
+            if (BS.SelectedSectionResource == null) { return; }
+            int nbPlacers = BS.SelectedSectionResource.placers.Count;
             index++;
             if (index < 0) { index = nbPlacers - 1; }
             if (index >= nbPlacers) { index = 0; }
@@ -81,12 +83,13 @@ namespace Munglo.DungeonGenerator.UI
 
         private void WhenLeftPressed()
         {
-            if (MS.SelectedSectionResource == null) { return; }
-            int nbPlacers = MS.SelectedSectionResource.placers.Count;
+            if (BS.SelectedSectionResource == null) { return; }
+            int nbPlacers = BS.SelectedSectionResource.placers.Count;
             index--;
             if (index < 0) { index = nbPlacers - 1; }
             if (index >= nbPlacers) { index = 0; }
             placerBar.Index = index;
         }
+        */
     }// EOF CLASS
 }

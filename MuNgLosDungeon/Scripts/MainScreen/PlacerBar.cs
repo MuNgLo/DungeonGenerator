@@ -13,21 +13,21 @@ namespace Munglo.DungeonGenerator.UI
 	{
         [Export] SectionSelector sectionSelector;
 
-		private MainScreen MS;
+		private BottomScreen BS;
 		private int index = 0;
 		// Called when the node enters the scene tree for the first time.
-		public int Index { set { index = value; IndexChanged(); } }
+		//public int Index { set { index = value; IndexChanged(); } }
 		public override void _Ready()
 		{
-			MS = GetParent<MainScreen>();
-			GetNode<TextureButton>("PlacerNameBtn").Pressed += WhenNamePressed;
-            GetNode<Button>("CheckButton").Toggled += WhenCheckButtonToggled;
+			BS = GetParent<BottomScreen>();
+			//GetNode<TextureButton>("PlacerNameBtn").Pressed += WhenNamePressed;
+            //GetNode<Button>("CheckButton").Toggled += WhenCheckButtonToggled;
         }
-
+/*
 		private void WhenCheckButtonToggled(bool state)
 		{
-			if (MS.SelectedSectionResource == null) { return; }
-			SectionResource section = MS.SelectedSectionResource;
+			if (BS.SelectedSectionResource == null) { return; }
+			SectionResource section = BS.SelectedSectionResource;
 			if (section.placers.Count >= index)
 			{
                 section.placers[index].active = state;
@@ -36,8 +36,8 @@ namespace Munglo.DungeonGenerator.UI
 
         private void WhenNamePressed()
 		{
-            if (MS.SelectedSectionResource == null) { return; }
-            SectionResource section = MS.SelectedSectionResource;
+            if (BS.SelectedSectionResource == null) { return; }
+            SectionResource section = BS.SelectedSectionResource;
             if (section.placers.Count >= index)
 			{
 				EditorInterface.Singleton.InspectObject(section.placers[index]);
@@ -67,7 +67,7 @@ namespace Munglo.DungeonGenerator.UI
 			{
 				Hide();
 			}
-		}
+		}*/
 
 	}// EOF CLASS
 }

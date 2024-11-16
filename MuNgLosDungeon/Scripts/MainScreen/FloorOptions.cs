@@ -20,7 +20,7 @@ namespace Munglo.DungeonGenerator.UI
             (FindChild("Plus") as TextureButton).Pressed += WhenPlusPressed;
             (FindChild("Minus") as TextureButton).Pressed += WhenMinusPressed;
 
-            (FindChild("Label") as Label).Text = MasterConfig.maxVisibleFloors.ToString();
+            (FindChild("EndVisibleFloor") as Label).Text = MasterConfig.maxVisibleFloors.ToString();
         }
         public override void _ExitTree()
         {
@@ -32,15 +32,19 @@ namespace Munglo.DungeonGenerator.UI
 
         private void UpdateUI()
         {
-            int cubes = MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors;
-            (FindChild("Label") as Label).Text = (cubes - 1).ToString();
+            // Container for the floor boxes
             HBoxContainer cont = GetNode<HBoxContainer>("HBoxContainer");
+            // Get the OG floor box
             TextureButton FloorBox = FindChild("FloorBox") as TextureButton;
-
+            // Get Index of OG box. After this the rest will be inserted/removed
             int startInsertIndex = FloorBox.GetIndex() + 1;
+            // Calculate endfloor
+            int endfloor = MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1;
+            (FindChild("EndVisibleFloor") as Label).Text = endfloor.ToString();
+
 
             int currentCount = cont.GetChildCount();
-            int goalCount = cubes + 5;
+            int goalCount = endfloor - MasterConfig.visibleFloorStart + 5 + 1; // 5 extra because not all are floorboxes
 
             if(currentCount > goalCount)
             {
@@ -60,16 +64,16 @@ namespace Munglo.DungeonGenerator.UI
                     cont.MoveChild(copy, startInsertIndex + i);
                 }
             }
+            GD.Print($"FloorOptions::UpdateUI() startInsertIndex[{startInsertIndex}] currentCount[{currentCount}] goalCount[{goalCount}]");
+
         }
 
         private void WhenSpinBoxValueChanged(double value)
         {
-            MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors, 1, 10);
             MasterConfig.visibleFloorStart = Mathf.Clamp((int)value, 0, 100);
-            GD.Print($"FloorOptions::WhenSpinBoxValueChanged({value}) as int[{(int)value}] MasterConfig.visibleFloorStart[{MasterConfig.visibleFloorStart}] MasterConfig.maxVisibleFloors[{MasterConfig.maxVisibleFloors}]");
             ResourceSaver.Save(MasterConfig);
+            ShowFloorsNotif();
             UpdateUI();
-            MS.RaiseNotification($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
             MS.ReDrawDungeon();
             (FindChild("Plus") as TextureButton).GrabFocus(); // Block the spinbox lineedit from grabbing keystrokes
         }
@@ -77,17 +81,21 @@ namespace Munglo.DungeonGenerator.UI
         {
             MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors + 1, 1, 10);
             ResourceSaver.Save(MasterConfig);
+            ShowFloorsNotif();
             UpdateUI();
-            MS.RaiseNotification($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
             MS.ReDrawDungeon();
         }
         private void WhenMinusPressed()
         {
             MasterConfig.maxVisibleFloors = Mathf.Clamp(MasterConfig.maxVisibleFloors - 1, 1, 10);
             ResourceSaver.Save(MasterConfig);
+            ShowFloorsNotif();
             UpdateUI();
-            MS.RaiseNotification($"Showing floor {MasterConfig.visibleFloorStart}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors - 1}" : string.Empty));
             MS.ReDrawDungeon();
+        }
+
+        private void ShowFloorsNotif(){
+            MS.RaiseNotification($"Showing floor {MasterConfig.visibleFloorStart + 1}" + (MasterConfig.maxVisibleFloors > 1 ? $" through {MasterConfig.visibleFloorStart + MasterConfig.maxVisibleFloors}" : string.Empty));
         }
     }// EOF CLASS
 }

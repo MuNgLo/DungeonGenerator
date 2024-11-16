@@ -56,7 +56,7 @@ namespace Munglo.DungeonGenerator.Sections
                 {
                     if (piece.hasFloor)
                     {
-                        piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = piece.Orientation, variantID = 2 };
+                        piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = piece.Orientation, variantID = 1 };
                     }
                     if(piece.WallKey(Dungeon.Flip(piece.Orientation)).key == PIECEKEYS.WD)
                     {
@@ -73,7 +73,7 @@ namespace Munglo.DungeonGenerator.Sections
                     if (rng.Next(100) < 20)
                     {
                         MapPiece rp = GetRandomFloor();
-                        rp.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = rp.Orientation, variantID = 1 };
+                        rp.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = rp.Orientation, variantID = 2 };
                     }
                 }
             }
@@ -81,12 +81,12 @@ namespace Munglo.DungeonGenerator.Sections
             if(pieces.Count == 1)
             {
                 // One tile room so add alkov on opposite wall
-                pieces[0].AssignWall(new KeyData() { key= PIECEKEYS.W, dir = orientation, variantID = 2 }, true);
+                //pieces[0].AssignWall(new KeyData() { key= PIECEKEYS.W, dir = orientation, variantID = 2 }, true);
             }
             else
             {
                 // roll chance for alkov
-                if(rng.Next(100) < 40)
+                /*if(rng.Next(100) < 40)
                 {
                     List<MapPiece> candidates = GetWallPieces(0, true);
                     if(candidates.Count > 0)
@@ -105,7 +105,7 @@ namespace Munglo.DungeonGenerator.Sections
                             candidates.Remove(pick);
                         }
                     }
-                }
+                }*/
             }
             
             // If debug Run Debug method
@@ -259,111 +259,5 @@ namespace Munglo.DungeonGenerator.Sections
             }
         }
         #endregion
-
-       
-        private void AddCentralSpiralStairs()
-        {
-            if (pieces.Count < 1) { GD.PrintErr($"RoomBase::AddCentralSpiralStairs() RoomIndex[{sectionIndex}] Has Only [{pieces.Count}] pieces. Skipping spiral stairs"); return; }
-
-            MapPiece spiralPiece = GetCenterPiece();
-            //spiralPiece.SetError(true);
-            MapCoordinate startCoord = spiralPiece.Coord;
-
-            if (spiralPiece.hasFloor)
-            {
-                for (int i = 0; i < sizeY; i++)
-                {
-                    // clear floors
-                    if (i > 0)
-                    {
-                        pieces.Find(p => p.Coord == startCoord + MapCoordinate.Up * i).keyFloor = new KeyData() { key = PIECEKEYS.NONE, dir = orientation };
-                        pieces.Find(p => p.Coord == startCoord + MapCoordinate.Up * i + orientation).keyFloor = new KeyData() { key = PIECEKEYS.NONE, dir = orientation };
-                        pieces.Find(p => p.Coord == startCoord + MapCoordinate.Up * i + Dungeon.TwistRight(orientation)).keyFloor = new KeyData() { key = PIECEKEYS.NONE, dir = orientation };
-                        pieces.Find(p => p.Coord == startCoord + MapCoordinate.Up * i + orientation + Dungeon.TwistRight(orientation)).keyFloor = new KeyData() { key = PIECEKEYS.NONE, dir = orientation };
-                    }
-
-
-                    int vID = PickSpiralStairVariation(spiralPiece);
-
-                    if (vID == 1)
-                    {
-                        // check for bridge marked pieces on the floor above and if so mark all surrounding gallery as bridges
-                        List<MapPiece> bridgePieces = pieces.FindAll(p => p.isBridge && p.Coord.y == spiralPiece.Coord.y + 1);
-                        if (bridgePieces.Count > 0)
-                        {
-                            MarkGalleryNeighboursAsBridges(spiralPiece);
-                        }
-                    }
-                    //startCoord + MapCoordinate.Up * i
-                    AddProp(new SectionProp() { key = PIECEKEYS.STAIRSPIRAL, dir = spiralPiece.Orientation, position = new Vector3I(0,0,0), variantID = vID });
-
-                    if (!pieces.Exists(p => p.Coord == spiralPiece.Coord.StepUp))
-                    {
-                        GD.Print("RoomBase::BuildProps() Grabbing extra above to add to room!");
-                        // This might eat up things above later
-                        pieces.Add(map.GetPiece(spiralPiece.Coord.StepUp));
-                        pieces.Last().State = MAPPIECESTATE.PENDING;
-                        pieces.Last().SectionIndex = sectionIndex;
-                        pieces.Last().Orientation = spiralPiece.Orientation;
-                    }
-                    spiralPiece = pieces.Find(p => p.Coord == spiralPiece.Coord.StepUp);
-                    if (spiralPiece.SectionIndex != sectionIndex) { spiralPiece.SectionIndex = sectionIndex; }
-                    map.SavePiece(spiralPiece);
-                }
-            }
-        }
-
-        private MapPiece GetLowerLeftestCorner()
-        {
-            List<MapPiece> candidates = pieces.FindAll(p => p.Coord.y == Coord.y && p.HasWall(Dungeon.TwistLeft(orientation)) && p.HasWall(Dungeon.Flip(orientation)));
-            if(candidates.Count > 0) { return candidates[0]; }
-            return null;
-        }
-
-        private void MarkGalleryNeighboursAsBridges(MapPiece piece)
-        {
-            MAPDIRECTION dir = piece.Orientation;
-
-            MapCoordinate[] locs = new MapCoordinate[8]
-            {
-                piece.Coord + MAPDIRECTION.UP + Dungeon.Flip(dir),
-                piece.Coord + MAPDIRECTION.UP + Dungeon.Flip(dir) + Dungeon.TwistRight(dir),
-                piece.Coord + MAPDIRECTION.UP + Dungeon.TwistLeft(dir),
-                piece.Coord + MAPDIRECTION.UP + Dungeon.TwistLeft(dir) + dir,
-                piece.Coord + MAPDIRECTION.UP + dir + dir,
-                piece.Coord + MAPDIRECTION.UP + dir + dir + Dungeon.TwistRight(dir),
-                piece.Coord + MAPDIRECTION.UP + Dungeon.TwistRight(dir) + Dungeon.TwistRight(dir),
-                piece.Coord + MAPDIRECTION.UP + Dungeon.TwistRight(dir) + Dungeon.TwistRight(dir) + dir
-            };
-
-            foreach (MapCoordinate coordinate in locs)
-            {
-                if(!pieces.Exists(p=>p.Coord == coordinate)){
-                    pieces.Add(map.GetPiece(coordinate));
-                }
-                pieces.Find(p=>p.Coord == coordinate).isBridge = true;
-                map.SavePiece(pieces.Find(p => p.Coord == coordinate));
-            }
-        }
-        private int PickSpiralStairVariation(MapPiece piece)
-        {
-            MAPDIRECTION dir = piece.Orientation;
-            // Check for floors that blick gallery
-            if(piece.NeighbourUp.Neighbour(Dungeon.Flip(dir)).hasFloor) { return 2; }
-            if(map.GetPiece( piece.Coord + Dungeon.Flip(dir) + Dungeon.TwistRight(dir)).hasFloor) { return 2; }
-            if (map.GetPiece(piece.Coord + Dungeon.TwistLeft(dir)).hasFloor) { return 2; }
-            if (map.GetPiece(piece.Coord + Dungeon.TwistLeft(dir) + dir).hasFloor) { return 2; }
-            if (map.GetPiece(piece.Coord + dir + dir).hasFloor) { return 2; }
-            if (map.GetPiece(piece.Coord + dir + dir + Dungeon.TwistRight(dir)).hasFloor) { return 2; }
-            if (map.GetPiece(piece.Coord + Dungeon.TwistRight(dir) + Dungeon.TwistRight(dir)).hasFloor) { return 2; }
-            if (map.GetPiece(piece.Coord + Dungeon.TwistRight(dir) + Dungeon.TwistRight(dir) + dir).hasFloor) { return 2; }
-
-            return 1;
-        }
-       
-        
-       
-        
-
     }// EOF CLASS
 }

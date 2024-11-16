@@ -1,8 +1,6 @@
 #if TOOLS
 using Godot;
-using System;
 using Munglo.DungeonGenerator.UI;
-using System.Diagnostics;
 
 namespace Munglo.DungeonGenerator
 {
@@ -15,9 +13,12 @@ namespace Munglo.DungeonGenerator
         private AddonSettingsResource masterConfig;
         public AddonSettingsResource MasterConfig => masterConfig;
         private MainScreen screen;
+        public MainScreen MS => screen;
+        private BottomScreen bscreen;
         private SubViewportContainer subV;
         private CameraControls cam;
         private PackedScene mainPrefab = ResourceLoader.Load<PackedScene>("res://addons/MuNgLosDungeon/Scenes/MainScreen.tscn");
+        private PackedScene bottomPrefab = ResourceLoader.Load<PackedScene>("res://addons/MuNgLosDungeon/Scenes/BottomScreen.tscn");
         public ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
         private EditorFileDialog popup;
         #region Overrides
@@ -48,6 +49,13 @@ namespace Munglo.DungeonGenerator
             (screen.FindChild("Export") as TextureButton).Pressed += WhenMSExportPressed;
 
             //RunDebugTestThings();
+
+            // Bottomscreen
+            bscreen = (BottomScreen)bottomPrefab.Instantiate();
+            bscreen.addon = this;
+            // Add bottom screen instance to the editor
+            AddControlToBottomPanel(bscreen, "Dungeon");
+
         }
 
         Button testBTN;
@@ -80,7 +88,7 @@ namespace Munglo.DungeonGenerator
             if(testBTN is not null){
                 RemoveControlFromContainer(CustomControlContainer.SpatialEditorMenu, testBTN);
             }
-
+            RemoveControlFromBottomPanel(bscreen);
             GD.Print("Unloaded MuNgLo's Dungeon Plugin");
             subV.MouseEntered -= WhenMouseEnterMain;
             subV.MouseExited -= WhenMouseExitMain;
@@ -127,7 +135,7 @@ namespace Munglo.DungeonGenerator
         }
         public override void _Input(InputEvent @event)
         {
-            if (!screen.cursorIsInside) 
+            if (!MS.cursorIsInside) 
             { 
                 if(cam.State == CameraControls.CAMERAMODE.FREELOOK)
                 {
@@ -147,7 +155,7 @@ namespace Munglo.DungeonGenerator
                 if(b.ButtonIndex == MouseButton.Left && b.IsPressed())
                 {
                     SubViewportContainer cont = screen.GetNode<SubViewportContainer>("SubViewportContainer");
-                    (cont as DuengeonSelector).DoRayCastIntoSubViewport();
+                    (cont as SelectOnClick).DoRayCastIntoSubViewport();
                 }
 
                 if (b.ButtonIndex == MouseButton.Right)

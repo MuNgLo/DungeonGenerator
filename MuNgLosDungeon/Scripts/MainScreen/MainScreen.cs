@@ -11,99 +11,22 @@ namespace Munglo.DungeonGenerator.UI
     [Tool]
     public partial class MainScreen : Control
     {
-        public Dungeons addon;
         /// <summary>
         /// Use this to only react to input if cursor is over screen
         /// </summary>
         public bool cursorIsInside = false;
-        
+        public Dungeons addon;
+        private Selection.Manager selection;
         private ScreenDungeonVisualizer dunVis;
+        
+
         public Node3D CurrentDungeon => GetNode<Node3D>("SubViewportContainer/SubViewport/Dungeon/Generated");
+        public Node3D Gizmos => GetNode<Node3D>("SubViewportContainer/SubViewport/Gizmos");
 
-        public EventHandler OnMainScreenUIUpdate;
-
-
-        #region selection related
-        private MapPiece selectedMapPiece;
-        private ISection selectedSection;
-        private SectionResource selectedSectionResource;
-        public MapPiece SelectedMapPiece => selectedMapPiece;
-        public ISection SelectedSection => selectedSection;
-        public SectionResource SelectedSectionResource => selectedSectionResource;
-        public EventHandler OnSelectionChanged;
-        public EventHandler<string> OnNotificationPushed;
-        public void ClearSelection()
-        {
-            selectedMapPiece = null;
-            selectedSection = null;
-            if (addon.Mode != VIEWERMODE.SECTION) { selectedSectionResource = null; }
-        }
-        public void SelectFirstSection(bool runUpdates = true)
-        {
-            GD.Print($"MainScreen::SelectFirstSection()");
-            ScreenDungeonVisualizer vis = FindChild("Dungeon") as ScreenDungeonVisualizer;
-            if (vis.Map.Sections.Count < 1) { return; }
-            SelectSection(0);
-        }
-        public void SelectMapPiece(MapPiece mapPiece, bool runUpdates = true)
-        {
-            if (mapPiece == null) { return; }
-            selectedMapPiece= mapPiece;
-            SelectSection(mapPiece.SectionIndex, false);
-            if (runUpdates)
-            {
-                RaiseSelectionChanged();
-                RaiseUpdateUI();
-            }
-        }
-        public void SelectSection(int sectionIndex, bool runUpdates = true)
-        {
-            if (sectionIndex < 0) { return; }
-            selectedSection = dunVis.Map.Sections[sectionIndex];
-
-            if (runUpdates)
-            {
-                RaiseSelectionChanged();
-                RaiseUpdateUI();
-            }
-        }
-        public void SelectSectionResource(Resource res, bool runUpdates = true)
-        {
-            if (res is not SectionResource) { return; }
-            GD.Print($"MainScreen::SelectSectionResource() SectionResource is [{res.ResourcePath}]");
-
-            if (selectedSectionResource is not null)
-            {
-                selectedSectionResource.Changed -= RaiseSelectionChanged;
-            }
-            selectedSectionResource = res as SectionResource;
-            selectedSectionResource.Changed += RaiseSelectionChanged;
-
-            if (runUpdates)
-            {
-                RaiseSelectionChanged();
-                RaiseUpdateUI();
-            }
-        }
-        public void RaiseSelectionChanged()
-        {
-            GD.Print($"MainScreen::RaiseSelectionChanged()  EVENT!!");
-
-            EventHandler evt = OnSelectionChanged;
-            evt?.Invoke(this, EventArgs.Empty);
-
-            if (SelectedMapPiece is not null)
-            {
-                GD.Print($"SELECTED => MapPiece[{SelectedMapPiece.Coord}] section[{SelectedMapPiece.SectionIndex}] floor[{SelectedMapPiece.hasFloor}] bridge[{SelectedMapPiece.isBridge}] stair[{SelectedMapPiece.hasStairs}]");
-
-            }
-            if (selectedSection is not null)
-            {
-                GD.Print($"Section[{SelectedSection.SectionIndex}] has [{SelectedSection.ConnectionCount}] connections. Section Min/Max [{SelectedSection.MinCoord} / {SelectedSection.MaxCoord}]");
-            }
-        }
-        #endregion
-
+        internal EventHandler OnMainScreenUIUpdate;
+        internal EventHandler<string> OnNotificationPushed;
+    
+        internal Selection.Manager Selection => selection;
 
 
         public override void _Ready()
@@ -117,10 +40,10 @@ namespace Munglo.DungeonGenerator.UI
             {
                 PopupInitialSettingsDialougue();
             }
+            selection = new Selection.Manager(addon, this, dunVis);
             SetDebugLayer(addon.Profile.showDebugLayer);
             RaiseUpdateUI();
         }
-        
         private void PopupInitialSettingsDialougue()
         {
             PackedScene pScn = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/InitialPopup.tscn") as PackedScene;
@@ -128,7 +51,6 @@ namespace Munglo.DungeonGenerator.UI
             pop.screen = this;
             AddChild(pop);
         }
-
         public void RaiseUpdateUI()
         {
             GD.Print($"MainScreen::RaiseUpdateUI()  EVENT!!");
@@ -140,8 +62,6 @@ namespace Munglo.DungeonGenerator.UI
             EventHandler<string> evt = OnNotificationPushed;
             evt?.Invoke(this, message);
         }
-
-      
         /// <summary>
         /// Generates and display a dungeon in the viewer
         /// </summary>
@@ -151,7 +71,6 @@ namespace Munglo.DungeonGenerator.UI
         {
             dunVis.BuildDungeon(settings, biome);
         }
-
         public void GenerateSection(string sectionTypeName, SectionResource sectionDef, GenerationSettingsResource settings, BiomeResource biome)
         {
             RaiseNotification($"Building Section {sectionDef.sectionName}");
@@ -159,14 +78,13 @@ namespace Munglo.DungeonGenerator.UI
             GD.Print($"MainScreen::GenerateSection() defIsNull[{sectionDef is null}] placersisNull[{placers is null}]");
             dunVis.BuildSection(sectionTypeName, sectionDef, placers, settings, biome, ReDrawDungeon);
         }
-
         public void ReDrawDungeon()
         {
             switch (addon.Mode)
             {
                 case VIEWERMODE.SECTION:
                     dunVis.ReDrawSection();
-                    SelectFirstSection();
+                    selection.SelectFirstSection();
                     break;
                 case VIEWERMODE.DUNGEON:
                 default:
@@ -183,7 +101,7 @@ namespace Munglo.DungeonGenerator.UI
             await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
             dunVis.ClearLevel();
             dunVis.ClearLevelDebug();
-            ClearSelection();
+            selection.ClearSelection();
             RaiseNotification("CLEARED");
         }
         /// <summary>
@@ -194,7 +112,5 @@ namespace Munglo.DungeonGenerator.UI
         {
             dunVis.SetDebugLayer(state);
         }
-
-    
     }// EOF CLASS
 }
