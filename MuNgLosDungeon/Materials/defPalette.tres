@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b8wt4qxyt2klr"]
+
+[ext_resource type="Texture2D" uid="uid://cniw4wchkbiy1" path="res://addons/MuNgLosDungeon/Materials/Textures/Palette.png" id="1_3gs4o"]
+
+[resource]
+albedo_texture = ExtResource("1_3gs4o")
