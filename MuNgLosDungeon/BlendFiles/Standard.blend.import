@@ -33,6 +33,10 @@ animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "materials": {
+"bBrass": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defBrass.tres"
+},
 "bCieling": {
 "use_external/enabled": true,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defCeilingMaterial.tres"

@@ -8,6 +8,20 @@ namespace Munglo.DungeonGenerator
     /// </summary>
     static internal class Dungeon
     {
+        static public MapCoordinate[] NeighbourCoordinates(MapCoordinate coord)
+        {
+            return new MapCoordinate[] {
+                coord + MAPDIRECTION.NORTH,
+                coord + MAPDIRECTION.EAST,
+                coord + MAPDIRECTION.SOUTH,
+                coord + MAPDIRECTION.WEST,
+                coord + MAPDIRECTION.NORTH + MAPDIRECTION.EAST,
+                coord + MAPDIRECTION.SOUTH + MAPDIRECTION.EAST,
+                coord + MAPDIRECTION.SOUTH + MAPDIRECTION.WEST,
+                coord + MAPDIRECTION.NORTH + MAPDIRECTION.WEST
+            };
+        }
+
         static public MAPDIRECTION Flip(MAPDIRECTION direction)
         {
             return TwistLeft(TwistLeft(direction));

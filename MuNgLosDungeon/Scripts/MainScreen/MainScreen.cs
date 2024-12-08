@@ -27,6 +27,7 @@ namespace Munglo.DungeonGenerator.UI
         internal EventHandler<string> OnNotificationPushed;
     
         internal Selection.Manager Selection => selection;
+        public MapData Map { get => dunVis.Map; }
 
 
         public override void _Ready()
@@ -53,7 +54,7 @@ namespace Munglo.DungeonGenerator.UI
         }
         public void RaiseUpdateUI()
         {
-            GD.Print($"MainScreen::RaiseUpdateUI()  EVENT!!");
+            //GD.Print($"MainScreen::RaiseUpdateUI()  EVENT!!");
             EventHandler evt = OnMainScreenUIUpdate;
             evt?.Invoke(this, EventArgs.Empty);
         }
@@ -80,6 +81,7 @@ namespace Munglo.DungeonGenerator.UI
         }
         public void ReDrawDungeon()
         {
+            selection.ClearSelection();
             switch (addon.Mode)
             {
                 case VIEWERMODE.SECTION:

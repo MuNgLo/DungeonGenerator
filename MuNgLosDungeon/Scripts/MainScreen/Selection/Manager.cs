@@ -1,7 +1,9 @@
 using Godot;
-using Godot.Collections;
 using System;
-using System.Reflection;
+using Munglo.DungeonGenerator.Gizmos;
+using System.Linq;
+using Munglo.DungeonGenerator.Pathfinding;
+using System.Collections.Generic;
 
 namespace Munglo.DungeonGenerator.UI.Selection
 {
@@ -13,10 +15,15 @@ namespace Munglo.DungeonGenerator.UI.Selection
         private ScreenDungeonVisualizer dunVis;
 
         private PackedScene gizmoDiamond;
-        private PackedScene gizmoSectionBox;
+        private PackedScene gizmoConnParent;
+        private PackedScene gizmoConnChild;
+        private PackedScene gizmoSegmented;
 
         private MapPiece selectedMapPiece;
         private ISection selectedSection;
+        private MapPiece pathTargetMapPiece;
+        private List<PathLocation> pathRoute;
+
         private SectionResource selectedSectionResource;
         internal MapPiece SelectedMapPiece => selectedMapPiece;
         internal ISection SelectedSection => selectedSection;
@@ -29,7 +36,9 @@ namespace Munglo.DungeonGenerator.UI.Selection
             MS = ms;
             dunVis = dv;
             gizmoDiamond = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/diamond.tscn") as PackedScene;
-            gizmoSectionBox = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/sectionbox.tscn") as PackedScene;
+            gizmoConnParent = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/connparent.tscn") as PackedScene;
+            gizmoConnChild = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/connchild.tscn") as PackedScene;
+            gizmoSegmented = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/segmented.tscn") as PackedScene;
             MS.OnMainScreenUIUpdate += UpdateGizmos;
         }
 
@@ -47,15 +56,158 @@ namespace Munglo.DungeonGenerator.UI.Selection
                 MS.Gizmos.AddChild(d);
                 d.Position = Dungeon.GlobalPosition(selectedMapPiece);
             }
-            // Insert sectionbox
-            if(selectedSection is not null){
-                Node3D min = gizmoSectionBox.Instantiate() as Node3D;
-                Node3D max = gizmoSectionBox.Instantiate() as Node3D;
-                MS.Gizmos.AddChild(min);
-                MS.Gizmos.AddChild(max);
-                min.Position = Dungeon.GlobalPosition(selectedSection.MinCoord);
-                max.Position = Dungeon.GlobalPosition(selectedSection.MaxCoord);
+            // Insert Diamond on path target mappiece
+            if (pathTargetMapPiece is not null)
+            {
+                Node3D d = gizmoDiamond.Instantiate() as Node3D;
+                MS.Gizmos.AddChild(d);
+                d.Position = Dungeon.GlobalPosition(pathTargetMapPiece);
+
+                // Build path
+                if(Pathing.FindSectionInnerPath(MS.Map.Sections[selectedMapPiece.SectionIndex], selectedMapPiece.Coord, pathTargetMapPiece.Coord, out List<PathLocation> path)){
+                    //GD.Print($"Selection.Manager::UpdateGizmos() FindPath returned TRUE with path.Count[{path.Count}]");
+                    pathRoute = path;
+                    SegmentedGizmo pathy = gizmoSegmented.Instantiate() as SegmentedGizmo;
+
+                    pathy.pathScale = 1.0f;
+                    pathy.offset = Vector3.Up * 0.5f;
+                    pathy.ClearSegments();
+                    pathy.AddSegments(pathRoute);
+                    pathy.color = Colors.Green;
+                    MS.Gizmos.AddChild(pathy);
+                    pathy.Position = Vector3.Zero;
+
+
+                }else{
+                    path = new List<PathLocation>();
+                }
             }
+            // Insert section gizmos
+            if (selectedSection is not null)
+            {
+                // Add bridge flag gizmos
+                foreach (MapPiece piece in selectedSection.Pieces)
+                {
+                    if(piece.isBridge){
+                        SegmentedGizmo d = gizmoSegmented.Instantiate() as SegmentedGizmo;
+
+                        d.pathScale = 0.5f;
+                        d.offset = Vector3.Up * 0.5f;
+                        d.ClearSegments();
+                        d.AddSegments(GizmoShapes.Bridge);
+
+
+                        MS.Gizmos.AddChild(d);
+                        d.Position = Dungeon.GlobalPosition(piece.Coord);
+                        d.GlobalRotationDegrees = Dungeon.ResolveRotation(piece.Orientation);
+                    }
+                }
+
+                // Put arrows on connection tiles
+                foreach (SectionConnection connection in selectedSection.Connections)
+                {
+                    //GD.Print($"Selection.Manager::UpdateGizmos() Adding arrow gizmo on connection[{connection.Coord}] connection.Dir[{connection.Dir}]");
+                    // Parent
+                    if (selectedSection.SectionIndex == connection.ParentSection)
+                    {
+                        Node3D d = gizmoConnParent.Instantiate() as Node3D;
+                        MS.Gizmos.AddChild(d);
+                        d.Position = Dungeon.GlobalPosition(connection.Coord);
+                        d.GlobalRotationDegrees = Dungeon.ResolveRotation(Dungeon.Flip(connection.Dir));
+                    }
+                    // Child
+                    if (selectedSection.SectionIndex == connection.ChildSection)
+                    {
+                        Node3D d = gizmoConnParent.Instantiate() as Node3D;
+                        d = gizmoConnChild.Instantiate() as Node3D;
+                        MS.Gizmos.AddChild(d);
+                        d.Position = Dungeon.GlobalPosition(connection.Coord);
+                        d.GlobalRotationDegrees = Dungeon.ResolveRotation(Dungeon.Flip(connection.Dir));
+                    }
+
+                }
+
+
+
+                if (selectedSection.SectionStyle == "Connector")
+                {
+                    AddMapPieceGizmoOnCoord(selectedSection.Pieces.First().Coord);
+                    AddMapPieceGizmoOnCoord(selectedSection.Pieces.Last().Coord);
+                    return;
+                }
+
+                AddSectionGizmo(selectedSection);
+
+
+            }
+        }
+        private void AddMapPieceGizmoOnCoord(MapCoordinate coord)
+        {
+            Node3D segmented = gizmoSegmented.Instantiate() as Node3D;
+            MS.Gizmos.AddChild(segmented);
+            segmented.Position = Dungeon.GlobalPosition(coord);
+            Vector3[] mapPieceBox = BuildMapPieceBox();
+            (segmented as SegmentedGizmo).ClearSegments();
+            (segmented as SegmentedGizmo).AddSegments(mapPieceBox);
+        }
+        private void AddSectionGizmo(ISection section)
+        {
+            Node3D segmented = gizmoSegmented.Instantiate() as Node3D;
+            MS.Gizmos.AddChild(segmented);
+            segmented.Position = Dungeon.GlobalPosition(section.MinCoord);
+            Vector3[] mapPieceBox = BuildMapPieceBox(section.MaxCoord - section.MinCoord);
+            (segmented as SegmentedGizmo).ClearSegments();
+            (segmented as SegmentedGizmo).AddSegments(mapPieceBox);
+        }
+        private Vector3[] BuildMapPieceBox()
+        {
+            return BuildMapPieceBox(new MapCoordinate(0, 0, 0));
+        }
+
+        private Vector3[] BuildMapPieceBox(MapCoordinate size)
+        {
+            float width = size.x * 6.0f;
+            float depth = size.z * 6.0f;
+            float height = size.y * 6.0f;
+
+            Vector3[] box = new Vector3[]{
+                // TOP
+                new Vector3(3.0f + width,5.0f + height,3.0f + depth),
+                new Vector3(-3.0f,5.0f + height,3.0f + depth),
+                new Vector3(-3.0f,5.0f + height,-3.0f),
+                new Vector3(3.0f + width,5.0f + height,-3.0f),
+                new Vector3(3.0f + width,5.0f + height,3.0f + depth),
+
+                new Vector3(0.0f,float.PositiveInfinity,0.0f),
+                // Bottom
+                new Vector3(-3.0f,-1.0f,3.0f + depth),
+                new Vector3(-3.0f,-1.0f,-3.0f),
+                new Vector3(3.0f + width,-1.0f,-3.0f),
+                new Vector3(3.0f + width,-1.0f,3.0f + depth),
+                new Vector3(-3.0f,-1.0f,3.0f + depth),
+
+
+                new Vector3(0.0f,float.PositiveInfinity,0.0f),
+
+                new Vector3(-3.0f,5.0f,3.0f + depth),
+                new Vector3(-3.0f,-1.0f + height,3.0f + depth),
+
+                new Vector3(0.0f,float.PositiveInfinity,0.0f),
+
+                new Vector3(-3.0f,-1.0f,-3.0f),
+                new Vector3(-3.0f,5.0f + height,-3.0f),
+
+                new Vector3(0.0f,float.PositiveInfinity,0.0f),
+
+                new Vector3(3.0f + width,-1.0f,-3.0f),
+                new Vector3(3.0f + width,5.0f + height,-3.0f),
+
+                new Vector3(0.0f,float.PositiveInfinity,0.0f),
+
+                new Vector3(3.0f + width,-1.0f,3.0f + depth),
+                new Vector3(3.0f + width,5.0f + height,3.0f + depth)
+                };
+            return box;
         }
 
         internal void ClearSelection()
@@ -63,18 +215,32 @@ namespace Munglo.DungeonGenerator.UI.Selection
             selectedMapPiece = null;
             selectedSection = null;
             if (addon.Mode != VIEWERMODE.SECTION) { selectedSectionResource = null; }
+            UpdateGizmos(this, null);
         }
         internal void SelectFirstSection(bool runUpdates = true)
         {
-            GD.Print($"MainScreen::SelectFirstSection()");
+            GD.Print($"Selection.Manager::SelectFirstSection()");
             ScreenDungeonVisualizer vis = MS.FindChild("Dungeon") as ScreenDungeonVisualizer;
             if (vis.Map.Sections.Count < 1) { return; }
             SelectSection(0);
+        }
+        internal void SelectPathTargetMapPiece(MapPiece mapPiece, bool runUpdates = true)
+        {
+            GD.Print($"Selection.Manager::SelectPathTargetMapPiece()");
+            if (mapPiece == null || selectedMapPiece is null) { return; }
+            pathTargetMapPiece = mapPiece;
+            //SelectSection(mapPiece.SectionIndex, false);
+            if (runUpdates)
+            {
+                RaiseSelectionChanged();
+                MS.RaiseUpdateUI();
+            }
         }
         internal void SelectMapPiece(MapPiece mapPiece, bool runUpdates = true)
         {
             if (mapPiece == null) { return; }
             selectedMapPiece = mapPiece;
+            pathTargetMapPiece = null;
             SelectSection(mapPiece.SectionIndex, false);
             if (runUpdates)
             {
@@ -98,7 +264,7 @@ namespace Munglo.DungeonGenerator.UI.Selection
         internal void SelectSectionResource(Resource res, bool runUpdates = true)
         {
             if (res is not SectionResource) { return; }
-            GD.Print($"MainScreen::SelectSectionResource() SectionResource is [{res.ResourcePath}]");
+            GD.Print($"Selection.Manager::SelectSectionResource() SectionResource is [{res.ResourcePath}]");
 
             if (selectedSectionResource is not null)
             {
@@ -115,7 +281,7 @@ namespace Munglo.DungeonGenerator.UI.Selection
         }
         internal void RaiseSelectionChanged()
         {
-            GD.Print($"MainScreen::RaiseSelectionChanged()  EVENT!!");
+            //GD.Print($"Selection.Manager::RaiseSelectionChanged()  EVENT!!");
 
             EventHandler evt = OnSelectionChanged;
             evt?.Invoke(this, EventArgs.Empty);

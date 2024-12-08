@@ -61,19 +61,20 @@ namespace Munglo.DungeonGenerator
         Button testBTN;
         private void RunDebugTestThings()
         {
-            testBTN = new Button(){Text = "Debug" };
+            testBTN = new Button() { Text = "Debug" };
             AddControlToContainer(CustomControlContainer.SpatialEditorMenu, testBTN);
             testBTN.Pressed += DebugDumpToScene;
         }
 
-        private void DebugDumpToScene(){
+        private void DebugDumpToScene()
+        {
             PackedScene sceneToSave = new PackedScene();
             //GD.Print($"ExportConfirmed() O1[{screen.CurrentDungeon.GetChildren()[0].Owner}] O2[{screen.CurrentDungeon.GetChildren()[1].Owner}]");
 
             Node copy = testBTN.GetParent().GetParent().GetParent().GetParent().GetParent();
 
 
-            Error err = sceneToSave.Pack(copy); 
+            Error err = sceneToSave.Pack(copy);
             if (err != Error.Ok)
             {
                 GD.PrintErr($"Dungeons::DebugDumpToScene() err[{err}]");
@@ -85,7 +86,8 @@ namespace Munglo.DungeonGenerator
 
         public override void _ExitTree()
         {
-            if(testBTN is not null){
+            if (testBTN is not null)
+            {
                 RemoveControlFromContainer(CustomControlContainer.SpatialEditorMenu, testBTN);
             }
             RemoveControlFromBottomPanel(bscreen);
@@ -121,7 +123,7 @@ namespace Munglo.DungeonGenerator
         }
         public override void _Process(double delta)
         {
-            if (!screen.cursorIsInside) { return; } 
+            if (!screen.cursorIsInside) { return; }
             Vector3 inputvector = Vector3.Zero;
             if (Input.IsKeyPressed(Key.W)) { inputvector += Vector3.Forward; }
             if (Input.IsKeyPressed(Key.S)) { inputvector += Vector3.Back; }
@@ -135,13 +137,13 @@ namespace Munglo.DungeonGenerator
         }
         public override void _Input(InputEvent @event)
         {
-            if (!MS.cursorIsInside) 
-            { 
-                if(cam.State == CameraControls.CAMERAMODE.FREELOOK)
+            if (!MS.cursorIsInside)
+            {
+                if (cam.State == CameraControls.CAMERAMODE.FREELOOK)
                 {
                     cam.GoLocked();
                 }
-                return; 
+                return;
             }
             if (@event is InputEventMouseMotion)
             {
@@ -152,10 +154,23 @@ namespace Munglo.DungeonGenerator
             {
                 InputEventMouseButton b = (InputEventMouseButton)@event;
 
-                if(b.ButtonIndex == MouseButton.Left && b.IsPressed())
+                if (b.ButtonIndex == MouseButton.Left && b.IsPressed())
                 {
                     SubViewportContainer cont = screen.GetNode<SubViewportContainer>("SubViewportContainer");
-                    (cont as SelectOnClick).DoRayCastIntoSubViewport();
+
+
+                    if ((cont as SelectOnClick).RayCastToMapPiece(out MapPiece mp))
+                    {
+                        if (Input.IsKeyPressed(Key.Shift))
+                        {
+                            MS.Selection.SelectPathTargetMapPiece(mp);
+                        }
+                        else
+                        {
+                            MS.Selection.SelectMapPiece(mp);
+                        }
+
+                    }
                 }
 
                 if (b.ButtonIndex == MouseButton.Right)
@@ -209,7 +224,7 @@ namespace Munglo.DungeonGenerator
                 SetOwner(screen.CurrentDungeon, node);
             }
             GD.Print($"ExportConfirmed() O1[{screen.CurrentDungeon.GetChildren()[0].Owner}] O2[{screen.CurrentDungeon.GetChildren()[1].Owner}]");
-            Error err = sceneToSave.Pack(screen.CurrentDungeon); 
+            Error err = sceneToSave.Pack(screen.CurrentDungeon);
             if (err != Error.Ok)
             {
                 GD.PrintErr($"Dungeons::WhenExportConfirmed() err[{err}]");
@@ -221,11 +236,11 @@ namespace Munglo.DungeonGenerator
         }
         public bool VerifySectionsFolder()
         {
-            if(masterConfig.ProjectResourcePath != string.Empty && DirAccess.DirExistsAbsolute(masterConfig.SectionResourcePath))
+            if (masterConfig.ProjectResourcePath != string.Empty && DirAccess.DirExistsAbsolute(masterConfig.SectionResourcePath))
             {
                 return true;
             }
-            if(masterConfig.ProjectResourcePath != string.Empty && DirAccess.DirExistsAbsolute(masterConfig.ProjectResourcePath))
+            if (masterConfig.ProjectResourcePath != string.Empty && DirAccess.DirExistsAbsolute(masterConfig.ProjectResourcePath))
             {
                 GD.Print("Dungeons:: Creating Sections folder in the project path");
                 DirAccess.MakeDirAbsolute(masterConfig.SectionResourcePath);
@@ -249,8 +264,8 @@ namespace Munglo.DungeonGenerator
             EditorInterface.Singleton.InspectObject(Profile);
             (screen.FindChild("Build") as TextureButton).ReleaseFocus();
         }
-        
- 
+
+
         private void WhenMouseEnterMain()
         {
             screen.cursorIsInside = true;
@@ -259,7 +274,7 @@ namespace Munglo.DungeonGenerator
         {
             screen.cursorIsInside = false;
         }
-       
+
         #endregion
 
         /// <summary>
@@ -271,7 +286,7 @@ namespace Munglo.DungeonGenerator
         private void SetOwner(Node Owner, Node node)
         {
             node.Owner = Owner;
-            if(node.SceneFilePath != string.Empty) { return; }
+            if (node.SceneFilePath != string.Empty) { return; }
             foreach (Node n in node.GetChildren())
             {
                 SetOwner(screen.CurrentDungeon, n);
@@ -284,12 +299,13 @@ namespace Munglo.DungeonGenerator
         /// <summary>
         /// Toggles mode between dungeon and section. Defaults to dungeon.
         /// </summary>
-        public void ChangeMode(){
+        public void ChangeMode()
+        {
             ChangeMode(mode == VIEWERMODE.DUNGEON ? VIEWERMODE.SECTION : VIEWERMODE.DUNGEON);
         }
         public void ChangeMode(VIEWERMODE newMode)
         {
-            if(newMode != mode)
+            if (newMode != mode)
             {
                 GD.Print($"Dungeons::ChangeMode() changed to {newMode}");
                 mode = newMode;

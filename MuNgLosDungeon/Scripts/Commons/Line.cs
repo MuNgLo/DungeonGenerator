@@ -52,13 +52,13 @@ namespace Munglo.DungeonGenerator
             {
                 // back check
                 if(
-                    step.Neighbour(Dungeon.Flip(step.Orientation)).isBridge != step.isBridge
+                    step.Neighbour(Dungeon.Flip(step.Orientation), true).isBridge != step.isBridge
                     ||
-                    step.Neighbour(Dungeon.Flip(step.Orientation)).SectionIndex != step.SectionIndex
+                    step.Neighbour(Dungeon.Flip(step.Orientation), true).SectionIndex != step.SectionIndex
                     )
                 {
                     step.AssignWall(new KeyData() { key = mainLine ? PIECEKEYS.WD : PIECEKEYS.W, dir = Dungeon.Flip(step.Orientation) }, true);
-                    step.Neighbour(Dungeon.Flip(step.Orientation)).AssignWall(new KeyData() { key = mainLine ? PIECEKEYS.WD : PIECEKEYS.W, dir = step.Orientation }, true);
+                    step.Neighbour(Dungeon.Flip(step.Orientation), true).AssignWall(new KeyData() { key = mainLine ? PIECEKEYS.WD : PIECEKEYS.W, dir = step.Orientation }, true);
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace Munglo.DungeonGenerator
         }
         internal void WalkNormal(int maxSteps, bool mainline)
         {
-            MapPiece nextStep = Last.Neighbour(Last.Orientation);
+            MapPiece nextStep = Last.Neighbour(Last.Orientation, true);
             if (nextStep == null) { GD.PrintErr($"Line", "WalkNormal", $"steps.Count[{steps.Count}] nextStep is NULL[{nextStep == null}]"); }
 
             if (nextStep.State != MAPPIECESTATE.UNUSED && nextStep.SectionIndex < 0)  
@@ -138,7 +138,7 @@ namespace Munglo.DungeonGenerator
                 {
                     if (mainline)
                     {
-                        section.AddConnection(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
+                        section.AddConnectionAsParent(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
                         nextStep.isBridge = true;
                         nextStep.Orientation = Last.Orientation;
                         nextStep.State = MAPPIECESTATE.PENDING;
@@ -173,12 +173,12 @@ namespace Munglo.DungeonGenerator
         /// <param name="mainline"></param>
         internal void WalkBridge(int maxSteps, bool mainline)
         {
-            MapPiece nextStep = Last.Neighbour(Last.Orientation);
+            MapPiece nextStep = Last.Neighbour(Last.Orientation, true);
 
             if (nextStep.SectionIndex < 0)
             {
                 // Blank
-                section.AddConnection(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
+                section.AddConnectionAsParent(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
                 nextStep.SectionIndex = SectionIndex;
                 nextStep.Orientation = Last.Orientation;
                 nextStep.State = MAPPIECESTATE.PENDING;
@@ -206,7 +206,7 @@ namespace Munglo.DungeonGenerator
                 }
                 else
                 {
-                    section.AddConnection(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
+                    section.AddConnectionAsParent(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
                     nextStep.isBridge = true;
                     nextStep.Orientation = Last.Orientation;
                     nextStep.State = MAPPIECESTATE.PENDING;
@@ -222,7 +222,7 @@ namespace Munglo.DungeonGenerator
             List<MapPiece> turners = new List<MapPiece>();
             for (int i = steps.Count -1; i > steps.Count - 1 - width; i--)
             {
-                turners.Add(steps[i].Neighbour(dir));
+                turners.Add(steps[i].Neighbour(dir, true));
             }
             if (reversed) { turners.Reverse(); }
             return turners.ToArray();
@@ -248,10 +248,10 @@ namespace Munglo.DungeonGenerator
                 if (pickIndex < Count)
                 {
                     dir = Dungeon.TwistLeft(steps[pickIndex].Orientation);
-                    return steps[pickIndex].Neighbour(dir);
+                    return steps[pickIndex].Neighbour(dir, true);
                 }
                 dir = Dungeon.TwistRight(steps[pickIndex - Count].Orientation);
-                return steps[pickIndex - Count].Neighbour(dir);
+                return steps[pickIndex - Count].Neighbour(dir, true);
             }
 
             if (leftside && !rightside)
@@ -259,14 +259,14 @@ namespace Munglo.DungeonGenerator
                 int pickIndex = rng.Next(Count);
 
                 dir = Dungeon.TwistLeft(steps[pickIndex].Orientation);
-                return steps[pickIndex].Neighbour(dir);
+                return steps[pickIndex].Neighbour(dir, true);
             }
 
             if (!leftside && rightside)
             {
                 int pickIndex = rng.Next(Count);
                 dir = Dungeon.TwistRight(steps[pickIndex].Orientation);
-                return steps[pickIndex].Neighbour(dir);
+                return steps[pickIndex].Neighbour(dir, true);
             }
             
             return null;

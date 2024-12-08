@@ -129,7 +129,6 @@ namespace Munglo.DungeonGenerator
                     PIECEKEYS.AS,
                     PIECEKEYS.ASIC,
                     PIECEKEYS.BRIDGE,
-                    PIECEKEYS.STAIRSPIRAL,
                     PIECEKEYS.STAIRPLATFORM,
                     PIECEKEYS.STAIR
               };
@@ -141,7 +140,6 @@ namespace Munglo.DungeonGenerator
                     "res://addons/MuNgLosDungeon/Scenes/def_bridgefoundation.tscn", 
                     "res://addons/MuNgLosDungeon/Scenes/def_bridgerail.tscn", "res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn", 
                     "res://addons/MuNgLosDungeon/Scenes/def_bridgepost.tscn", "res://addons/MuNgLosDungeon/Scenes/def_balcony.tscn"},
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_stairspiral01.tscn", "res://addons/MuNgLosDungeon/Scenes/def_stairspiral02.tscn", "res://addons/MuNgLosDungeon/Scenes/def_stairspiral03.tscn" },
                 new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_stairsplatform.tscn" },
                 new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_stairs01.tscn", "res://addons/MuNgLosDungeon/Scenes/def_stairs02.tscn" }
             };

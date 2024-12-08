@@ -10,10 +10,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qthb6")
-sectionInfo = NodePath("GridContainer/SectionInfo")
-mapPieceInfo = NodePath("GridContainer/MappieceInfo")
+sectionInfo = NodePath("TabContainer/Selection/GridContainer/SectionInfo")
+mapPieceInfo = NodePath("TabContainer/Selection/GridContainer/MappieceInfo")
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="Selection" type="Control" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="GridContainer" type="GridContainer" parent="TabContainer/Selection"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,12 +35,27 @@ grow_horizontal = 2
 grow_vertical = 2
 columns = 2
 
-[node name="SectionInfo" type="Label" parent="GridContainer"]
+[node name="SectionInfo" type="Label" parent="TabContainer/Selection/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SectionINfo"
 
-[node name="MappieceInfo" type="Label" parent="GridContainer"]
+[node name="MappieceInfo" type="Label" parent="TabContainer/Selection/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "MapPieceInfo"
+
+[node name="Pathing" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="DungeonInfo" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Settings" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3

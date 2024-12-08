@@ -232,6 +232,10 @@ namespace Munglo.DungeonGenerator
             if (p1.SectionIndex == p2.SectionIndex) return;
             sections[p1.SectionIndex].AddOpening(p1.Coord, dir, false, overrideLocked);
             sections[p2.SectionIndex].AddOpening(p2.Coord, Dungeon.Flip(dir), false, overrideLocked);
+
+            sections[p2.SectionIndex].Connections.Add(
+                new SectionConnection(p1.SectionIndex, p2.SectionIndex, Dungeon.Flip(dir), p2.Coord)
+                            );
         }
         public MapPiece GetNextPieceOver(MapPiece startPiece, MAPDIRECTION orientation)
         {
@@ -265,11 +269,11 @@ namespace Munglo.DungeonGenerator
 
         internal void AddDoorWide(MapPiece piece1, bool overrideLocked)
         {
-            MapPiece piece2 = piece1.Neighbour(Dungeon.TwistRight(piece1.Orientation));
+            MapPiece piece2 = piece1.Neighbour(Dungeon.TwistRight(piece1.Orientation), true);
             piece1.AssignWall(new KeyData() { key = PIECEKEYS.OCCUPIED, dir = Dungeon.Flip(piece1.Orientation) }, overrideLocked); 
             piece2.AssignWall(new KeyData() { key = PIECEKEYS.WDW, dir = Dungeon.Flip(piece1.Orientation) }, overrideLocked);
-            piece1.Neighbour(Dungeon.Flip(piece1.Orientation)).AssignWall(new KeyData() { key = PIECEKEYS.WDW, dir = piece1.Orientation }, overrideLocked);
-            piece2.Neighbour(Dungeon.Flip(piece1.Orientation)).AssignWall(new KeyData() { key = PIECEKEYS.OCCUPIED, dir = piece1.Orientation }, overrideLocked);
+            piece1.Neighbour(Dungeon.Flip(piece1.Orientation), true).AssignWall(new KeyData() { key = PIECEKEYS.WDW, dir = piece1.Orientation }, overrideLocked);
+            piece2.Neighbour(Dungeon.Flip(piece1.Orientation), true).AssignWall(new KeyData() { key = PIECEKEYS.OCCUPIED, dir = piece1.Orientation }, overrideLocked);
         }
 
      

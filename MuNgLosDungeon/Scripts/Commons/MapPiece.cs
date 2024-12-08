@@ -18,13 +18,13 @@ namespace Munglo.DungeonGenerator
         internal MAPPIECESTATE State { get => state; set => state = value; }
         public bool hasStairs = false;
         public bool isBridge = false;
-        internal MapPiece NeighbourNorth => map.GetPiece(Coord.StepNorth);
+        /*internal MapPiece NeighbourNorth => map.GetPiece(Coord.StepNorth);
         internal MapPiece NeighbourEast => map.GetPiece(Coord.StepEast);
         internal MapPiece NeighbourSouth => map.GetPiece(Coord.StepSouth);
         internal MapPiece NeighbourWest => map.GetPiece(Coord.StepWest);
         internal MapPiece NeighbourUp => map.GetPiece(Coord.StepUp);
         internal MapPiece NeighbourDown => map.GetPiece(Coord.StepDown);
-
+*/
         private protected int sectionIndex = -1;
         internal int SectionIndex { get => sectionIndex; set => sectionIndex = value; }
         /// <summary>
@@ -41,9 +41,9 @@ namespace Munglo.DungeonGenerator
                 }
                 if (sectionIndex >= map.Sections.Count)
                 {
-                    GD.PushError($"MapPiece[{coord}] sectionIndex to high! Defaulting to 0 but this need fixing!");
+                    GD.PushError($"MapPiece[{coord}] sectionIndex[{sectionIndex}] to high! Count[{map.Sections.Count}] Defaulting to last section but this need fixing!");
                     SetError(true);
-                    sectionIndex = 0;
+                    sectionIndex = map.Sections.Count - 1;
                 }
                 return map.Sections[sectionIndex];
             }
@@ -278,7 +278,7 @@ namespace Munglo.DungeonGenerator
         /// <returns></returns>
         public MapPiece NeighbourRight()
         {
-            return Neighbour(Dungeon.TwistRight(orientation));
+            return Neighbour(Dungeon.TwistRight(orientation), true);
         }
         /// <summary>
         /// Returns the neighbouring piece to the left relative to the orientation
@@ -286,7 +286,7 @@ namespace Munglo.DungeonGenerator
         /// <returns></returns>
         public MapPiece NeighbourLeft()
         {
-            return Neighbour(Dungeon.TwistLeft(orientation));
+            return Neighbour(Dungeon.TwistLeft(orientation), true);
         }
         /// <summary>
         /// Returns the neighbouring piece in direction
@@ -294,9 +294,10 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>
-        public MapPiece Neighbour(MAPDIRECTION dir)
+        public MapPiece Neighbour(MAPDIRECTION dir, bool createIfNeeded)
         {
-            return map.GetPiece(Coord + dir);
+            if(createIfNeeded){ return map.GetPiece(Coord + dir);}
+            return map.GetExistingPiece(Coord + dir);
         }
         /// <summary>
         /// Assign keydata to wall location. Also set the wall flag.

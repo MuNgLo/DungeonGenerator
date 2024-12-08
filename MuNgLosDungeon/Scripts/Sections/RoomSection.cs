@@ -24,7 +24,7 @@ namespace Munglo.DungeonGenerator.Sections
             MapPiece parent = map.GetExistingPiece(coord + Dungeon.Flip(orientation));
             if(parent is not null)
             {
-                AddConnection(parent.SectionIndex, Dungeon.Flip(orientation), start.Coord, true);
+                AddConnectionAsParent(parent.SectionIndex, Dungeon.Flip(orientation), start.Coord, true);
             }
 
             //ProcGenMKIII.Log("RoomBase", $"BuildRoom", $"Loc{coord}  Size({sizeX}.{sizeY}.{sizeZ}) minX({minX}) maxX({maxX})");
@@ -47,7 +47,7 @@ namespace Munglo.DungeonGenerator.Sections
             if (sectionDefinition.firstPieceDoor)
             {
                 pieces.First().AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(pieces.First().Orientation) }, true);
-                pieces.First().Neighbour(Dungeon.Flip(pieces.First().Orientation)).AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = pieces.First().Orientation }, true);
+                pieces.First().Neighbour(Dungeon.Flip(pieces.First().Orientation), true).AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = pieces.First().Orientation }, true);
             }
 
             if (pieces.Count < 10)
@@ -152,7 +152,7 @@ namespace Munglo.DungeonGenerator.Sections
             for (int i = 1; i < 7; i++)
             {
                 MAPDIRECTION processingDirection = (MAPDIRECTION)i;
-                MapPiece nb = rp.Neighbour(processingDirection);
+                MapPiece nb = rp.Neighbour(processingDirection, true);
                 if (nb.State == MAPPIECESTATE.UNUSED)
                 {
                     if ((nb.Coord.x >= minX && nb.Coord.x <= maxX
@@ -242,7 +242,7 @@ namespace Munglo.DungeonGenerator.Sections
 
                 MAPDIRECTION dir = pick.OutsideWallDirection();
                 if (pick.WallKey(dir).key != PIECEKEYS.W) { continue; }
-                MapPiece nb = pick.Neighbour(dir);
+                MapPiece nb = pick.Neighbour(dir, true);
                 if (nb.isEmpty) { continue; }
                 if (nb.WallKey(Dungeon.Flip(dir)).key != PIECEKEYS.W) { continue; }
 
@@ -251,7 +251,7 @@ namespace Munglo.DungeonGenerator.Sections
 
                 if (nb.SectionIndex != sectionIndex)
                 {
-                    AddConnection(nb.SectionIndex, dir, pick.Coord, true);
+                    AddConnectionAsParent(nb.SectionIndex, dir, pick.Coord, true);
                     return;
                 }
 

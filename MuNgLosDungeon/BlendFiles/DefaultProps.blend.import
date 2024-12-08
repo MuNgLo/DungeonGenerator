@@ -34,15 +34,15 @@ import_script/path=""
 _subresources={
 "materials": {
 "bBone": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defBone.tres"
 },
 "bBrass": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defBrass.tres"
 },
 "bEmber": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defEmber.tres"
 },
 "bMetalCastIron": {
@@ -50,11 +50,15 @@ _subresources={
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defMetalCastIron.tres"
 },
 "bMetalSteel": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defMetalSteel.tres"
 },
-"bWood": {
+"bPalette": {
 "use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defPalette.tres"
+},
+"bWood": {
+"use_external/enabled": false,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defWood.tres"
 }
 },
@@ -66,7 +70,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Barrel1m.res"
 },
 "DefaultProps_BookShelf": {
@@ -76,7 +79,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_BookShelf.res"
 },
 "DefaultProps_Brazier01": {
@@ -86,7 +88,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Brazier01.res"
 },
 "DefaultProps_Brazier01Coalbed": {
@@ -96,7 +97,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Brazier01Coalbed.res"
 },
 "DefaultProps_BrazierGrate": {
@@ -106,7 +106,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_BrazierGrate.res"
 },
 "DefaultProps_ChefKnife": {
@@ -116,7 +115,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_ChefKnife.res"
 },
 "DefaultProps_CookingpotBig": {
@@ -126,7 +124,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_CookingpotBig.res"
 },
 "DefaultProps_CookingpotBigLid": {
@@ -136,7 +133,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_CookingpotBigLid.res"
 },
 "DefaultProps_CookingpotSmall": {
@@ -146,7 +142,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_CookingpotSmall.res"
 },
 "DefaultProps_CookingpotSmallLid": {
@@ -156,7 +151,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_CookingpotSmallLid.res"
 },
 "DefaultProps_Crate1m": {
@@ -166,7 +160,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Crate1m.res"
 },
 "DefaultProps_MeatClever": {
@@ -176,7 +169,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_MeatClever.res"
 },
 "DefaultProps_Pan": {
@@ -186,7 +178,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Pan.res"
 },
 "DefaultProps_PotFork": {
@@ -196,7 +187,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_PotFork.res"
 },
 "DefaultProps_Skull": {
@@ -206,7 +196,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Skull.res"
 },
 "DefaultProps_Spatula": {
@@ -216,7 +205,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Spatula.res"
 },
 "DefaultProps_Stool": {
@@ -226,7 +214,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/DefaultProps_Stool.res"
 }
 }

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BiomeResource" load_steps=57 format=3 uid="uid://djwgxq0sin8ef"]
+[gd_resource type="Resource" script_class="BiomeResource" load_steps=53 format=3 uid="uid://djwgxq0sin8ef"]
 
 [ext_resource type="PackedScene" uid="uid://b0k5luvs28qyn" path="res://addons/MuNgLosDungeon/Scenes/Standard/def_ceiling.tscn" id="1_14fsf"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/Commons/BiomeEntry.cs" id="2_r24ux"]
@@ -22,9 +22,6 @@
 [ext_resource type="PackedScene" uid="uid://dxmsx0og05v3r" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn" id="20_xryib"]
 [ext_resource type="PackedScene" uid="uid://da4kispjxtxwv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgepost.tscn" id="21_70h0k"]
 [ext_resource type="PackedScene" uid="uid://b2tla62s2g83v" path="res://addons/MuNgLosDungeon/Scenes/def_balcony.tscn" id="22_6olvy"]
-[ext_resource type="PackedScene" uid="uid://b1m03utkrnrus" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral01.tscn" id="23_xmmnj"]
-[ext_resource type="PackedScene" uid="uid://klt0ly4ne60i" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral02.tscn" id="24_airi8"]
-[ext_resource type="PackedScene" uid="uid://c5811pgjgjs7c" path="res://addons/MuNgLosDungeon/Scenes/def_stairspiral03.tscn" id="25_lv2ah"]
 [ext_resource type="PackedScene" uid="uid://dpliftngpsoho" path="res://addons/MuNgLosDungeon/Scenes/def_stairsplatform.tscn" id="26_ij1xl"]
 [ext_resource type="PackedScene" uid="uid://bch2kn6ntmb4u" path="res://addons/MuNgLosDungeon/Scenes/def_stairs01.tscn" id="27_vhtqm"]
 [ext_resource type="PackedScene" uid="uid://yqrnyyhsvjgi" path="res://addons/MuNgLosDungeon/Scenes/def_stairs02.tscn" id="28_00jhy"]
@@ -102,11 +99,6 @@ script = ExtResource("2_r24ux")
 key = 24
 resources = [ExtResource("16_7xgfo"), ExtResource("17_lthqm"), ExtResource("18_lxehh"), ExtResource("19_ys7ef"), ExtResource("20_xryib"), ExtResource("21_70h0k"), ExtResource("22_6olvy")]
 
-[sub_resource type="Resource" id="Resource_7n7k1"]
-script = ExtResource("2_r24ux")
-key = 22
-resources = [ExtResource("23_xmmnj"), ExtResource("24_airi8"), ExtResource("25_lv2ah")]
-
 [sub_resource type="Resource" id="Resource_ibpoe"]
 script = ExtResource("2_r24ux")
 key = 23
@@ -144,4 +136,4 @@ debug = [SubResource("Resource_bijmw"), SubResource("Resource_k2lao"), SubResour
 walls = [SubResource("Resource_p1d5d"), SubResource("Resource_aa6gt"), SubResource("Resource_o6xee"), SubResource("Resource_wg2fs")]
 floors = [SubResource("Resource_if4hw")]
 ceilings = [SubResource("Resource_7b1aj")]
-props = [SubResource("Resource_yif4u"), SubResource("Resource_xhuvd"), SubResource("Resource_qfxte"), SubResource("Resource_7n7k1"), SubResource("Resource_ibpoe"), SubResource("Resource_8yg3n")]
+props = [SubResource("Resource_yif4u"), SubResource("Resource_xhuvd"), SubResource("Resource_qfxte"), SubResource("Resource_ibpoe"), SubResource("Resource_8yg3n")]

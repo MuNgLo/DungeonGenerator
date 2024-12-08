@@ -155,7 +155,7 @@ namespace Munglo.DungeonGenerator
             if (wide)
             {
                 piece.AssignWall(new KeyData() { key = PIECEKEYS.WDW, dir = dir }, overrideLocked);
-                MapPiece nb = piece.Neighbour(Dungeon.TwistRight(dir));
+                MapPiece nb = piece.Neighbour(Dungeon.TwistRight(dir), true);
                 nb.AssignWall(new KeyData() { key = PIECEKEYS.OCCUPIED, dir = dir }, overrideLocked);
                 if (!piece.hasFloor)
                 {
@@ -365,16 +365,20 @@ namespace Munglo.DungeonGenerator
             }
             return false;
         }
-        public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
+        public void AddConnectionAsParent(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
         {
             connections.Add(new SectionConnection(sectionIndex, otherSectionIndex, dir, coord));
         }
+        public void AddConnectionAsChild(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
+        {
+            connections.Add(new SectionConnection(otherSectionIndex, sectionIndex, dir, coord));
+        }
         public void BuildConnections()
         {
-            foreach (SectionConnection connection in connections) 
+            for (int i = 0; i < connections.Count; i++)
             {
-                if(connection.ParentSection != sectionIndex) { continue; }
-                map.AddOpeningBetweenSections(connection, true);
+                 if(connections[i].ParentSection != sectionIndex) { continue; }
+                map.AddOpeningBetweenSections(connections[i], true);
             }
         }
 

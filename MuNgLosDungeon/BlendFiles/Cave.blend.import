@@ -34,82 +34,8 @@ import_script/path=""
 _subresources={
 "materials": {
 "bCave": {
-"use_external/enabled": true,
+"use_external/enabled": false,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defCave.tres"
-}
-},
-"meshes": {
-"DefaultCave_ArchCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_ArchCave.res"
-},
-"DefaultCave_ArchCornerCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_ArchCornerCave.res"
-},
-"DefaultCave_CeilingCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_CeilingCave.res"
-},
-"DefaultCave_FloorCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_FloorCave.res"
-},
-"DefaultCave_WallCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallCave.res"
-},
-"DefaultCave_WallCornerCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallCornerCave.res"
-},
-"DefaultCave_WallOpeningCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallOpeningCave.res"
-},
-"DefaultCave_WallWideOpeningCave": {
-"generate/lightmap_uv": 0,
-"generate/lods": 0,
-"generate/shadow_meshes": 0,
-"lods/normal_merge_angle": 60.0,
-"lods/normal_split_angle": 25.0,
-"save_to_file/enabled": true,
-"save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_WallWideOpeningCave.res"
 }
 }
 }

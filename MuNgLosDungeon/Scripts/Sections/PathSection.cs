@@ -19,7 +19,7 @@ namespace Munglo.DungeonGenerator.Sections
 
         // Corridor things
         [ExportGroup("Corridors")]
-        [Export] public int corMaxTotal = 20;
+        [Export] public int corMaxTotal = 60;
         [Export] public int corMaxStraight = 5;
         [Export] public int corMinStraight = 2;
 
@@ -134,16 +134,16 @@ namespace Munglo.DungeonGenerator.Sections
         }
         private void BuildStartConnection()
         {
-            MapPiece startpieceConnection = LeftSide.First.Neighbour(Dungeon.Flip(LeftSide.First.Orientation));
+            MapPiece startpieceConnection = LeftSide.First.Neighbour(Dungeon.Flip(LeftSide.First.Orientation), true);
 
             if(startpieceConnection.SectionIndex >= 0)
             {
-                AddConnection(startpieceConnection.SectionIndex, Dungeon.Flip(LeftSide.First.Orientation), LeftSide.First.Coord, true);
+                AddConnectionAsParent(startpieceConnection.SectionIndex, Dungeon.Flip(LeftSide.First.Orientation), LeftSide.First.Coord, true);
             }
         }
         private void BuildEndCap()
         {
-            MapPiece endpieceConnection = LeftSide.Last.Neighbour(LeftSide.Last.Orientation);
+            MapPiece endpieceConnection = LeftSide.Last.Neighbour(LeftSide.Last.Orientation, true);
             LeftSide.Last.AddDebug(new KeyData() { key = PIECEKEYS.DEBUGPATHEND, dir = LeftSide.Last.Orientation });
             RightSide.Last.AddDebug(new KeyData() { key = PIECEKEYS.DEBUGPATHEND, dir = RightSide.Last.Orientation });
 
@@ -152,11 +152,11 @@ namespace Munglo.DungeonGenerator.Sections
                 CapLineEndsWithWalls();
                 if (endpieceConnection.State == MAPPIECESTATE.PENDING && endpieceConnection.SectionIndex >= 0 && endpieceConnection.SectionIndex != sectionIndex)
                 {
-                    AddConnection(endpieceConnection.SectionIndex, LeftSide.Last.Orientation, LeftSide.Last.Coord, true);
+                    AddConnectionAsParent(endpieceConnection.SectionIndex, LeftSide.Last.Orientation, LeftSide.Last.Coord, true);
                 }
                 return;
             }
-            MapPiece endpieceConnection2 = RightSide.Last.Neighbour(RightSide.Last.Orientation);
+            MapPiece endpieceConnection2 = RightSide.Last.Neighbour(RightSide.Last.Orientation, true);
 
             if (endpieceConnection.State == MAPPIECESTATE.PENDING && endpieceConnection2.State == MAPPIECESTATE.PENDING)
             {
@@ -178,12 +178,12 @@ namespace Munglo.DungeonGenerator.Sections
                 }
                 if (LeftSide.Last.isBridge)
                 {
-                    LeftSide.Last.Neighbour(LeftSide.Last.Orientation).AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(LeftSide.Last.Orientation) }, true);
+                    LeftSide.Last.Neighbour(LeftSide.Last.Orientation, true).AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(LeftSide.Last.Orientation) }, true);
                 }
                 else
                 {
-                    LeftSide.Last.Neighbour(LeftSide.Last.Orientation).AssignWall(new KeyData() { key = PIECEKEYS.NONE, dir = Dungeon.Flip(LeftSide.Last.Orientation) }, true);
-                    RightSide.Last.Neighbour(LeftSide.Last.Orientation).AssignWall(new KeyData() { key = PIECEKEYS.NONE, dir = Dungeon.Flip(RightSide.Last.Orientation) }, true);
+                    LeftSide.Last.Neighbour(LeftSide.Last.Orientation, true).AssignWall(new KeyData() { key = PIECEKEYS.NONE, dir = Dungeon.Flip(LeftSide.Last.Orientation) }, true);
+                    RightSide.Last.Neighbour(LeftSide.Last.Orientation, true).AssignWall(new KeyData() { key = PIECEKEYS.NONE, dir = Dungeon.Flip(RightSide.Last.Orientation) }, true);
                 }
             }
             else
@@ -192,12 +192,12 @@ namespace Munglo.DungeonGenerator.Sections
                 if(!endpieceConnection.isEmpty && endpieceConnection2.isEmpty && endpieceConnection.SectionIndex >= 0 && endpieceConnection.SectionIndex != sectionIndex) 
                 {
                     // Add a single door to connect corridors on left side
-                    AddConnection(endpieceConnection.SectionIndex, LeftSide.Last.Orientation, LeftSide.Last.Coord, true);
+                    AddConnectionAsParent(endpieceConnection.SectionIndex, LeftSide.Last.Orientation, LeftSide.Last.Coord, true);
                 }
                 else if(endpieceConnection.isEmpty && !endpieceConnection2.isEmpty && endpieceConnection2.SectionIndex >= 0 && endpieceConnection2.SectionIndex != sectionIndex)
                 {
                     // Add a single door to connect corridors on right side
-                    AddConnection(endpieceConnection2.SectionIndex, RightSide.Last.Orientation, RightSide.Last.Coord, true);
+                    AddConnectionAsParent(endpieceConnection2.SectionIndex, RightSide.Last.Orientation, RightSide.Last.Coord, true);
                 }
             }
         }
@@ -206,7 +206,7 @@ namespace Munglo.DungeonGenerator.Sections
             for (int i = 0; i < lines.Length; i++)
             {
                 MAPDIRECTION dir = lines[i].Last.Orientation;
-                MapPiece next = lines[i].Last.Neighbour(dir);
+                MapPiece next = lines[i].Last.Neighbour(dir, true);
                 if (next.isEmpty && next.SectionIndex < 0)
                 {
                     lines[i].Last.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = lines[i].Last.Orientation }, true);
@@ -306,7 +306,7 @@ namespace Munglo.DungeonGenerator.Sections
                 MAPDIRECTION expandTo = Dungeon.TwistRight(step.Orientation);
                 for (int i = 1; i < lines.Length; i++)
                 {
-                    lines[i] = new Line(this, lines[i - 1].Last.Neighbour(expandTo), rng);
+                    lines[i] = new Line(this, lines[i - 1].Last.Neighbour(expandTo, true), rng);
                     lines[i].Last.Orientation = step.Orientation;
                     lines[i].Last.State = MAPPIECESTATE.PENDING;
                 }
@@ -324,7 +324,7 @@ namespace Munglo.DungeonGenerator.Sections
                     return;
                 }
                 cleared++;
-                step = step.Neighbour(dir);
+                step = step.Neighbour(dir, true);
             }
             sizeX = cleared;
         }

@@ -48,6 +48,10 @@ _subresources={
 "bWood": {
 "use_external/enabled": true,
 "use_external/path": "res://addons/MuNgLosDungeon/Materials/defWood.tres"
+},
+"bWoodDark": {
+"use_external/enabled": true,
+"use_external/path": "res://addons/MuNgLosDungeon/Materials/defWoodDark.tres"
 }
 },
 "meshes": {
@@ -58,7 +62,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/MudularBridge_BalconyMESH.res"
 },
 "MudularBridge_FoundationMESH": {
@@ -68,7 +71,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/MudularBridge_FoundationMESH.res"
 },
 "MudularBridge_PostMESH": {
@@ -78,7 +80,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/MudularBridge_PostMESH.res"
 },
 "MudularBridge_RailingMESH": {
@@ -88,7 +89,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/MudularBridge_RailingMESH.res"
 },
 "MudularBridge_SectionMESH": {
@@ -98,7 +98,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/MudularBridge_SectionMESH.res"
 }
 }

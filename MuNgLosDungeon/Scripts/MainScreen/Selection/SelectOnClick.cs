@@ -18,9 +18,9 @@ namespace Munglo.DungeonGenerator.UI
             cube = FindChild("Dungeon") as Node3D;
         }
     
-        public void DoRayCastIntoSubViewport()
+        public bool RayCastToMapPiece(out MapPiece mp)
         {
-            //float z = 20.0f;
+            mp = null;
             Vector2 position2D = subV.GetMousePosition();
             //Plane dropPlane = new Plane(new Vector3(0, 0, 1), z);
             Vector3 cursorWorldPos = cam.ProjectRayOrigin(position2D);
@@ -30,11 +30,9 @@ namespace Munglo.DungeonGenerator.UI
             {
                 (subV.FindChild("Target") as Node3D).GlobalPosition = point;
                 ScreenDungeonVisualizer vis = FindChild("Dungeon") as ScreenDungeonVisualizer;
-                MapPiece mapPiece = vis.GetMapPiece(Dungeon.GlobalSnapCoordinate((Vector3I)point));
-                if (mapPiece is null) { return; }
-                MS.Selection.SelectMapPiece(mapPiece);
-                return;
+                mp = vis.GetMapPiece(Dungeon.GlobalSnapCoordinate((Vector3I)point));
             }
+            return mp is not null;
         }
         public bool TryToHit(Vector3 startPoint, Vector3 dir, World3D world, out Node3D hit, out Vector3 point)
         {

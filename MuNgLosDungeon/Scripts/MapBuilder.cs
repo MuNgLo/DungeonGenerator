@@ -35,9 +35,9 @@ namespace Munglo.DungeonGenerator
                     sectionSeed = roomSeed,
                     cfg = Args
                 });
+            map.Sections.Add(centerRoom);
             centerRoom.Build();
             centerRoom.Save();
-            map.Sections.Add(centerRoom);
             GD.Print("MapBuilder::BuildMapData() Heart Done.");
 
             // Do generation per floor
@@ -101,10 +101,10 @@ namespace Munglo.DungeonGenerator
 
         private void BuildSectionConnections()
         {
-            foreach (ISection section in map.Sections)
+            for (int i = 0; i < map.Sections.Count; i++)
             {
-                section.PunchBackDoor();
-                section.BuildConnections();
+                map.Sections[i].PunchBackDoor();
+                map.Sections[i].BuildConnections();
             }
         }
 

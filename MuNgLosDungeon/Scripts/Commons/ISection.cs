@@ -90,7 +90,8 @@ namespace Munglo.DungeonGenerator
         public void SealSection(int wallVariant = 0, int floorVariant = 0, int ceilingVariant = 0);
 
 
-        public void AddConnection(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
+        public void AddConnectionAsChild(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
+        public void AddConnectionAsParent(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
         /// <summary>
         /// Assign placers to the section. If placersOverride is valid it will override the SectionResource placers collection
         /// </summary>

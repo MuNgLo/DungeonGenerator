@@ -50,7 +50,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_BotFrameMESH.res"
 },
 "ModularStairs_BotStepsMESH": {
@@ -60,7 +59,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_BotStepsMESH.res"
 },
 "ModularStairs_MidFrameMESH": {
@@ -70,7 +68,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_MidFrameMESH.res"
 },
 "ModularStairs_MidStepMESH": {
@@ -80,7 +77,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_MidStepMESH.res"
 },
 "ModularStairs_PlatformMESH": {
@@ -90,7 +86,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_PlatformMESH.res"
 },
 "ModularStairs_PlatformPlanksMESH": {
@@ -100,7 +95,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_PlatformPlanksMESH.res"
 },
 "ModularStairs_Stair01MESH": {
@@ -110,7 +104,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_Stair01MESH.res"
 },
 "ModularStairs_Stair02MESH": {
@@ -120,7 +113,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_Stair02MESH.res"
 },
 "ModularStairs_TopFrameMESH": {
@@ -130,7 +122,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_TopFrameMESH.res"
 },
 "ModularStairs_TopStepsMESH": {
@@ -140,7 +131,6 @@ _subresources={
 "lods/normal_merge_angle": 60.0,
 "lods/normal_split_angle": 25.0,
 "save_to_file/enabled": true,
-"save_to_file/make_streamable": "",
 "save_to_file/path": "res://addons/MuNgLosDungeon/Meshes/ModularStairs_TopStepsMESH.res"
 }
 }

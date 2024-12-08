@@ -15,6 +15,7 @@ data_*/
 mono_crash.*.json
 
 *.blend1
+*.depren
 .vs/
 .vscode
 

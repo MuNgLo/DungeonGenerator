@@ -15,7 +15,6 @@ namespace Munglo.DungeonGenerator
             y = Y;
             z = Z;
         }
-
         public bool Equals(MapCoordinate other)
         {
             return x == other.x && y == other.y && z == other.z;
@@ -113,6 +112,11 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         public static MapCoordinate North => new MapCoordinate(0, 0, -1);
         /// <summary>
+        /// The shift value needed to shift one location North.
+        /// 0,0,-1
+        /// </summary>
+        public static MapCoordinate NorthEast => new MapCoordinate(1, 0, -1);
+        /// <summary>
         /// The shift value needed to shift one location East.
         /// 1,0,0
         /// </summary>
@@ -121,12 +125,27 @@ namespace Munglo.DungeonGenerator
         /// The shift value needed to shift one location South.
         /// 0,0,1
         /// </summary>
+        public static MapCoordinate SouthEast => new MapCoordinate(1, 0, 1);
+        /// <summary>
+        /// The shift value needed to shift one location South.
+        /// 0,0,1
+        /// </summary>
         public static MapCoordinate South => new MapCoordinate(0, 0, 1);
+        /// <summary>
+        /// The shift value needed to shift one location South.
+        /// 0,0,1
+        /// </summary>
+        public static MapCoordinate SouthWest => new MapCoordinate(-1, 0, 1);
         /// <summary>
         /// The shift value needed to shift one location West.
         /// -1,0,0
         /// </summary>
         public static MapCoordinate West => new MapCoordinate(-1, 0, 0);
+        /// <summary>
+        /// The shift value needed to shift one location West.
+        /// -1,0,0
+        /// </summary>
+        public static MapCoordinate NorthWest => new MapCoordinate(-1, 0, -1);
         #endregion
     }// EOF CLASS
 
