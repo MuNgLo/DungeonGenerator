@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://fcw44l4urw5r"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/BottomScreen/BottomScreen.cs" id="1_qthb6"]
+
+[node name="dungeonBottom" type="Control" node_paths=PackedStringArray("sectionInfo", "mapPieceInfo")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qthb6")
+sectionInfo = NodePath("GridContainer/SectionInfo")
+mapPieceInfo = NodePath("GridContainer/MappieceInfo")
+
+[node name="GridContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+
+[node name="SectionInfo" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SectionINfo"
+
+[node name="MappieceInfo" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "MapPieceInfo"

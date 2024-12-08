@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi0b0qyxcngcg"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/Selection/Gizmos/PathGizmo.cs" id="1_5au75"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i6jn7"]
+emission_enabled = true
+emission = Color(0.378285, 0.341516, 0, 1)
+emission_energy_multiplier = 5.0
+disable_receive_shadows = true
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_88nbm"]
+
+[node name="Diamond" type="MeshInstance3D"]
+material_override = SubResource("StandardMaterial3D_i6jn7")
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_88nbm")
+script = ExtResource("1_5au75")
+Shape = 3
+GizmoColor = Color(0.378285, 0.341516, 0, 1)
+PathScale = 3.0
+Offset = Vector3(0, 1.5, 0)
