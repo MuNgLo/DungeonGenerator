@@ -19,9 +19,11 @@ namespace Munglo.DungeonGenerator
         internal SectionResource startRoom;
         internal SectionResource standardRoom;
         private List<ISection> sections;
+        private System.Collections.Generic.Dictionary<MapCoordinate, SectionConnection> connections;
         private PRNGMarsenneTwister rng;
 
         public List<ISection> Sections => sections;
+        public System.Collections.Generic.Dictionary<MapCoordinate, SectionConnection> Connections { get => connections; set => connections = value; }
         public GenerationSettingsResource MapArgs => mapArgs;
 
         internal System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>> Pieces => pieces;
@@ -29,6 +31,7 @@ namespace Munglo.DungeonGenerator
         internal MapData(GenerationSettingsResource args, SectionResource startRoom, SectionResource standardRoom)
         {
             sections = new List<ISection>();
+            connections = new System.Collections.Generic.Dictionary<MapCoordinate, SectionConnection>();
             pieces = new System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, System.Collections.Generic.Dictionary<int, MapPiece>>>();
             mapArgs = args;
             this.startRoom = startRoom;
@@ -233,9 +236,7 @@ namespace Munglo.DungeonGenerator
             sections[p1.SectionIndex].AddOpening(p1.Coord, dir, false, overrideLocked);
             sections[p2.SectionIndex].AddOpening(p2.Coord, Dungeon.Flip(dir), false, overrideLocked);
 
-            sections[p2.SectionIndex].Connections.Add(
-                new SectionConnection(p1.SectionIndex, p2.SectionIndex, Dungeon.Flip(dir), p2.Coord)
-                            );
+            sections[p2.SectionIndex].Connections.Add(p1.Coord);
         }
         public MapPiece GetNextPieceOver(MapPiece startPiece, MAPDIRECTION orientation)
         {

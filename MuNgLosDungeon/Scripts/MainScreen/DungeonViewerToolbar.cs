@@ -66,7 +66,7 @@ namespace Munglo.DungeonGenerator.UI
             pop.SetItemChecked(1, Profile.settings.showWalls);
             pop.SetItemChecked(2, Profile.settings.showCeilings);
             pop.SetItemChecked(3, Profile.settings.showProps);
-            pop.SetItemChecked(4, Profile.settings.showDebug);
+            pop.SetItemChecked(4, Profile.settings.pathingPass);
             pop.SetItemChecked(5, Profile.settings.showArches);
         }
 
@@ -157,7 +157,7 @@ namespace Munglo.DungeonGenerator.UI
                     ResourceSaver.Save(Profile.settings);
                     break;
                 case 4:
-                    Profile.settings.showDebug = pop.IsItemChecked(index);
+                    Profile.settings.pathingPass = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
                     screen.SetDebugLayer(Profile.showDebugLayer);
 

@@ -25,6 +25,8 @@ namespace Munglo.DungeonGenerator.UI
 
         internal EventHandler OnMainScreenUIUpdate;
         internal EventHandler<string> OnNotificationPushed;
+        internal EventHandler<Pathfinding.PathData> OnPathDataPushed;
+
     
         internal Selection.Manager Selection => selection;
         public MapData Map { get => dunVis.Map; }
@@ -113,6 +115,9 @@ namespace Munglo.DungeonGenerator.UI
         internal void SetDebugLayer(bool state)
         {
             dunVis.SetDebugLayer(state);
+        }
+        internal void RaiseOnPathDataPushed(Pathfinding.PathData pathData){
+            OnPathDataPushed?.Invoke(this, pathData);
         }
     }// EOF CLASS
 }

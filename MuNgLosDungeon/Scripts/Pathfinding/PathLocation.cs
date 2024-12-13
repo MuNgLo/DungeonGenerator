@@ -20,6 +20,12 @@ namespace Munglo.DungeonGenerator.Pathfinding
 
         public PathLocation(MapPiece mapPiece)
         {
+            if(mapPiece is null){
+                Godot.GD.PushError($"PathLocation::Constructor() mapPiece was NULL!!");
+                //System.Diagnostics.Debug.Assert(false);
+                Godot.GD.Print(System.Environment.StackTrace);
+                return;
+            }
             isWalkable = mapPiece.hasFloor;
             coord = mapPiece.Coord;
         }
@@ -62,7 +68,6 @@ namespace Munglo.DungeonGenerator.Pathfinding
                     Neighbors[coord + MapCoordinate.SouthWest] = double.MaxValue;
                 }
             }
-            Godot.GD.Print($"PathLocation::SetNeighbours() added [{Neighbors.Keys.Count}]");
         }
     }// EOF CLASS
 }

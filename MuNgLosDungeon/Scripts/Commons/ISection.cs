@@ -42,11 +42,6 @@ namespace Munglo.DungeonGenerator
         public void Build();
 
         /// <summary>
-        /// Generate the connections between sections
-        /// </summary>
-        public void BuildConnections();
-
-        /// <summary>
         /// Write all the section's pieces to the mapData instance
         /// </summary>
         public void Save();
@@ -70,7 +65,7 @@ namespace Munglo.DungeonGenerator
         /// <exception cref="NotImplementedException"></exception>
         public bool IsInside(Vector3 worldPosition);
 
-        public List<SectionConnection> Connections { get; }
+        public List<MapCoordinate> Connections { get; }
 
         public List<SectionProp> Props { get; }
         public MapPiece GetRandomPiece();
@@ -90,7 +85,7 @@ namespace Munglo.DungeonGenerator
         public void SealSection(int wallVariant = 0, int floorVariant = 0, int ceilingVariant = 0);
 
 
-        public void AddConnectionAsChild(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
+        //public void AddConnectionAsChild(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
         public void AddConnectionAsParent(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
         /// <summary>
         /// Assign placers to the section. If placersOverride is valid it will override the SectionResource placers collection

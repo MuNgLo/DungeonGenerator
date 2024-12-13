@@ -6,6 +6,11 @@ namespace Munglo.DungeonGenerator.Pathfinding;
 
 internal static class Pathing
 {
+    internal static bool FindSectionPath(int sectionIndex1, int sectionIndex2, out List<int> sectionPath)
+    {
+        sectionPath = new List<int>(){sectionIndex1, sectionIndex2};
+        return true;
+    }
     internal static bool FindSectionInnerPath(ISection section, MapCoordinate from, MapCoordinate to, out List<PathLocation> path)
     {
         Map map = new Map(section);
@@ -15,8 +20,7 @@ internal static class Pathing
         PathLocation goal = new PathLocation(section.Pieces.Find(p => p.Coord == to));
         goal.SetNeighbours(map);
         path = AStar(start, goal, map);
-
-        return path.Count > 0;
+        return path is not null;
     }
     internal static List<PathLocation> AStar(PathLocation start, PathLocation goal, Map map)
     {
@@ -126,7 +130,7 @@ internal static class Pathing
             }
         }
 
-        return null; // No path found
+        return new List<PathLocation>(); // No path found
     }
 
 
@@ -260,4 +264,6 @@ internal static class Pathing
         int y = Math.Abs(cd.y);
         return x + y;
     }
+
+  
 }// EOF CLASS

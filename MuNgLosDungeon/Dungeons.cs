@@ -91,6 +91,7 @@ namespace Munglo.DungeonGenerator
                 RemoveControlFromContainer(CustomControlContainer.SpatialEditorMenu, testBTN);
             }
             RemoveControlFromBottomPanel(bscreen);
+            bscreen.QueueFree();
             GD.Print("Unloaded MuNgLo's Dungeon Plugin");
             subV.MouseEntered -= WhenMouseEnterMain;
             subV.MouseExited -= WhenMouseExitMain;

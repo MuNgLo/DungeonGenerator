@@ -36,8 +36,8 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         private protected string sectionName = string.Empty;
 
-        private protected List<SectionConnection> connections;
-        public List<SectionConnection> Connections => connections;
+        private protected List<MapCoordinate> connections;
+        public List<MapCoordinate> Connections => connections;
         public int ConnectionCount => connections.Count;
 
 
@@ -105,7 +105,7 @@ namespace Munglo.DungeonGenerator
             if (args.sectionDefinition is null) { GD.PushError("Section definition was NULL"); return; }
             
             pieces = new List<MapPiece>();
-            connections = new List<SectionConnection>();
+            connections = new List<MapCoordinate>();
             rng = new PRNGMarsenneTwister(args.Seed);
             props = new SectionProps(this, args.Seed);
             
@@ -367,18 +367,12 @@ namespace Munglo.DungeonGenerator
         }
         public void AddConnectionAsParent(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
         {
-            connections.Add(new SectionConnection(sectionIndex, otherSectionIndex, dir, coord));
-        }
-        public void AddConnectionAsChild(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
-        {
-            connections.Add(new SectionConnection(otherSectionIndex, sectionIndex, dir, coord));
-        }
-        public void BuildConnections()
-        {
-            for (int i = 0; i < connections.Count; i++)
-            {
-                 if(connections[i].ParentSection != sectionIndex) { continue; }
-                map.AddOpeningBetweenSections(connections[i], true);
+            MapCoordinate sectionKey = coord;
+            if(!connections.Exists(p=>p == coord)){
+                if(!map.Connections.ContainsKey(coord)){
+                    map.Connections[coord] = new SectionConnection(sectionIndex, otherSectionIndex, dir, coord);
+                }
+                connections.Add(coord);
             }
         }
 

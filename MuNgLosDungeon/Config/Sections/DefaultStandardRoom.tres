@@ -1,21 +1,6 @@
-[gd_resource type="Resource" script_class="SectionResource" load_steps=7 format=3 uid="uid://cpo4pr8osbhnk"]
+[gd_resource type="Resource" script_class="SectionResource" load_steps=2 format=3 uid="uid://cpo4pr8osbhnk"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/SectionResource.cs" id="1_jal31"]
-[ext_resource type="Resource" uid="uid://cw3p0voay7aav" path="res://addons/MuNgLosDungeon/Config/Placers/def_Proptable.tres" id="1_viim0"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PlacerEntryResource.cs" id="2_etqdo"]
-[ext_resource type="Resource" uid="uid://cbkcsslumic5w" path="res://addons/MuNgLosDungeon/Config/Placers/def_Bookshelf.tres" id="3_gykgi"]
-
-[sub_resource type="Resource" id="Resource_gj1lk"]
-script = ExtResource("2_etqdo")
-active = false
-count = 1
-placer = ExtResource("1_viim0")
-
-[sub_resource type="Resource" id="Resource_chgqg"]
-script = ExtResource("2_etqdo")
-active = true
-count = 1
-placer = ExtResource("3_gykgi")
 
 [resource]
 script = ExtResource("1_jal31")
@@ -24,15 +9,15 @@ sectionType = "RoomSection"
 sectionStyle = ""
 defaultResponses = 15
 sizeWidthMin = 3
-sizeWidthMax = 4
+sizeWidthMax = 5
 sizeDepthMin = 3
-sizeDepthMax = 11
+sizeDepthMax = 5
 nbFloorsMin = 1
 nbFloorsMax = 1
 debug = false
 nbDoorsPerFloorMin = 0
 nbDoorsPerFloorMax = 0
-placers = [SubResource("Resource_gj1lk"), SubResource("Resource_chgqg")]
+placers = []
 centerSpiralStairs = false
 firstPieceDoor = false
 backDoorChance = 30

@@ -27,6 +27,6 @@ internal class Map
         {
             node.SetNeighbours(this);
         }
-        Godot.GD.Print($"Map::Map() Nodes.Count[{Nodes.Count}]");
+        //Godot.GD.Print($"Map::Map() Nodes.Count[{Nodes.Count}]");
     }
 }

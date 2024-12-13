@@ -34,9 +34,6 @@ namespace Munglo.DungeonGenerator
         private Node3D unsortedContainer;
         private BiomeResource biome;
 
-        public override void _EnterTree()
-        {
-        }
         public void BuildDungeon(GenerationSettingsResource settings, BiomeResource biome, SectionResource startRoom, SectionResource standardRoom)
         {
             genSettings = settings;

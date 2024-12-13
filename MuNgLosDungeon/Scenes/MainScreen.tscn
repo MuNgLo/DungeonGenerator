@@ -139,7 +139,7 @@ popup/item_3/text = "Props"
 popup/item_3/checkable = 1
 popup/item_3/checked = true
 popup/item_3/id = 3
-popup/item_4/text = "Debug"
+popup/item_4/text = "PathingPass"
 popup/item_4/checkable = 1
 popup/item_4/checked = true
 popup/item_4/id = 4
@@ -275,7 +275,7 @@ stretch_mode = 5
 [node name="EndVisibleFloor" type="Label" parent="FloorOptions/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("29_j2fmg")
-text = "4"
+text = "2"
 
 [node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
 custom_minimum_size = Vector2(17.46, 0)

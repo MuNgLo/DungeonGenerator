@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://fcw44l4urw5r"]
+[gd_scene load_steps=3 format=3 uid="uid://fcw44l4urw5r"]
 
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/BottomScreen/BottomScreen.cs" id="1_qthb6"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/BottomScreen/PathInfo.cs" id="2_sxobj"]
 
 [node name="dungeonBottom" type="Control" node_paths=PackedStringArray("sectionInfo", "mapPieceInfo")]
 layout_mode = 3
@@ -20,9 +21,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 1
 
 [node name="Selection" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -45,10 +47,42 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "MapPieceInfo"
 
-[node name="Pathing" type="Control" parent="TabContainer"]
-visible = false
+[node name="Pathing" type="Control" parent="TabContainer" node_paths=PackedStringArray("BS", "pathDebugInfo")]
 layout_mode = 2
+script = ExtResource("2_sxobj")
+BS = NodePath("../..")
+pathDebugInfo = NodePath("MarginContainer/FlowContainer/GridContainer/PathDebugInfo")
 metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Pathing"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="FlowContainer" type="FlowContainer" parent="TabContainer/Pathing/MarginContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="TabContainer/Pathing/MarginContainer/FlowContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TabContainer/Pathing/MarginContainer/FlowContainer/GridContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Path information"
+fit_content = true
+
+[node name="PathDebugInfo" type="RichTextLabel" parent="TabContainer/Pathing/MarginContainer/FlowContainer/GridContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Path information"
+fit_content = true
 
 [node name="DungeonInfo" type="Control" parent="TabContainer"]
 visible = false

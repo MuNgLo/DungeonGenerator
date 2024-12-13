@@ -7,6 +7,7 @@ using static System.Collections.Specialized.BitVector32;
 using Munglo.DungeonGenerator.Sections;
 using System.Reflection;
 using Godot.Collections;
+using Munglo.DungeonGenerator.Pathfinding;
 
 namespace Munglo.DungeonGenerator
 {
@@ -97,14 +98,61 @@ namespace Munglo.DungeonGenerator
             }
             LatePassRooms();
             RemoveAllEmpty();
+
+
+            // Do pathing for all connections
+            if (Args.pathingPass)
+            {
+                DoPathingPass();
+            }
         }// EOF GenerateMap()
+
+        private void DoPathingPass()
+        {
+            // Process all connections
+            foreach (KeyValuePair<MapCoordinate, SectionConnection> connection in map.Connections)
+            {
+                List<SectionConnection> others = new List<SectionConnection>();
+                // Process Connection neighbours for parent side section
+                ISection parentSection = map.Sections[connection.Value.ParentSection];
+                for (int i = 0; i < parentSection.Connections.Count; i++)
+                {
+                    // the connection neighbour to process
+                    SectionConnection neighbourConnection = map.Connections[parentSection.Connections[i]];
+                    // skip if it is the same 
+                    if (connection.Key == neighbourConnection.Coord) { continue; }
+                    if (!others.Exists(p => p.Coord == neighbourConnection.Coord))
+                    {
+                        others.Add(neighbourConnection);
+                    }
+                }
+                // Process neighbours
+                for (int i = 0; i < others.Count; i++)
+                {
+                    if (Pathing.FindSectionInnerPath(
+                        parentSection,
+                        connection.Value.GetSide(parentSection.SectionIndex),
+                        others[i].GetSide(parentSection.SectionIndex),
+                         out List<PathLocation> path))
+                    {
+                        //GD.Print($"MapBuilder::DoPathingPass() FindSectionInnerPath path.Count[{path.Count}]");
+                        connection.Value.Neighbors[others[i].Coord] = path.Count;
+                    }
+                }
+            }
+            //GD.Print("pathing Pass in builder!");
+            GD.Print(map.Connections.First().ToString());
+        }
 
         private void BuildSectionConnections()
         {
             for (int i = 0; i < map.Sections.Count; i++)
             {
                 map.Sections[i].PunchBackDoor();
-                map.Sections[i].BuildConnections();
+            }
+            foreach (KeyValuePair<MapCoordinate, SectionConnection> con in map.Connections)
+            {
+                map.AddOpeningBetweenSections(con.Value, true);
             }
         }
 
@@ -328,7 +376,7 @@ namespace Munglo.DungeonGenerator
             foreach (ISection room in map.Sections)
             {
                 if (room is not RoomSection) { continue; }
-                PlaceBridges(room);
+                //PlaceBridges(room);
             }
         }
 
