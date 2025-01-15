@@ -17,8 +17,8 @@ namespace Munglo.DungeonGenerator
         [Export] public BiomeEntry[] floors;
         [ExportCategory("Ceilings")]
         [Export] public BiomeEntry[] ceilings;
-        [ExportCategory("Props")]
-        [Export] public BiomeEntry[] props;
+        [ExportCategory("Extras")]
+        [Export] public BiomeEntry[] extras;
 
         private readonly string standardMeshPath = "res://addons/MuNgLosDungeon/Meshes/Standard/Standard_";
         private readonly string standardScenePath = "res://addons/MuNgLosDungeon/Scenes/Standard/";
@@ -30,7 +30,7 @@ namespace Munglo.DungeonGenerator
             if (entry is null) { if (walls.Where(p => p.key == key).Count() > 0) { entry = walls.Where(p => p.key == key).First(); } }
             if (entry is null) { if (floors.Where(p => p.key == key).Count() > 0) { entry = floors.Where(p => p.key == key).First(); } }
             if (entry is null) { if (ceilings.Where(p => p.key == key).Count() > 0) { entry = ceilings.Where(p => p.key == key).First(); } }
-            if (entry is null) { if (props.Where(p => p.key == key).Count() > 0) { entry = props.Where(p => p.key == key).First(); } }
+            if (entry is null) { if (extras.Where(p => p.key == key).Count() > 0) { entry = extras.Where(p => p.key == key).First(); } }
             if (entry is null) { return false; }
             if (entry.resources.Length < 1)
             {
@@ -66,10 +66,7 @@ namespace Munglo.DungeonGenerator
                 PIECEKEYS.ERROR,
                 PIECEKEYS.FAULTY,
                 PIECEKEYS.WFGREEN,
-                PIECEKEYS.WFRED,
-                PIECEKEYS.DEBUGPATHEND,
-                PIECEKEYS.DEBUGBRIDGE,
-                PIECEKEYS.DEBUGSTAIR
+                PIECEKEYS.WFRED
             };
             string[] defDebugEntries = new string[]
             {
@@ -77,10 +74,7 @@ namespace Munglo.DungeonGenerator
                 standardMeshPath + "dbError.res",
                 standardMeshPath + "dbFaulty.res",
                 standardMeshPath + "dbWallFlagGreen.res",
-                standardMeshPath + "dbWallFlagRed.res",
-                standardMeshPath + "dbEnd.res",
-                standardMeshPath + "dbBridge.res",
-                standardMeshPath + "dbStair.res"
+                standardMeshPath + "dbWallFlagRed.res"
             };
             debug = new BiomeEntry[defDebugKeys.Length];
             SetupArray(ref debug, defDebugKeys, defDebugEntries);
@@ -101,50 +95,52 @@ namespace Munglo.DungeonGenerator
             };
             walls = new BiomeEntry[defWallsKeys.Length];
             SetupArray(ref walls, defWallsKeys, defWallsEntries);
-            //floors
+            
+            // Floors
             PIECEKEYS[] defFloorsKeys = new PIECEKEYS[]
               {
                     PIECEKEYS.F
               };
             string[][] defFloorsEntries = new string[][]
             {
-                new string[] { standardScenePath + "def_floor01.tscn", standardScenePath + "def_floor02.tscn", standardScenePath + "def_floor03.tscn" }
+                new string[]{ 
+                standardScenePath + "def_floor01.tscn",
+                 standardScenePath + "def_floor02.tscn",
+                  standardScenePath + "def_floor03.tscn", 
+                   standardScenePath + "def_hallwayfloor01.tscn", 
+                   standardScenePath + "def_hallwayfloor02.tscn"
+                }
             };
             floors = new BiomeEntry[defFloorsKeys.Length];
             SetupArray(ref floors, defFloorsKeys, defFloorsEntries);
-            //ceilings
+            
+            // Ceilings
             PIECEKEYS[] defCeilingsKeys = new PIECEKEYS[]
               {
                     PIECEKEYS.C
               };
-            string[] defCeilingsEntries = new string[]
+            string[][] defCeilingsEntries = new string[][]
             {
-                standardScenePath + "def_ceiling.tscn"
+                new string[]{ standardScenePath + "def_ceiling.tscn" }
             };
             ceilings = new BiomeEntry[defCeilingsKeys.Length];
             SetupArray(ref ceilings, defCeilingsKeys, defCeilingsEntries);
-            //prop
-            PIECEKEYS[] defPropsKeys = new PIECEKEYS[]
-              {
-                    PIECEKEYS.AS,
-                    PIECEKEYS.ASIC,
-                    PIECEKEYS.BRIDGE,
-                    PIECEKEYS.STAIRPLATFORM,
-                    PIECEKEYS.STAIR
-              };
-            string[][] defPropsEntries = new string[][]
-            {
-                new string[]{ standardScenePath + "def_arch.tscn" },
-                new string[]{ standardScenePath + "def_archcorner.tscn" },
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_bridgesection.tscn", "res://addons/MuNgLosDungeon/Scenes/def_bridgesection02.tscn",
-                    "res://addons/MuNgLosDungeon/Scenes/def_bridgefoundation.tscn", 
-                    "res://addons/MuNgLosDungeon/Scenes/def_bridgerail.tscn", "res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn", 
-                    "res://addons/MuNgLosDungeon/Scenes/def_bridgepost.tscn", "res://addons/MuNgLosDungeon/Scenes/def_balcony.tscn"},
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_stairsplatform.tscn" },
-                new string[]{ "res://addons/MuNgLosDungeon/Scenes/def_stairs01.tscn", "res://addons/MuNgLosDungeon/Scenes/def_stairs02.tscn" }
+            
+            // Extras
+            PIECEKEYS[] defExtrakeys = new PIECEKEYS[] 
+            { 
+                PIECEKEYS.ARCH,
             };
-            props = new BiomeEntry[defPropsKeys.Length];
-            SetupArray(ref props, defPropsKeys, defPropsEntries);
+            string[][] defExtrasEntries = new string[][]
+            {
+                new string[]{ 
+                    standardScenePath + "def_arch.tscn", 
+                    standardScenePath + "def_archcorner.tscn", 
+                    standardScenePath + "def_hallwayarch01.tscn", 
+                    }
+            };
+            extras = new BiomeEntry[defExtrakeys.Length];
+            SetupArray(ref extras, defExtrakeys, defExtrasEntries);
         }
 
        

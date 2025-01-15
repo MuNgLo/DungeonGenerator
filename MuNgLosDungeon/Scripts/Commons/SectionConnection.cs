@@ -2,30 +2,34 @@ using System;
 using System.Collections.Generic;
 
 namespace Munglo.DungeonGenerator;
+/// <summary>
+/// Represents onse side of a dooropeninng you could say.
+/// It defines the location in a section that is connected to another section
+/// </summary>
 public class SectionConnection
 {
-    public readonly int ParentSection;
-    public readonly int ChildSection;
-    public readonly MapCoordinate Coord;
+    public readonly int sectionID;
+    public readonly int connectionID;
+    public int connectedToConnectionID;
+    public MapCoordinate coord;
+    private List<ConnectedLocation> connectedLocations;
+    internal List<ConnectedLocation> ConnectedLocations => connectedLocations;
+    
     public readonly MAPDIRECTION Dir;
-    /// <summary>
-    /// Key: neighbor's MapCoordinate, Value: distance
-    /// </summary>
-    public Dictionary<MapCoordinate, double> Neighbors;
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="p">Parent</param>
-    /// <param name="c">Child</param>
-    /// <param name="dir"></param>
-    /// <param name="coord"></param>
-    public SectionConnection(int p, int c, MAPDIRECTION dir, MapCoordinate coord)
+
+    public SectionConnection(int id, MapCoordinate mapLocation, int inSection, MAPDIRECTION dir)
     {
-        ParentSection = p;
-        ChildSection = c;
-        Coord = coord;
+        connectedLocations = new();
+        coord = mapLocation;
+        connectionID = id;
         Dir = dir;
-        Neighbors = new Dictionary<MapCoordinate, double>();
+        sectionID = inSection;
+        connectedToConnectionID = -1;
+    }
+    public void Add(int connectionID, MapCoordinate location, double cost){
+        if(!connectedLocations.Exists(p=>p.connectionID == connectionID)){
+            connectedLocations.Add(new ConnectedLocation(sectionID, connectionID, location, cost));
+        }
     }
     /// <summary>
     /// Returns the side of the connection that is in hte given sectionID
@@ -34,16 +38,21 @@ public class SectionConnection
     /// <returns></returns>
     internal MapCoordinate GetSide(int sectionID)
     {
-        return ParentSection == sectionID ? Coord : Coord + Dir;
+        return connectedLocations.Find(p=>p.section == sectionID).coord;
+    }
+  
+    public override string ToString(){
+        string text = $"uniqueID[{connectionID}] in [S{sectionID}] to [C{connectedToConnectionID}]\n";
+        text += string.Join(' ', connectedLocations);
+        return text;
     }
 
-    public override string ToString(){
-        string text = $"\n::::SectionConnection:::: {Coord} \n";
-        foreach (KeyValuePair<MapCoordinate, double> item in Neighbors)
-        {
-            text += $"Coord{item.Key} cost [{item.Value}]\n";
+    internal double GetCost(MapCoordinate coord)
+    {
+        if(ConnectedLocations.Exists(p=>p.coord == coord)){
+            return ConnectedLocations.Find(p=>p.coord == coord).cost;
         }
-        text += "***********************************";
-        return text;
+        Godot.GD.PushError($"SectionConnection::GetCost({coord}) coord was not found as connectedLocation. Returning max cost!");
+        return double.MaxValue;
     }
 }

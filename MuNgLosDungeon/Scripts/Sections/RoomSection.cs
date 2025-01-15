@@ -11,7 +11,7 @@ namespace Munglo.DungeonGenerator.Sections
     public class RoomSection : SectionBase
     {
         public RoomSection(SectionbBuildArguments args) : base(args) { }
-   
+
         #region ISection methods
         public override void Build()
         {
@@ -20,11 +20,19 @@ namespace Munglo.DungeonGenerator.Sections
             start.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = 0 };
             pieces.Add(start);
             start.Save();
-            
+
             MapPiece parent = map.GetExistingPiece(coord + Dungeon.Flip(orientation));
-            if(parent is not null)
+            if (parent is not null)
             {
-                AddConnectionAsParent(parent.SectionIndex, Dungeon.Flip(orientation), start.Coord, true);
+                //AddConnection(Dungeon.Flip(orientation), map.Sections[parent.SectionIndex], start.Coord, parent.Coord, true);
+
+                ISection parentSection = map.Sections[parent.SectionIndex];
+                int c1 = AddConnection(Dungeon.Flip(orientation), parentSection, start.Coord, parent.Coord, true);
+                int c2 = parentSection.AddConnection(orientation, this, parent.Coord, start.Coord, true);
+                map.Connections[c1].connectedToConnectionID = c2;
+                map.Connections[c2].connectedToConnectionID = c1;
+
+
             }
 
             //ProcGenMKIII.Log("RoomBase", $"BuildRoom", $"Loc{coord}  Size({sizeX}.{sizeY}.{sizeZ}) minX({minX}) maxX({maxX})");
@@ -49,94 +57,7 @@ namespace Munglo.DungeonGenerator.Sections
                 pieces.First().AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(pieces.First().Orientation) }, true);
                 pieces.First().Neighbour(Dungeon.Flip(pieces.First().Orientation), true).AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = pieces.First().Orientation }, true);
             }
-
-            if (pieces.Count < 10)
-            {
-                foreach (MapPiece piece in pieces)
-                {
-                    if (piece.hasFloor)
-                    {
-                        piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = piece.Orientation, variantID = 1 };
-                    }
-                    if(piece.WallKey(Dungeon.Flip(piece.Orientation)).key == PIECEKEYS.WD)
-                    {
-                        piece.AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = Dungeon.Flip(piece.Orientation), variantID = 1 }, true);
-                    }
-                }
-            }
-            else
-            {
-                // Roll cracked floor
-                int crackedCount = pieces.Count / 20;
-                for (int i = 0; i < crackedCount + 1; i++)
-                {
-                    if (rng.Next(100) < 20)
-                    {
-                        MapPiece rp = GetRandomFloor();
-                        rp.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = rp.Orientation, variantID = 2 };
-                    }
-                }
-            }
-
-            if(pieces.Count == 1)
-            {
-                // One tile room so add alkov on opposite wall
-                //pieces[0].AssignWall(new KeyData() { key= PIECEKEYS.W, dir = orientation, variantID = 2 }, true);
-            }
-            else
-            {
-                // roll chance for alkov
-                /*if(rng.Next(100) < 40)
-                {
-                    List<MapPiece> candidates = GetWallPieces(0, true);
-                    if(candidates.Count > 0)
-                    {
-                        breaker = 10;
-                        while (breaker > 0)
-                        {
-                            breaker--;
-                            if(candidates.Count < 1) { break; }
-                            MapPiece pick = candidates[rng.Next(candidates.Count)];
-                            if(pick.WallKey(pick.OutsideWallDirection()).key == PIECEKEYS.W)
-                            {
-                                pick.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = pick.OutsideWallDirection(), variantID = 2 }, true);
-                                break;
-                            }
-                            candidates.Remove(pick);
-                        }
-                    }
-                }*/
-            }
-            
-            // If debug Run Debug method
-            if(sectionDefinition.debug)
-            {
-                AddDebugThings();
-            }
-        }
-
-        private void AddDebugThings()
-        {
-            //GD.Print($"GOAL! max[{roomDef.nbDoorsPerFloorMax}] min[{roomDef.nbDoorsPerFloorMin}]  asd");
-            // Doors
-            if (sectionDefinition.nbDoorsPerFloorMax > 0)
-            {
-                if (sectionDefinition.nbDoorsPerFloorMin > sectionDefinition.nbDoorsPerFloorMax) { sectionDefinition.nbDoorsPerFloorMin = sectionDefinition.nbDoorsPerFloorMax; }
-                for (int i = 0; i < sizeY; i++)
-                {
-                    int doorCount = sectionDefinition.nbDoorsPerFloorMin == sectionDefinition.nbDoorsPerFloorMax ? sectionDefinition.nbDoorsPerFloorMax : rng.Next(sectionDefinition.nbDoorsPerFloorMin, sectionDefinition.nbDoorsPerFloorMax);
-                    List<MapPiece> candidates = GetWallPieces(i);
-                    if (candidates.Count < 1) { continue; }
-                    int spread = candidates.Count / Math.Min(candidates.Count, doorCount);
-                    for (int d = 1; d < doorCount + 1; d++)
-                    {
-                        int index = rng.Next(spread * (d - 1), spread * d);
-                        if (index >= candidates.Count) { break; }
-                        MapPiece loc = candidates[index];
-                        loc.AssignWall(new KeyData() { key = PIECEKEYS.WD, dir = candidates[index].OutsideWallDirection(), variantID = 0 }, true);
-                    }
-                }
-            }
+            FitSmallArches();
         }
 
         private void ProcessPiece(MapPiece rp)
@@ -161,7 +82,7 @@ namespace Munglo.DungeonGenerator.Sections
                         )
                     {
                         // Not bottomfloor so have to have same sectionindex underneath
-                        if(nb.Coord.y > MinY && !pieces.Exists(p => p.Coord == nb.Coord + MAPDIRECTION.DOWN))
+                        if (nb.Coord.y > MinY && !pieces.Exists(p => p.Coord == nb.Coord + MAPDIRECTION.DOWN))
                         {
                             // blocked by piece no part of room so wall it
                             //rp.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = processingDirection }, false);
@@ -185,7 +106,7 @@ namespace Munglo.DungeonGenerator.Sections
                     }
                     else
                     {
-                        if(rp.Coord + MAPDIRECTION.UP == nb.Coord)
+                        if (rp.Coord + MAPDIRECTION.UP == nb.Coord)
                         {
                             //rp.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = processingDirection };
                         }
@@ -220,7 +141,7 @@ namespace Munglo.DungeonGenerator.Sections
                 pick = pieces[rng.Next(pieces.Count - 1) + 1];
             }
             //ProcGenMKIII.Log("RoomBase", "AddPropOnRandomTile", $"Adding [{keyData.key}] to [{pick}] in room[{roomIndex}]");
-            pick.AddProp(keyData);
+            pick.AddExtra(keyData);
             return true;
         }
         public override void PunchBackDoor()
@@ -251,11 +172,11 @@ namespace Munglo.DungeonGenerator.Sections
 
                 if (nb.SectionIndex != sectionIndex)
                 {
-                    AddConnectionAsParent(nb.SectionIndex, dir, pick.Coord, true);
+                    AddConnection(dir, map.Sections[nb.SectionIndex], pick.Coord, nb.Coord, true);
                     return;
                 }
 
-         
+
             }
         }
         #endregion

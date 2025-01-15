@@ -26,5 +26,6 @@ noise = SubResource("FastNoiseLite_papvm")
 albedo_color = Color(0.117647, 0.117647, 0.176471, 1)
 albedo_texture = SubResource("NoiseTexture2D_h3ne8")
 roughness_texture = SubResource("NoiseTexture2D_u441k")
+uv1_scale = Vector3(0.15, 0.15, 0.15)
 uv1_triplanar = true
 uv1_world_triplanar = true

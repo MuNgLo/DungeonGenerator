@@ -86,6 +86,9 @@ namespace Munglo.DungeonGenerator
         internal KeyData WallKeySouth { get => wallkeys[MAPDIRECTION.SOUTH]; private set => wallkeys[MAPDIRECTION.SOUTH] = value; }
         internal KeyData WallKeyWest { get => wallkeys[MAPDIRECTION.WEST]; private set => wallkeys[MAPDIRECTION.WEST] = value; }
 
+        internal List<KeyData> extras;
+        internal List<KeyData> Extras => extras;
+
         /// <summary>
         /// Debug meshes
         /// </summary>
@@ -125,6 +128,7 @@ namespace Munglo.DungeonGenerator
             state = s;
             orientation = dir;
             walls = new WALLS();
+            extras = new List<KeyData>();
         }
         public MapPiece(MapData mapData, MapCoordinate coordinates)
         {
@@ -132,6 +136,7 @@ namespace Munglo.DungeonGenerator
             coord = coordinates;
             state = MAPPIECESTATE.UNUSED;
             walls = new WALLS();
+            extras = new List<KeyData>();
         }
         public MapPiece(MapData mapData)
         {
@@ -139,6 +144,7 @@ namespace Munglo.DungeonGenerator
             coord = MapCoordinate.Down * 10;
             state = MAPPIECESTATE.ERROR;
             walls = new WALLS();
+            extras = new List<KeyData>();
         }
         #endregion
 
@@ -202,12 +208,13 @@ namespace Munglo.DungeonGenerator
         }
   
         /// <summary>
-        /// Removes all mathching keys from props. Then add one
+        /// Removes all matching key && dir from the extra keys. Then add one
         /// </summary>
         /// <param name="kData"></param>
-        internal void AddProp(KeyData kData)
+        internal void AddExtra(KeyData kData)
         {
-            Section.AddProp(new SectionProp(kData, (Vector3I)Dungeon.GlobalPosition(this)));
+            extras.RemoveAll(p=>p.key == kData.key && p.dir == kData.dir);
+            extras.Add(kData);
         }
         /// <summary>
         /// Removes all mathching keys from props. Then add one
@@ -276,21 +283,20 @@ namespace Munglo.DungeonGenerator
         /// Returns the neighbouring piece to the right relative to the orientation
         /// </summary>
         /// <returns></returns>
-        public MapPiece NeighbourRight()
+        public MapPiece NeighbourRight(bool createIfNeeded)
         {
-            return Neighbour(Dungeon.TwistRight(orientation), true);
+            return Neighbour(Dungeon.TwistRight(orientation), createIfNeeded);
         }
         /// <summary>
         /// Returns the neighbouring piece to the left relative to the orientation
         /// </summary>
         /// <returns></returns>
-        public MapPiece NeighbourLeft()
+        public MapPiece NeighbourLeft(bool createIfNeeded)
         {
-            return Neighbour(Dungeon.TwistLeft(orientation), true);
+            return Neighbour(Dungeon.TwistLeft(orientation), createIfNeeded);
         }
         /// <summary>
         /// Returns the neighbouring piece in direction
-        /// Remember that this will never return NULL.
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>

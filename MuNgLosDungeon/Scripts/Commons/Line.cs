@@ -9,6 +9,7 @@ namespace Munglo.DungeonGenerator
     /// </summary>
     internal class Line
     {
+        private MapData map;
         private List<MapPiece> steps;
         private bool isBlocked = false;
         internal int Count => steps.Count;
@@ -17,8 +18,9 @@ namespace Munglo.DungeonGenerator
         private protected readonly ISection section;
         private int SectionIndex => section.SectionIndex;
 
-        internal Line(ISection section, MapPiece startPiece, PRNGMarsenneTwister rng)
+        internal Line(MapData map, ISection section, MapPiece startPiece, PRNGMarsenneTwister rng)
         {
+            this.map = map;
             this.section = section;
             steps = new List<MapPiece>();
             steps.Add(startPiece);
@@ -45,75 +47,6 @@ namespace Munglo.DungeonGenerator
                 }
             }
         }
-        
-        internal void AddTransitionDoors(bool mainLine)
-        {
-            foreach (MapPiece step in steps)
-            {
-                // back check
-                if(
-                    step.Neighbour(Dungeon.Flip(step.Orientation), true).isBridge != step.isBridge
-                    ||
-                    step.Neighbour(Dungeon.Flip(step.Orientation), true).SectionIndex != step.SectionIndex
-                    )
-                {
-                    step.AssignWall(new KeyData() { key = mainLine ? PIECEKEYS.WD : PIECEKEYS.W, dir = Dungeon.Flip(step.Orientation) }, true);
-                    step.Neighbour(Dungeon.Flip(step.Orientation), true).AssignWall(new KeyData() { key = mainLine ? PIECEKEYS.WD : PIECEKEYS.W, dir = step.Orientation }, true);
-                }
-            }
-        }
-        
-
-        internal void AddWallsLeft()
-        {
-            foreach (MapPiece step in steps)
-            {
-                if (step.SectionIndex < 1)
-                {
-                    if (step.WallKey(Dungeon.TwistLeft(step.Orientation)).key != PIECEKEYS.OCCUPIED)
-                    {
-                        step.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = Dungeon.TwistLeft(step.Orientation), variantID = 1 }, false);
-                    }
-                    else
-                    {
-                        // Revert occupied set from turns back to none
-                        step.AssignWall(new KeyData() { key = PIECEKEYS.NONE, dir = Dungeon.TwistLeft(step.Orientation) }, false);
-                    }
-                }
-            }
-        }
-        internal void AddWallsRight()
-        {
-            foreach (MapPiece step in steps)
-            {
-                if (step.SectionIndex < 1)
-                {
-                    if (step.WallKey(Dungeon.TwistRight(step.Orientation)).key != PIECEKEYS.OCCUPIED)
-                    {
-                        step.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = Dungeon.TwistRight(step.Orientation), variantID = 1 }, false);
-                    }
-                    else
-                    {
-                        // Revert occupied set from turns back to none
-                        step.AssignWall(new KeyData() { key = PIECEKEYS.NONE, dir = Dungeon.TwistRight(step.Orientation) }, false);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// removes steps in line from end
-        /// </summary>
-        /// <param name="amount"></param>
-        internal void RemoveFromEnd(int amount)
-        {
-            for(int i = 0; i < amount; i++)
-            {
-                if(steps.Count > 1)
-                {
-                    steps.RemoveAt(steps.Count - 1);
-                }
-            }
-        }
 
         internal void Walk(int maxSteps, bool mainline)
         {
@@ -124,41 +57,87 @@ namespace Munglo.DungeonGenerator
         internal void WalkNormal(int maxSteps, bool mainline)
         {
             MapPiece nextStep = Last.Neighbour(Last.Orientation, true);
-            if (nextStep == null) { GD.PrintErr($"Line", "WalkNormal", $"steps.Count[{steps.Count}] nextStep is NULL[{nextStep == null}]"); }
 
-            if (nextStep.State != MAPPIECESTATE.UNUSED && nextStep.SectionIndex < 0)  
+            if (nextStep.SectionIndex >= 0)
             {
-                isBlocked= true;
-                return;
-            }
-            else if(nextStep.SectionIndex >= 0 && nextStep.SectionIndex != SectionIndex)
-            {
-                // First step into room
-                if (nextStep.Section.BridgeAllowed && maxSteps > steps.Count)
+                if (nextStep.SectionIndex != Last.SectionIndex)
                 {
-                    if (mainline)
+                    // First step into other section
+                    if (nextStep.Section.BridgeAllowed && maxSteps > steps.Count)
                     {
-                        section.AddConnectionAsParent(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
-                        nextStep.isBridge = true;
-                        nextStep.Orientation = Last.Orientation;
-                        nextStep.State = MAPPIECESTATE.PENDING;
-                        steps.Add(nextStep);
+                        if (mainline)
+                        {
+                            ISection nextSection = map.Sections[nextStep.SectionIndex];
+                            // WORKZ
+                            int c1 = section.AddConnection(Last.Orientation, nextSection, Last.Coord, nextStep.Coord, true);
+                            int c2 = nextSection.AddConnection(Dungeon.Flip(Last.Orientation), section, nextStep.Coord, Last.Coord, true);
+                            map.Connections[c1].connectedToConnectionID = c2;
+                            map.Connections[c2].connectedToConnectionID = c1;
+
+                            // Rightside special connection
+                            MapPiece nextStepRightNB = nextStep.Neighbour(Dungeon.TwistRight(Last.Orientation), false);
+                            if (nextStepRightNB is not null && nextStepRightNB.SectionIndex == nextSection.SectionIndex && !nextStepRightNB.HasWall(Dungeon.TwistLeft(Last.Orientation)))
+                            {
+                                int cR1 = section.AddConnection(Dungeon.TwistRight(Last.Orientation), map.Sections[nextStepRightNB.SectionIndex], nextStep.Coord, nextStepRightNB.Coord, true);
+                                int cR2 = map.Sections[nextStepRightNB.SectionIndex].AddConnection(Dungeon.TwistLeft(Last.Orientation), section, nextStepRightNB.Coord, nextStep.Coord, true);
+                                map.Connections[cR1].connectedToConnectionID = cR2;
+                                map.Connections[cR2].connectedToConnectionID = cR1;
+                            }
+
+                            // Leftside special connection
+                            MapPiece nextStepLeftNB = nextStep.Neighbour(Dungeon.TwistLeft(Last.Orientation), false);
+                            if (nextStepLeftNB is not null && nextStepLeftNB.SectionIndex == nextSection.SectionIndex && !nextStepLeftNB.HasWall(Dungeon.TwistRight(Last.Orientation)))
+                            {
+                                int cL1 = section.AddConnection(
+                                    Dungeon.TwistLeft(Last.Orientation),
+                                    map.Sections[nextStepLeftNB.SectionIndex],
+                                    nextStep.Coord,
+                                    nextStepLeftNB.Coord,
+                                    false);
+                                int cL2 = map.Sections[nextStepLeftNB.SectionIndex].AddConnection(Dungeon.TwistRight(Last.Orientation), section, nextStepLeftNB.Coord, nextStep.Coord, true);
+                                map.Connections[cL1].connectedToConnectionID = cL2;
+                                map.Connections[cL2].connectedToConnectionID = cL1;
+                            }
+
+
+                            //nextStep.isBridge = true;
+                            nextStep.Orientation = Last.Orientation;
+                            nextStep.State = MAPPIECESTATE.PENDING;
+                            steps.Add(nextStep);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        isBlocked = true;
                         return;
                     }
                 }
-                else
+                else if (nextStep.SectionIndex == SectionIndex)
                 {
-                    isBlocked = true;
+                    steps.RemoveAll(p => p.Coord == nextStep.Coord);
+                    nextStep.Orientation = Last.Orientation;
+                    nextStep.State = MAPPIECESTATE.PENDING;
+                    steps.Add(nextStep);
                     return;
                 }
-            }
-            else if(nextStep.SectionIndex == SectionIndex)
-            {
-                steps.RemoveAll(p=>p.Coord == nextStep.Coord);
+                // Proceed to walk Line through other section
                 nextStep.Orientation = Last.Orientation;
                 nextStep.State = MAPPIECESTATE.PENDING;
                 steps.Add(nextStep);
                 return;
+            }
+            else if (Last.SectionIndex >= 0 && Last.SectionIndex != SectionIndex)
+            {
+                int nextSectionIndex = nextStep.SectionIndex;
+                if (nextSectionIndex < 0) { nextSectionIndex = SectionIndex; }
+                // WORKZ
+                int c1b = section.AddConnection(Dungeon.Flip(Last.Orientation), map.Sections[Last.SectionIndex], nextStep.Coord, Last.Coord, true);
+                int c2b = map.Sections[Last.SectionIndex].AddConnection(Last.Orientation, section, Last.Coord, nextStep.Coord, true);
+                map.Connections[c1b].connectedToConnectionID = c2b;
+                map.Connections[c2b].connectedToConnectionID = c1b;
+
+
             }
             nextStep.SectionIndex = SectionIndex;
             nextStep.Orientation = Last.Orientation;
@@ -178,7 +157,7 @@ namespace Munglo.DungeonGenerator
             if (nextStep.SectionIndex < 0)
             {
                 // Blank
-                section.AddConnectionAsParent(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
+                section.AddConnection(Last.Orientation, map.Sections[nextStep.SectionIndex], Last.Coord, nextStep.Coord, true);
                 nextStep.SectionIndex = SectionIndex;
                 nextStep.Orientation = Last.Orientation;
                 nextStep.State = MAPPIECESTATE.PENDING;
@@ -206,7 +185,7 @@ namespace Munglo.DungeonGenerator
                 }
                 else
                 {
-                    section.AddConnectionAsParent(nextStep.SectionIndex, Last.Orientation, Last.Coord, true);
+                    section.AddConnection(Last.Orientation, map.Sections[nextStep.SectionIndex], Last.Coord, nextStep.Coord, true);
                     nextStep.isBridge = true;
                     nextStep.Orientation = Last.Orientation;
                     nextStep.State = MAPPIECESTATE.PENDING;
@@ -217,10 +196,10 @@ namespace Munglo.DungeonGenerator
             }
         }
 
-        internal MapPiece[] GetTurners(int width, MAPDIRECTION dir, bool reversed=false)
+        internal MapPiece[] GetTurners(int width, MAPDIRECTION dir, bool reversed = false)
         {
             List<MapPiece> turners = new List<MapPiece>();
-            for (int i = steps.Count -1; i > steps.Count - 1 - width; i--)
+            for (int i = steps.Count - 1; i > steps.Count - 1 - width; i--)
             {
                 turners.Add(steps[i].Neighbour(dir, true));
             }
@@ -237,8 +216,9 @@ namespace Munglo.DungeonGenerator
         internal MapPiece GetRandomAlongPath(out MAPDIRECTION dir, bool leftside = true, bool rightside = true)
         {
             dir = MAPDIRECTION.ANY;
-            if(Count < 1) { 
-                return null; 
+            if (Count < 1)
+            {
+                return null;
             }
 
 
@@ -268,19 +248,32 @@ namespace Munglo.DungeonGenerator
                 dir = Dungeon.TwistRight(steps[pickIndex].Orientation);
                 return steps[pickIndex].Neighbour(dir, true);
             }
-            
+
             return null;
         }
 
         internal void TrimToLength(int length)
         {
-            while(Count > length)
+            while (Count > length)
             {
                 steps.Last().State = MAPPIECESTATE.UNUSED;
                 steps.RemoveAt(steps.Count - 1);
             }
         }
 
-     
+        internal void Remove(MapCoordinate coord)
+        {
+            steps.RemoveAll(p => p.Coord == coord);
+        }
+        internal void FilterBySectionID(int id)
+        {
+            steps.RemoveAll(p => p.SectionIndex == id);
+        }
+        internal void InsertAsFirst(MapPiece mapPiece)
+        {
+            List<MapPiece> newList = new() { mapPiece };
+            newList.AddRange(steps);
+            steps = newList;
+        }
     }// EOF CLASS
 }

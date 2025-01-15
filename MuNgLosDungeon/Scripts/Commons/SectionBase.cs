@@ -30,25 +30,29 @@ namespace Munglo.DungeonGenerator
         /// <summary>
         /// What type of section is this. Room, Corridor, Void, Pantry?
         /// </summary>
-        private protected string sectionStyle = string.Empty; 
+        private protected string sectionStyle = string.Empty;
         /// <summary>
         /// The section name. Might not be unique in the Dungeon
         /// </summary>
         private protected string sectionName = string.Empty;
 
-        private protected List<MapCoordinate> connections;
-        public List<MapCoordinate> Connections => connections;
+        private protected List<int> connections;
+        public List<int> Connections => connections;
         public int ConnectionCount => connections.Count;
 
 
         private protected List<MapPiece> pieces;
+        private protected List<MapCoordinate> extraPieces;
+
+
+
         private SectionProps props;
         internal SectionProps PropGrid => props;
         public List<SectionProp> Props => props.props;
 
         private protected MapCoordinate coord;
-        private protected int MinY => coord.y;
-        private protected int MaxY => coord.y + sizeY;
+        private protected int MinY => minY;
+        private protected int MaxY => maxY;
         public MapCoordinate Coord => coord;
 
 
@@ -75,6 +79,8 @@ namespace Munglo.DungeonGenerator
 
         private protected int minX = 0;
         private protected int maxX = 0;
+        private protected int minY = 0;
+        private protected int maxY = 0;
         private protected int minZ = 0;
         private protected int maxZ = 0;
         #endregion
@@ -89,26 +95,29 @@ namespace Munglo.DungeonGenerator
         public string SectionName => sectionName;
         public virtual int TileCount => Pieces.Count;
         public virtual List<MapPiece> Pieces => pieces;
+        public virtual List<MapCoordinate> ExtraPieces => extraPieces;
+
         public int PropCount => Props.Count;
 
         #endregion
 
-       
+
 
         public Node3D sectionContainer;
 
-        public Node3D SectionContainer { get => sectionContainer; set => sectionContainer = value; } 
+        public Node3D SectionContainer { get => sectionContainer; set => sectionContainer = value; }
 
 
-        public SectionBase(SectionbBuildArguments args, bool adjustWidthDepth=true)
+        public SectionBase(SectionbBuildArguments args, bool adjustWidthDepth = true)
         {
             if (args.sectionDefinition is null) { GD.PushError("Section definition was NULL"); return; }
-            
+
             pieces = new List<MapPiece>();
-            connections = new List<MapCoordinate>();
+            extraPieces = new List<MapCoordinate>();
+            connections = new List<int>();
             rng = new PRNGMarsenneTwister(args.Seed);
             props = new SectionProps(this, args.Seed);
-            
+
             map = args.map;
 
             sectionDefinition = args.sectionDefinition;
@@ -122,15 +131,15 @@ namespace Munglo.DungeonGenerator
             if (orientation == MAPDIRECTION.ANY) { orientation = (MAPDIRECTION)rng.Next(1, 5); }
 
             sectionDefinition.VerifyValues();
-            
+
             sizeX = rng.Next(sectionDefinition.sizeWidthMin, sectionDefinition.sizeWidthMax + 1);
             sizeZ = rng.Next(sectionDefinition.sizeDepthMin, sectionDefinition.sizeDepthMax + 1);
             sizeY = rng.Next(sectionDefinition.nbFloorsMin, sectionDefinition.nbFloorsMax + 1);
 
             if (adjustWidthDepth) { ResolveWidthDepth(); }
-            SetMinMaxCoord();
+            SetMinMaxCoord(coord);
 
-            if(args.sectionDefinition.placers != null)
+            if (args.sectionDefinition.placers != null)
             {
                 placers = args.sectionDefinition.placers;
             }
@@ -194,22 +203,41 @@ namespace Munglo.DungeonGenerator
         }
         /// <summary>
         /// Puts wall,floor and ceiling keys against other sections
+        /// Pass -1 to skip the category
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
         public virtual void SealSection(int wallVariant = 0, int floorVariant = 0, int ceilingVariant = 0)
         {
-            foreach (MapPiece piece in Pieces)
+            List<MapPiece> sectionPieces = Pieces;
+            foreach (MapPiece piece in sectionPieces)
             {
-                // Skip pieces not part of this section
-                if(piece.SectionIndex != sectionIndex) {  continue; }
-                // Floor
-                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.DOWN)) { piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = floorVariant }; }
-                // Ceiling
-                if (!Pieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.UP)) { piece.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = orientation, variantID = ceilingVariant }; }
-                // Walls
-                for (int i = 1; i < 5; i++)
+                // Floor if no section piece below it
+                if (!sectionPieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.DOWN) && floorVariant >= 0)
                 {
-                    if (!Pieces.Exists(p => p.Coord == piece.Coord + (MAPDIRECTION)i)) { piece.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = (MAPDIRECTION)i, variantID = wallVariant }, true); }
+                    piece.keyFloor = new KeyData() { key = PIECEKEYS.F, dir = orientation, variantID = floorVariant };
+                }
+                // Ceiling if no section piece above it
+                if (!sectionPieces.Exists(p => p.Coord == piece.Coord + MAPDIRECTION.UP) && ceilingVariant >= 0)
+                {
+                    piece.keyCeiling = new KeyData() { key = PIECEKEYS.C, dir = orientation, variantID = ceilingVariant };
+                }
+
+                // Walls
+                if (wallVariant >= 0)
+                {
+                    for (int i = 1; i < 5; i++)
+                    {
+                        // Wall if no piece in that direction
+                        if (!sectionPieces.Exists(p => p.Coord == piece.Coord + (MAPDIRECTION)i))
+                        {
+                            MapPiece nb = map.GetExistingPiece(piece.Coord + (MAPDIRECTION)i);
+                            // Wall if the piece in that direction has a wall towards this piece
+                            if (nb is null || nb.isEmpty || nb.HasWall(Dungeon.Flip((MAPDIRECTION)i)))
+                            {
+                                piece.AssignWall(new KeyData() { key = PIECEKEYS.W, dir = (MAPDIRECTION)i, variantID = wallVariant }, true);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -231,9 +259,38 @@ namespace Munglo.DungeonGenerator
             }
             return candidates;
         }
+        public bool GetOuterWallFreeNeighbour(out MapPiece neighbour, out MAPDIRECTION dir, bool includeCorners = false)
+        {
+            // Confirmed
+            List<MapPiece> candidates = Pieces.FindAll(p => p.HasNorthWall);
+            dir = MAPDIRECTION.ANY;
+
+            candidates.AddRange(Pieces.FindAll(p => p.HasEastWall && !p.HasNorthWall));
+            candidates.AddRange(Pieces.FindAll(p => p.HasSouthWall && !p.HasNorthWall && !p.HasEastWall));
+            candidates.AddRange(Pieces.FindAll(p => p.HasWestWall && !p.HasNorthWall && !p.HasEastWall && !p.HasSouthWall));
+            if (!includeCorners)
+            {
+                int count = 0;
+                count += candidates.RemoveAll(p => p.HasNorthWall && p.HasEastWall);
+                count += candidates.RemoveAll(p => p.HasEastWall && p.HasSouthWall);
+                count += candidates.RemoveAll(p => p.HasSouthWall && p.HasWestWall);
+                count += candidates.RemoveAll(p => p.HasWestWall && p.HasNorthWall);
+            }
+            int breaker = 20;
+            while (breaker > 0)
+            {
+
+                int idx = RNG.Next(candidates.Count);
+                neighbour = candidates[idx].Neighbour(candidates[idx].OutsideWallDirection(), true);
+                if (neighbour.isEmpty) { dir = candidates[idx].OutsideWallDirection(); return true; }
+                breaker--;
+            }
+            neighbour = null;
+            return false;
+        }
 
 
-        private protected void SetMinMaxCoord()
+        private protected void SetMinMaxCoord(MapCoordinate center)
         {
             int Xoffset = 0;
             int Zoffset = 0;
@@ -242,30 +299,32 @@ namespace Munglo.DungeonGenerator
             switch (orientation)
             {
                 case MAPDIRECTION.NORTH:
-                    minX = coord.x - (int)(sizeX * 0.5f) + 1 - Xoffset;
-                    maxX = coord.x + (int)(sizeX * 0.5f);
-                    minZ = coord.z - sizeZ + 1;
-                    maxZ = coord.z;
+                    minX = center.x - (int)(sizeX * 0.5f) + 1 - Xoffset;
+                    maxX = center.x + (int)(sizeX * 0.5f);
+                    minZ = center.z - sizeZ + 1;
+                    maxZ = center.z;
                     break;
                 case MAPDIRECTION.SOUTH:
-                    minX = coord.x - (int)(sizeZ * 0.5f);
-                    maxX = coord.x + (int)(sizeZ * 0.5f) - 1 + Xoffset;
-                    minZ = coord.z;
-                    maxZ = coord.z + sizeZ - 1;
+                    minX = center.x - (int)(sizeZ * 0.5f);
+                    maxX = center.x + (int)(sizeZ * 0.5f) - 1 + Xoffset;
+                    minZ = center.z;
+                    maxZ = center.z + sizeZ - 1;
                     break;
                 case MAPDIRECTION.EAST:
-                    minX = coord.x;
-                    maxX = coord.x + sizeX - 1;
-                    minZ = coord.z - (int)(sizeZ * 0.5f) + 1 - Zoffset;
-                    maxZ = coord.z + (int)(sizeZ * 0.5f);
+                    minX = center.x;
+                    maxX = center.x + sizeX - 1;
+                    minZ = center.z - (int)(sizeZ * 0.5f) + 1 - Zoffset;
+                    maxZ = center.z + (int)(sizeZ * 0.5f);
                     break;
                 case MAPDIRECTION.WEST:
-                    minX = coord.x - sizeX + 1;
-                    maxX = coord.x;
-                    minZ = coord.z - (int)(sizeZ * 0.5f) + 1 - Zoffset;
-                    maxZ = coord.z + (int)(sizeZ * 0.5f);
+                    minX = center.x - sizeX + 1;
+                    maxX = center.x;
+                    minZ = center.z - (int)(sizeZ * 0.5f) + 1 - Zoffset;
+                    maxZ = center.z + (int)(sizeZ * 0.5f);
                     break;
             }
+            minY = center.y;
+            maxY = center.y + sizeY;
         }
         /// <summary>
         /// Todo rewrite this so it finds the furthest corner pieces and calculates which ones is closest to the center of them all
@@ -349,15 +408,15 @@ namespace Munglo.DungeonGenerator
 
         public virtual void PunchBackDoor()
         {
-            
+
         }
 
         public virtual bool IsInside(Vector3 worldPosition)
         {
             MapCoordinate coord = Dungeon.GlobalSnapCoordinate((Vector3I)worldPosition);
-            if(Pieces.Exists(p => p.Coord == coord))
+            if (Pieces.Exists(p => p.Coord == coord))
             {
-                if(Pieces.Find(p => p.Coord == coord).isEmpty)
+                if (Pieces.Find(p => p.Coord == coord).isEmpty)
                 {
                     GD.PushError($"SectionBase::IsInside() Empty piece inside section!");
                 }
@@ -365,16 +424,47 @@ namespace Munglo.DungeonGenerator
             }
             return false;
         }
-        public void AddConnectionAsParent(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked)
+        public void AddConnection(int id)
         {
-            MapCoordinate sectionKey = coord;
-            if(!connections.Exists(p=>p == coord)){
-                if(!map.Connections.ContainsKey(coord)){
-                    map.Connections[coord] = new SectionConnection(sectionIndex, otherSectionIndex, dir, coord);
-                }
-                connections.Add(coord);
+            if (id < 1)
+            {
+                GD.PushError($"SectionBase::AddConnection({id}) INVALID ID!\n{System.Environment.StackTrace}");
             }
+
+            if (!connections.Exists(p => p == id)) { connections.Add(id); }
         }
+        /// <summary>
+        /// Checks for pre-existing connection and add it. Otherwise create a new one.
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="coord"></param>
+        /// <param name="overrideLocked"></param>
+        public int AddConnection(MAPDIRECTION dir, ISection otherSection, MapCoordinate location, MapCoordinate otherLocation, bool overrideLocked)
+        {
+            // Create a new connection
+            if (map.AddNewConnection(this, otherSection, location, otherLocation, dir, out int cID))
+            {
+                AddConnection(cID);
+                return cID;
+            }
+            return -1;
+        }
+
+        public int AddInverseConnection(MAPDIRECTION dir, ISection otherSection, MapCoordinate location, MapCoordinate otherLocation, bool overrideLocked)
+        {
+            // Create a new connection
+            if (map.AddNewConnection(otherSection, this, otherLocation, location, Dungeon.Flip(dir), out int cID))
+            {
+                AddConnection(cID);
+                return cID;
+            }
+            return -1;
+        }
+
+
+
+
+
 
         public void AssignPlacer(SectionResource sectionDef, Array<PlacerEntryResource> placers)
         {
@@ -385,8 +475,8 @@ namespace Munglo.DungeonGenerator
             }
 
             if (sectionDef != null)
-            { 
-                if(sectionDef.placers != null && sectionDef.placers.Count > 0)
+            {
+                if (sectionDef.placers != null && sectionDef.placers.Count > 0)
                 {
                     this.placers = sectionDef.placers;
                 }
@@ -406,5 +496,48 @@ namespace Munglo.DungeonGenerator
             }
         }
 
+        public virtual void RemovePiece(MapCoordinate coord, int newsectionOwner = -1)
+        {
+            MapPiece mp = map.GetExistingPiece(coord);
+            pieces.Remove(mp);
+            mp.SectionIndex = newsectionOwner;
+            extraPieces.Add(coord);
+        }
+
+        public bool ContainsPiece(MapCoordinate coord)
+        {
+            if (ExtraPieces.Contains(coord)) { return true; }
+            if (Pieces.Exists(p => p.Coord == coord)) { return true; }
+            return false;
+        }
+
+        private protected virtual void FitSmallArches()
+        {
+            foreach (MapPiece mp in Pieces)
+            {
+                FitSmallArch(mp);
+            }
+        }
+        private protected void FitSmallArch(MapPiece piece)
+        {
+            if (!piece.hasCieling) { return; }
+            // add small arches
+            if (piece.HasNorthWall)
+            {
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.ARCH, dir = MAPDIRECTION.NORTH, variantID = 0 });
+            }
+            if (piece.HasEastWall)
+            {
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.ARCH, dir = MAPDIRECTION.EAST, variantID = 0 });
+            }
+            if (piece.HasSouthWall)
+            {
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.ARCH, dir = MAPDIRECTION.SOUTH, variantID = 0 });
+            }
+            if (piece.HasWestWall)
+            {
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.ARCH, dir = MAPDIRECTION.WEST, variantID = 0 });
+            }
+        }
     }// EOF CLASS
 }

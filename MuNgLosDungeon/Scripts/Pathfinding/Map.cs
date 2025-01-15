@@ -13,11 +13,15 @@ internal class Map
     {
         return Nodes.Find(node => node.coord == coord);
     }
-    internal Map(ISection section) {
+    internal Map(ISection section, List<MapPiece>extraPieces) {
         nodes = new List<PathLocation>();
         foreach (MapPiece piece in section.Pieces)
         {
             PathLocation loc = new PathLocation(piece);
+            nodes.Add(loc);
+        }
+        foreach(MapPiece ep in extraPieces){
+            PathLocation loc = new PathLocation(ep);
             nodes.Add(loc);
         }
     }

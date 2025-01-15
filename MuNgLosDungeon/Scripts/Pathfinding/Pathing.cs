@@ -4,25 +4,182 @@ using System.Linq;
 
 namespace Munglo.DungeonGenerator.Pathfinding;
 
+
+
 internal static class Pathing
 {
-    internal static bool FindSectionPath(int sectionIndex1, int sectionIndex2, out List<int> sectionPath)
+    internal static void FindPath(PathQuery query, Action<PathAnswer> callback)
     {
-        sectionPath = new List<int>(){sectionIndex1, sectionIndex2};
-        return true;
+        if (query.IsSectionPath)
+        {
+            PathAnswer answer = new PathAnswer(query);
+            answer.connectionPath = RunConnectionPathing(query.startConnection, query.endConnection, query.Connections);
+            callback.Invoke(answer);
+        }
+        else
+        {
+            PathAnswer answer = new PathAnswer(query);
+            answer.path = RunPathing(query.StartSection, query.startLocation, query.endLocation, query.Extras);
+            callback.Invoke(answer);
+        }
     }
-    internal static bool FindSectionInnerPath(ISection section, MapCoordinate from, MapCoordinate to, out List<PathLocation> path)
+    internal static bool FindPath(PathQuery query, out PathAnswer answer)
     {
-        Map map = new Map(section);
+        if (query.IsSectionPath)
+        {
+            answer = new PathAnswer(query);
+            answer.connectionPath = RunConnectionPathing(query.startConnection, query.endConnection, query.Connections);
+        }
+        else
+        {
+            answer = new PathAnswer(query);
+            answer.path = RunPathing(query.StartSection, query.startLocation, query.endLocation, query.Extras);
+        }
+        if (answer.path.Count > 0 || answer.connectionPath.Count > 0) { return true; }
+        return false;
+    }
+
+    private static List<PathLocation> RunPathing(ISection section, MapCoordinate from, MapCoordinate to, List<MapPiece> extras)
+    {
+        Map map = new Map(section, extras);
         map.SetNeighbours();
         PathLocation start = new PathLocation(section.Pieces.Find(p => p.Coord == from));
-        start.SetNeighbours(map);
+        start.SetNeighbours(map); // TODO try without this?
         PathLocation goal = new PathLocation(section.Pieces.Find(p => p.Coord == to));
-        goal.SetNeighbours(map);
+        goal.SetNeighbours(map); // TODO try without this?
+        return AStar(start, goal, map);
+    }
+
+    private static List<int> RunConnectionPathing(SectionConnection startConnection, SectionConnection goalConnection, Dictionary<int, SectionConnection> connections)
+    {
+        //connections[-1] = startConnection;
+        var openList = new List<int> { startConnection.connectionID };
+        var closedList = new HashSet<int>();
+
+        // Dictionaries to hold g(n), h(n), and parent pointers
+        var gScore = new Dictionary<int, double> { [startConnection.connectionID] = 0 };
+        var hScore = new Dictionary<int, double> { [startConnection.connectionID] = StepDistance(startConnection.coord, goalConnection.coord) };
+        var parentMap = new Dictionary<int, int>();
+
+        while (openList.Count > 0)
+        {
+            // Find node in open list with the lowest F score
+            int current = openList.OrderBy(node => gScore[node] + hScore[node]).First();
+
+            if (current == goalConnection.connectionID)
+            {
+                //Godot.GD.Print($"Pathing::AStarOverConnections() current[{current}] goalConnection[{goalConnection.connectionID}] parentMap KeyCount[{parentMap.Keys.Count}]");
+                return ReconstructSectionPath(parentMap, current);
+            }
+
+            openList.Remove(current);
+            closedList.Add(current);
+
+            if (connections[current].sectionID == goalConnection.sectionID)
+            {
+                double tentativeGScore = gScore[current] + goalConnection.ConnectedLocations.Find(p => p.connectionID == current).cost;
+                if (!gScore.ContainsKey(goalConnection.connectionID) || tentativeGScore < gScore[goalConnection.connectionID])
+                {
+                    // Update gScore and hScore
+                    gScore[goalConnection.connectionID] = tentativeGScore;
+                    hScore[goalConnection.connectionID] = tentativeGScore + StepDistance(goalConnection.coord, connections[current].coord);
+                    // Set the current node as the parent of the neighbor
+                    parentMap[goalConnection.connectionID] = current;
+                    if (!openList.Contains(goalConnection.connectionID))
+                    {
+                        openList.Add(goalConnection.connectionID);
+                    }
+                }
+            }
+            // Iterate over the precalculated locations
+            foreach (ConnectedLocation nbLocation in connections[current].ConnectedLocations)
+            {
+                SectionConnection nbSectionConnection = connections[nbLocation.connectionID];
+                // Tentative gScore (current gScore + distance to neighbor)
+                double tentativeGScore = double.MaxValue;
+                if (nbSectionConnection.sectionID == goalConnection.sectionID)
+                {
+                    // Workaround for the connections in the goal section to read the cost from the endConnection instead
+                    tentativeGScore = gScore[current] + goalConnection.ConnectedLocations.Find(p => p.connectionID == current).cost;
+                }
+                else
+                {
+                    tentativeGScore = gScore[current] + nbLocation.cost;
+                }
+
+
+                if (!gScore.ContainsKey(nbSectionConnection.connectionID) || tentativeGScore < gScore[nbSectionConnection.connectionID])
+                {
+                    // Update gScore and hScore
+                    gScore[nbSectionConnection.connectionID] = tentativeGScore;
+                    hScore[nbSectionConnection.connectionID] = tentativeGScore + StepDistance(nbSectionConnection.coord, connections[current].coord);
+
+                    // Set the current node as the parent of the neighbor
+                    parentMap[nbSectionConnection.connectionID] = current;
+
+                    if (!openList.Contains(nbSectionConnection.connectionID))
+                    {
+                        openList.Add(nbSectionConnection.connectionID);
+                        if (nbSectionConnection.connectedToConnectionID > 0)
+                        {
+                            parentMap[nbSectionConnection.connectedToConnectionID] = nbSectionConnection.connectionID;
+                            // Update gScore and hScore
+                            gScore[nbSectionConnection.connectedToConnectionID] = tentativeGScore + 1;
+                            hScore[nbSectionConnection.connectedToConnectionID] = 1000000000;
+                            openList.Add(nbSectionConnection.connectedToConnectionID);
+                        }
+                    }
+                }
+            }
+        }
+        connections.Remove(startConnection.connectionID);
+        connections.Remove(goalConnection.connectionID);
+        return new List<int>(); // No path found
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /// ################################################################################################################################################
+    /// ##########################################   UNDER THIUS NEED REFACTOR!!                    #####################################################
+    /// ################################################################################################################################################
+
+    /// <summary>
+    /// ONLY use this in pathquery constructor and MapBuilder pathing pass
+    /// </summary>
+    /// <param name="section"></param>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <param name="extras"></param>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    private static bool FindPathForQuery(ISection section, MapPiece from, MapPiece to, List<MapPiece> extras, out List<PathLocation> path)
+    {
+        Map map = new Map(section, extras);
+        map.SetNeighbours();
+        PathLocation start = new PathLocation(from);
+        start.SetNeighbours(map); // TODO try without this?
+        PathLocation goal = new PathLocation(to);
+        goal.SetNeighbours(map); // TODO try without this?
         path = AStar(start, goal, map);
         return path is not null;
     }
-    internal static List<PathLocation> AStar(PathLocation start, PathLocation goal, Map map)
+    private static List<PathLocation> AStar(PathLocation start, PathLocation goal, Map map)
     {
         var openList = new List<PathLocation> { start };
         var closedList = new HashSet<PathLocation>();
@@ -44,6 +201,8 @@ internal static class Pathing
 
             openList.Remove(current);
             closedList.Add(current);
+
+            //Godot.GD.Print($"Pathing::AStar() PathLocation.Neighbours is null[{current.Neighbors}]");
 
             foreach (MapCoordinate nbCoord in current.Neighbors.Keys)
             {
@@ -106,9 +265,6 @@ internal static class Pathing
                     }
                 }
                 */
-
-
-
 
                 // Tentative gScore (current gScore + distance to neighbor)
                 double tentativeGScore = gScore[current.coord] + current.Neighbors[nbCoord];
@@ -237,6 +393,19 @@ internal static class Pathing
                             Should be fine under this
     **************************************************************************/
 
+    static private List<int> ReconstructSectionPath(Dictionary<int, int> parentMap, int current)
+    {
+        var path = new List<int> { current };
+        while (parentMap.ContainsKey(current))
+        {
+            current = parentMap[current];
+            path.Add(current);
+        }
+        path.Reverse();
+        //path.RemoveAt(0);
+        return path;
+    }
+
     static private List<PathLocation> ReconstructPath(Dictionary<MapCoordinate, PathLocation> parentMap, PathLocation current)
     {
         var path = new List<PathLocation> { current };
@@ -264,6 +433,13 @@ internal static class Pathing
         int y = Math.Abs(cd.y);
         return x + y;
     }
+    static private int StepDistance(MapCoordinate start, MapCoordinate goal)
+    {
+        MapCoordinate cd = start - goal;
+        int x = Math.Abs(cd.x);
+        int y = Math.Abs(cd.y);
+        return x + y;
+    }
 
-  
+
 }// EOF CLASS

@@ -1,11 +1,7 @@
 ﻿using Godot;
 using Godot.Collections;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace Munglo.DungeonGenerator.UI
 {
@@ -32,16 +28,16 @@ namespace Munglo.DungeonGenerator.UI
             screen = GetParent().GetParent().GetParent() as MainScreen;
             MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettingsResource;
         }
-        public async void BuildDungeon(GenerationSettingsResource settings, BiomeResource biome)
+        public async void BuildDungeon(GenerationSettingsResource settings, FloorResource floor, BiomeResource biome)
         {
             screen.RaiseNotification($"Building Dungeon");
             this.settings = settings;
             screen.RaiseNotification($"Generating:" + string.Format("{0:0}", 0) + "%");
             await ToSignal(GetTree(), "process_frame");
             //BuildData(biome, () => { ShowMap(null, null); }, settings.roomStart, settings.roomDefault);
-            BuildData(biome, () => { ReDrawMap(); }, settings.roomStart, settings.roomDefault);
+            BuildData(biome, () => { ReDrawMap(); }, floor);
         }
-        public async void BuildSection(string sectionTypeName, SectionResource sectionDef, Array<PlacerEntryResource> placers, GenerationSettingsResource settings, BiomeResource biome, Action callback)
+        public async void BuildSection(string sectionTypeName, SectionResource sectionDef, ulong[] seed, GenerationSettingsResource settings, BiomeResource biome, Action callback)
         {
             this.settings = settings;
             screen.RaiseNotification($"Generating:" + string.Format("{0:0}", 0) + "%");
@@ -50,12 +46,12 @@ namespace Munglo.DungeonGenerator.UI
             cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             this.biome = biome;
 
-            map = new MapData(settings, settings.roomStart, settings.roomDefault);
-            await map.GenerateSection(sectionTypeName, sectionDef, placers, callback);
+            map = new MapData(settings);
+            await map.GenerateSection(sectionTypeName, seed, sectionDef, callback);
         }
 
 
-        private async void BuildData(BiomeResource biome, Action callback, SectionResource startRoom, SectionResource standardRoom)
+        private async void BuildData(BiomeResource biome, Action callback, FloorResource floor)
         {
             cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>();
             this.biome = biome;
@@ -64,8 +60,9 @@ namespace Munglo.DungeonGenerator.UI
                 GD.PrintErr($"DungeonGenerator::BuildDungeon() BuildDungeonFailed! settings is NULL[{settings is null}] biome is NUll[{biome is null}]");
                 return;
             }
-            map = new MapData(settings, startRoom, standardRoom);
-            await map.GenerateMap(callback);
+            map = new MapData(settings, floor);
+            //await map.GenerateMap(callback, screen.addon.MasterConfig.pathingPass);
+            await map.GenerateFloor(settings.floorDef, callback, screen.addon.MasterConfig.pathingPass);
         }
    
         /// <summary>
@@ -212,36 +209,8 @@ namespace Munglo.DungeonGenerator.UI
             }
             return debugContainer.GetChild(y) as Node3D;
         }
-
-
-
       
-        /// <summary>
-        /// Only ever add debug visuals for editor debugging
-        /// </summary>
-        /// <param name="piece"></param>
-        private void AddDebugVisuals(MapPiece piece)
-        {
-            Node3D floorParent = GetFloorDebugContainer(piece.Coord.y);
-
-            foreach (KeyData keyData in piece.Debug)
-            {
-                if (GetByKey(keyData, biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
-            }
-            if (piece.isBridge)
-            {
-                if (GetByKey(
-                    new KeyData() { key = PIECEKEYS.DEBUGBRIDGE, dir = piece.Orientation }
-                    , biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
-            }
-            if (piece.hasStairs)
-            {
-                if (GetByKey(
-                new KeyData() { key = PIECEKEYS.DEBUGSTAIR, dir = piece.Orientation }
-                , biome, out Node3D debugProp, false)) { floorParent.AddChild(debugProp); debugProp.Position = Dungeon.GlobalPosition(piece); };
-            }
-            
-        }
+     
 
 
         private void VisualizeFloor(int floor)
@@ -279,10 +248,6 @@ namespace Munglo.DungeonGenerator.UI
                     tileContainer.AddChild(visualNode, true);
                     visualNode.Position = Dungeon.GlobalPosition(piece);
                     visualNode.Show();
-                    if (Engine.IsEditorHint())
-                    {
-                        AddDebugVisuals(piece);
-                    }
                     index++;
                 }
             }
@@ -307,31 +272,7 @@ namespace Munglo.DungeonGenerator.UI
             }*/
 
 
-            // Section Props
-            foreach (SectionProp c in section.Props)
-            {
-                SpawnExtra(biome, c, true);
-            }
-        }
-        internal void SpawnExtra(BiomeResource biome, SectionProp propData, bool makeCollider = true)
-        {
-            //GD.Print($"DungeonGenerator::SpawnRoomProp()");
-            if (settings.showProps)
-            {
-                // skip arches 
-                if(!settings.showArches)
-                {
-                    if (propData.key == PIECEKEYS.AS || propData.key == PIECEKEYS.ASIC) { return; }
-                }
-
-
-                if (GetByKey(new KeyData() { key = propData.key, dir = propData.dir, variantID = propData.variantID }, biome, out Node3D prop, makeCollider))
-                {
-                    propContainer.AddChild(prop, true);
-                    //prop.GlobalPosition = Dungeon.GlobalRoomPropPosition(coord, propData.Offset);
-                    prop.GlobalPosition = propData.position;
-                };
-            }
+      
         }
         /// <summary>
         /// Decodes and instantiates the nodes needed for the map piece data
@@ -345,18 +286,18 @@ namespace Munglo.DungeonGenerator.UI
             visualNode.Name = piece.CoordString;
 
             // generate floors
-            if (settings.showFloors)
+            if (screen.addon.MasterConfig.showFloors)
             {
                 if (piece.keyFloor.key != PIECEKEYS.NONE && piece.keyFloor.key != PIECEKEYS.OCCUPIED &&
                     GetByKey(piece.keyFloor, biome, out Node3D floor, makeCollider)) { visualNode.AddChild(floor, true); };
             }
             // generate ceiling
-            if (settings.showCeilings)
+            if (screen.addon.MasterConfig.showCeilings)
             {
                 if (piece.keyCeiling.key != PIECEKEYS.NONE && GetByKey(piece.keyCeiling, biome, out Node3D ceiling, makeCollider)) { visualNode.AddChild(ceiling, true); };
             }
             // generate walls
-            if (settings.showWalls)
+            if (screen.addon.MasterConfig.showWalls)
             {
                 for (int i = 1; i < 9; i *= 2)
                 {
@@ -369,6 +310,14 @@ namespace Munglo.DungeonGenerator.UI
                     }
                 }
                 SpecialCaseRoundedCorners(piece, visualNode, biome, makeCollider);
+            }
+            // generate extras
+            if (screen.addon.MasterConfig.showExtras)
+            {
+                foreach (KeyData extra in piece.Extras)
+                {
+                    if (GetByKey(extra, biome, out Node3D ext, makeCollider)) { visualNode.AddChild(ext, true); };
+                }
             }
             return true;
         }
@@ -435,6 +384,8 @@ namespace Munglo.DungeonGenerator.UI
         }
         private Resource ResolveAndCache(KeyData data, BiomeResource biome)
         {
+            if(biome is null){GD.PushError("ScreenDungeonVisualizer::ResolveAndCache() BIOME GIVEN AS NULL!!"); return null; }
+
             if (cacheKeyedPieces == null) { cacheKeyedPieces = new System.Collections.Generic.Dictionary<PIECEKEYS, System.Collections.Generic.Dictionary<int, Resource>>(); }
 
             if (!cacheKeyedPieces.ContainsKey(data.key)) { cacheKeyedPieces[data.key] = new System.Collections.Generic.Dictionary<int, Resource>(); }
@@ -461,9 +412,9 @@ namespace Munglo.DungeonGenerator.UI
                 {
                     cacheKeyedPieces[data.key][data.variantID] = biome.ceilings.Where(p => p.key == data.key).First().GetResource(data.variantID);
                 }
-                else if (biome.props.Where(p => p.key == data.key).Count() > 0)
+                else if (biome.extras.Where(p => p.key == data.key).Count() > 0)
                 {
-                    cacheKeyedPieces[data.key][data.variantID] = biome.props.Where(p => p.key == data.key).First().GetResource(data.variantID);
+                    cacheKeyedPieces[data.key][data.variantID] = biome.extras.Where(p => p.key == data.key).First().GetResource(data.variantID);
                 }
             }
             if (!cacheKeyedPieces.ContainsKey(data.key))

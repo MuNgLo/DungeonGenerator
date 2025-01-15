@@ -11,6 +11,7 @@ internal class PathData{
     }
     public override string ToString(){
         string text = string.Empty;
+        if(path is null) {return $"PathData: path is NULL";}
         if(path.Count > 0){
             text += $"PathData: path[{path.Count}]";
         }

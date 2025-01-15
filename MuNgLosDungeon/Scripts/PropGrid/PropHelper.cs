@@ -47,7 +47,7 @@ namespace Munglo.DungeonGenerator.PropGrid
                     {
                         if(z < width + 1)
                         {
-                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
+                            //section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }
@@ -56,7 +56,7 @@ namespace Munglo.DungeonGenerator.PropGrid
                     {
                         if (x > 5 - width - 1)
                         {
-                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
+                            //section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }
@@ -66,7 +66,7 @@ namespace Munglo.DungeonGenerator.PropGrid
                     {
                         if (z >  5 - width - 1)
                         {
-                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
+                            //section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }
@@ -75,7 +75,7 @@ namespace Munglo.DungeonGenerator.PropGrid
                     {
                         if (x < width + 1)
                         {
-                            section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
+                            //section.AddProp(new SectionProp() { key = PIECEKEYS.STAIRPLATFORM, dir = dir, position = new Vector3I(x, layer, z) });
                             continue;
                         }
                     }

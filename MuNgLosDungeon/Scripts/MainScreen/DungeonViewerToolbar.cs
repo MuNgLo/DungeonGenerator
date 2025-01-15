@@ -62,12 +62,11 @@ namespace Munglo.DungeonGenerator.UI
             pop.HideOnCheckableItemSelection = false;
             pop.HideOnItemSelection = false;
             pop.HideOnStateItemSelection = false;
-            pop.SetItemChecked(0, Profile.settings.showFloors);
-            pop.SetItemChecked(1, Profile.settings.showWalls);
-            pop.SetItemChecked(2, Profile.settings.showCeilings);
-            pop.SetItemChecked(3, Profile.settings.showProps);
-            pop.SetItemChecked(4, Profile.settings.pathingPass);
-            pop.SetItemChecked(5, Profile.settings.showArches);
+            pop.SetItemChecked(0, screen.addon.MasterConfig.showFloors);
+            pop.SetItemChecked(1, screen.addon.MasterConfig.showWalls);
+            pop.SetItemChecked(2, screen.addon.MasterConfig.showCeilings);
+            pop.SetItemChecked(3, screen.addon.MasterConfig.pathingPass);
+            pop.SetItemChecked(4, screen.addon.MasterConfig.showExtras);
         }
 
         private void WhenModeTogglePressed()
@@ -141,29 +140,23 @@ namespace Munglo.DungeonGenerator.UI
             switch (id)
             {
                 case 0:
-                    Profile.settings.showFloors = pop.IsItemChecked(index);
+                    screen.addon.MasterConfig.showFloors = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
                     break;
                 case 1:
-                    Profile.settings.showWalls = pop.IsItemChecked(index);
+                    screen.addon.MasterConfig.showWalls = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
                     break;
                 case 2:
-                    Profile.settings.showCeilings = pop.IsItemChecked(index);
-                    ResourceSaver.Save(Profile.settings);
-                    break;
-                case 3:
-                    Profile.settings.showProps = pop.IsItemChecked(index);
+                    screen.addon.MasterConfig.showCeilings = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
                     break;
                 case 4:
-                    Profile.settings.pathingPass = pop.IsItemChecked(index);
+                    screen.addon.MasterConfig.pathingPass = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
-                    screen.SetDebugLayer(Profile.showDebugLayer);
-
                     break;
                 case 5:
-                    Profile.settings.showArches = pop.IsItemChecked(index);
+                    screen.addon.MasterConfig.showExtras = pop.IsItemChecked(index);
                     ResourceSaver.Save(Profile.settings);
                     break;
                 default:

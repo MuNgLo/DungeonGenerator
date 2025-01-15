@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PathResource" load_steps=2 format=3 uid="uid://bbm73lasohnsg"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PathResource.cs" id="1_y5hpc"]
+
+[resource]
+script = ExtResource("1_y5hpc")
+corMaxTotal = 24
+corMaxStraight = 24
+corMinStraight = 24
+sectionName = "Hallway Mid"
+sectionType = "HallwaySection"
+sectionStyle = "Corridor"
+defaultResponses = 0
+sizeWidthMin = 4
+sizeWidthMax = 4
+sizeDepthMin = 24
+sizeDepthMax = 24
+nbFloorsMin = 3
+nbFloorsMax = 3
+debug = false
+nbDoorsPerFloorMin = 0
+nbDoorsPerFloorMax = 0
+placers = []
+centerSpiralStairs = false
+firstPieceDoor = false
+backDoorChance = 30
+allFloor = false

@@ -37,6 +37,11 @@ namespace Munglo.DungeonGenerator
         /// </summary>
         public List<MapPiece> Pieces { get; }
         /// <summary>
+        /// Coordinates of pieces that was prevously part of this section
+        /// Used for pathing
+        /// </summary>
+        public List<MapCoordinate> ExtraPieces { get; }
+        /// <summary>
         /// Grows the section into the current MapData
         /// </summary>
         public void Build();
@@ -65,7 +70,7 @@ namespace Munglo.DungeonGenerator
         /// <exception cref="NotImplementedException"></exception>
         public bool IsInside(Vector3 worldPosition);
 
-        public List<MapCoordinate> Connections { get; }
+        public List<int> Connections { get; }
 
         public List<SectionProp> Props { get; }
         public MapPiece GetRandomPiece();
@@ -85,14 +90,30 @@ namespace Munglo.DungeonGenerator
         public void SealSection(int wallVariant = 0, int floorVariant = 0, int ceilingVariant = 0);
 
 
-        //public void AddConnectionAsChild(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
-        public void AddConnectionAsParent(int otherSectionIndex, MAPDIRECTION dir, MapCoordinate coord, bool overrideLocked);
+        public void AddConnection(int connectionIndex);
+        public int AddConnection(MAPDIRECTION dir, ISection otherSection, MapCoordinate location, MapCoordinate otherLocation, bool overrideLocked);
+        public int AddInverseConnection(MAPDIRECTION dir, ISection otherSection, MapCoordinate location, MapCoordinate otherLocation, bool overrideLocked);
+        
         /// <summary>
         /// Assign placers to the section. If placersOverride is valid it will override the SectionResource placers collection
         /// </summary>
         /// <param name="sectionDef"></param>
         /// <param name="placersOverride"></param>
         void AssignPlacer(SectionResource sectionDef, Array<PlacerEntryResource> placersOverride);
+        /// <summary>
+        /// Removes piece from the section and assign sectionIndex -1 to it if not a new owner is given
+        /// Also remeber it by adding the coord to the extraPieces
+        /// </summary>
+        /// <param name="coord"></param>
+        void RemovePiece(MapCoordinate coord, int newsectionOwner = -1);
+        /// <summary>
+        /// Checks both owned and extra pieces for the given coordinate. If it exist, returns true;
+        /// </summary>
+        /// <param name="parentCoord"></param>
+        /// <returns></returns>
+        bool ContainsPiece(MapCoordinate parentCoord);
+        bool GetOuterWallFreeNeighbour(out MapPiece neighbour, out MAPDIRECTION dir, bool includeCorners = false);
+
 
         public int ConnectionCount { get; }
 

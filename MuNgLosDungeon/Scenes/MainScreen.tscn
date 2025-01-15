@@ -123,7 +123,7 @@ toggle_mode = false
 shortcut_feedback = false
 shortcut_in_tooltip = false
 text = "View"
-item_count = 6
+item_count = 5
 popup/item_0/text = "Floors"
 popup/item_0/checkable = 1
 popup/item_0/checked = true
@@ -135,18 +135,14 @@ popup/item_2/text = "Ceilings"
 popup/item_2/checkable = 1
 popup/item_2/checked = true
 popup/item_2/id = 2
-popup/item_3/text = "Props"
+popup/item_3/text = "Extras"
 popup/item_3/checkable = 1
 popup/item_3/checked = true
-popup/item_3/id = 3
+popup/item_3/id = 5
 popup/item_4/text = "PathingPass"
 popup/item_4/checkable = 1
 popup/item_4/checked = true
 popup/item_4/id = 4
-popup/item_5/text = "Arches"
-popup/item_5/checkable = 1
-popup/item_5/checked = true
-popup/item_5/id = 5
 
 [node name="VSeparator4" type="VSeparator" parent="DungeonViewerToolbar"]
 layout_mode = 2
@@ -155,10 +151,12 @@ layout_mode = 2
 layout_mode = 2
 tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
 selected = 0
-item_count = 2
-popup/item_0/text = "PathSection"
-popup/item_1/text = "RoomSection"
+item_count = 3
+popup/item_0/text = "HallwaySection"
+popup/item_1/text = "PathSection"
 popup/item_1/id = 1
+popup/item_2/text = "RoomSection"
+popup/item_2/id = 2
 script = ExtResource("3_bakif")
 
 [node name="SectionResourceSelector" type="OptionButton" parent="DungeonViewerToolbar"]
@@ -275,7 +273,7 @@ stretch_mode = 5
 [node name="EndVisibleFloor" type="Label" parent="FloorOptions/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("29_j2fmg")
-text = "2"
+text = "3"
 
 [node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
 custom_minimum_size = Vector2(17.46, 0)

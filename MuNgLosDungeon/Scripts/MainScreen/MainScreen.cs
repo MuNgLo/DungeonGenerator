@@ -72,14 +72,14 @@ namespace Munglo.DungeonGenerator.UI
         /// <param name="biome"></param>
         public void GenerateDungeon(GenerationSettingsResource settings, BiomeResource biome)
         {
-            dunVis.BuildDungeon(settings, biome);
+            dunVis.BuildDungeon(settings, settings.floorDef, biome);
         }
         public void GenerateSection(string sectionTypeName, SectionResource sectionDef, GenerationSettingsResource settings, BiomeResource biome)
         {
             RaiseNotification($"Building Section {sectionDef.sectionName}");
             Array<PlacerEntryResource> placers = sectionDef.placers;
             GD.Print($"MainScreen::GenerateSection() defIsNull[{sectionDef is null}] placersisNull[{placers is null}]");
-            dunVis.BuildSection(sectionTypeName, sectionDef, placers, settings, biome, ReDrawDungeon);
+            dunVis.BuildSection(sectionTypeName, sectionDef, settings.Seed, settings, biome, ReDrawDungeon);
         }
         public void ReDrawDungeon()
         {

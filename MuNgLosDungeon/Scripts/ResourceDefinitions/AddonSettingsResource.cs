@@ -27,18 +27,14 @@ namespace Munglo.DungeonGenerator
         [Export] public int maxVisibleFloors = 5;
         public int visibleFloorEnd => visibleFloorStart + maxVisibleFloors - 1;
 
-        /// <summary>
-        /// Pass flags will only be used as debugging flags
-        /// </summary>
-        //[ExportGroup("Passes")]
-        //[Export] public bool debugPass = true;
-        //[Export] public bool clearEmpties = true;
-        //[Export] public bool floorPass = true;
-        //[Export] public bool wallPass = true;
-        //[Export] public bool ceilingPass = true;
-        //[Export] public bool corridorPass = true;
-        //[Export] public bool propPass = true;
-        //[Export] public bool roomPass = true;
-        //[Export] public bool waterPass = true;
+
+        [ExportGroup("Show")]
+        [Export] public bool showFloors = true;
+        [Export] public bool showWalls = true;
+        [Export] public bool showCeilings = true;
+        [Export] public bool showExtras = true;
+
+        [ExportGroup("Passes")]
+        [Export] public bool pathingPass = true;
     }
 }

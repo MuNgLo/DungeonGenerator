@@ -59,7 +59,7 @@ namespace Munglo.DungeonGenerator
             MapPiece nbRight = map.GetExistingPiece(piece.Coord + Dungeon.TwistRight(piece.Orientation));
 
             // Center
-            piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = piece.Orientation, variantID = 0 });
+            piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = piece.Orientation, variantID = 0 });
 
             CheckForOffsetPiece(piece, nbFor);
 
@@ -94,11 +94,11 @@ namespace Munglo.DungeonGenerator
 
             if (map.GetExistingPiece((piece.Coord + Dungeon.TwistLeft(dir))) is not null && map.GetExistingPiece((piece.Coord + Dungeon.TwistLeft(dir))).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistLeft(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistLeft(dir), variantID = 5 });
             }
             if (map.GetExistingPiece((piece.Coord + Dungeon.TwistRight(dir))) is not null && map.GetExistingPiece((piece.Coord + Dungeon.TwistRight(dir))).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 5 });
             }
             
             if (map.GetExistingPiece(piece.Coord + Dungeon.Flip(dir)) is not null 
@@ -109,7 +109,7 @@ namespace Munglo.DungeonGenerator
                 &&
                 map.GetExistingPiece((piece.Coord + Dungeon.TwistLeft(dir))).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.Flip(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.Flip(dir), variantID = 5 });
             }
 
             if (map.GetExistingPiece(piece.Coord + Dungeon.Flip(dir)) is not null 
@@ -120,39 +120,39 @@ namespace Munglo.DungeonGenerator
                 &&
                 map.GetExistingPiece((piece.Coord + Dungeon.TwistRight(dir))).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistRight(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistRight(dir), variantID = 5 });
             }
 
 
             // Foundation adds
             if (piece.WallKey(dir).key == PIECEKEYS.WD && map.GetExistingPiece(piece.Coord + Dungeon.TwistRight(dir)) is not null && !map.GetExistingPiece(piece.Coord + Dungeon.TwistRight(dir)).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 5 });
             }
             if (piece.WallKey(dir).key == PIECEKEYS.WD && map.GetExistingPiece(piece.Coord + Dungeon.TwistLeft(dir)) is not null && !map.GetExistingPiece(piece.Coord + Dungeon.TwistLeft(dir)).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistLeft(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistLeft(dir), variantID = 5 });
             }
 
             if (piece.WallKey(Dungeon.Flip(dir)).key == PIECEKEYS.WD)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistRight(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistRight(dir), variantID = 5 });
             }
             if (piece.WallKey(Dungeon.Flip(dir)).key == PIECEKEYS.WD)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.Flip(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.Flip(dir), variantID = 5 });
             }
 
 
             if (piece.WallKey(Dungeon.TwistLeft(dir)).key == PIECEKEYS.WD && map.GetExistingPiece(piece.Coord + Dungeon.TwistLeft(dir)) is not null && !map.GetExistingPiece(piece.Coord + Dungeon.TwistLeft(dir)).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistLeft(dir), variantID = 5 });
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.Flip(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistLeft(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.Flip(dir), variantID = 5 });
             }
             if (piece.WallKey(Dungeon.TwistRight(dir)).key == PIECEKEYS.WD && map.GetExistingPiece(piece.Coord + Dungeon.TwistRight(dir)) is not null && !map.GetExistingPiece(piece.Coord + Dungeon.TwistRight(dir)).isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 5 });
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistRight(dir), variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 5 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = Dungeon.TwistRight(dir), variantID = 5 });
             }
         }
 
@@ -162,7 +162,7 @@ namespace Munglo.DungeonGenerator
 
             if (!nb.isBridge && piece.WallKey(dir).key != PIECEKEYS.WD)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 3 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 3 });
             }
         }
         private void CheckForOffsetRail(MapPiece piece, MapPiece nb, MAPDIRECTION dir)
@@ -176,7 +176,7 @@ namespace Munglo.DungeonGenerator
 
             if (nb.isBridge && piece.WallKey(dir).key != PIECEKEYS.WD)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 4 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 4 });
             }
         }
         private void CheckForConnection(MapPiece piece, MapPiece nbRight, MAPDIRECTION dir)
@@ -185,7 +185,7 @@ namespace Munglo.DungeonGenerator
             // Foundation bridge to connect to
             if (nbRight.isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 1 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 1 });
             }
         }
 
@@ -196,7 +196,7 @@ namespace Munglo.DungeonGenerator
             // Foundation placements
             if (piece.WallKey(dir).key == PIECEKEYS.WD)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 2 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = dir, variantID = 2 });
             }
         }
 
@@ -207,7 +207,7 @@ namespace Munglo.DungeonGenerator
             // Forward
             if (nbFor.isBridge)
             {
-                piece.AddProp(new KeyData() { key = PIECEKEYS.BRIDGE, dir = piece.Orientation, variantID = 1 });
+                piece.AddExtra(new KeyData() { key = PIECEKEYS.BRIDGE, dir = piece.Orientation, variantID = 1 });
                 
                 // Railings on the offset section
                 // Right Side

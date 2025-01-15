@@ -135,6 +135,11 @@ namespace Munglo.DungeonGenerator
             //if (Input.IsKeyPressed(Key.Shift)) { screen.shiftIsPressed; }
             inputvector = inputvector.Normalized();
             cam.Inputvector(inputvector);
+
+            if (Input.IsMouseButtonPressed(MouseButton.Middle))
+            {
+                MS.Selection.SelectRandomPiecesForPathing(0.05f);
+            }
         }
         public override void _Input(InputEvent @event)
         {
@@ -179,6 +184,7 @@ namespace Munglo.DungeonGenerator
                     if (b.Pressed) { cam.GoFreeLook(); }
                     if (b.IsReleased()) { cam.GoLocked(); }
                 }
+
                 if (b.ButtonIndex == MouseButton.WheelUp)
                 {
                     if (b.Pressed) { cam.WheelUp(); }

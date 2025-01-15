@@ -1,13 +1,16 @@
 [gd_resource type="Resource" script_class="PathResource" load_steps=2 format=3 uid="uid://fwwvfja283kt"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PathResource.cs" id="1_h7b2a"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PathResource.cs" id="1_w1rmx"]
 
 [resource]
-script = ExtResource("1_h7b2a")
-sectionName = "Corridor"
+script = ExtResource("1_w1rmx")
+corMaxTotal = 15
+corMaxStraight = 5
+corMinStraight = 5
+sectionName = "Corridor Mid"
 sectionType = "PathSection"
 sectionStyle = "Connector"
-defaultResponses = 0
+defaultResponses = 15
 sizeWidthMin = 1
 sizeWidthMax = 1
 sizeDepthMin = 1

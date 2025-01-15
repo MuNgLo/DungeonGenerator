@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/BottomScreen/BottomScreen.cs" id="1_qthb6"]
 [ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/BottomScreen/PathInfo.cs" id="2_sxobj"]
 
-[node name="dungeonBottom" type="Control" node_paths=PackedStringArray("sectionInfo", "mapPieceInfo")]
+[node name="dungeonBottom" type="Control" node_paths=PackedStringArray("sectionInfo", "mapPieceInfo", "connectionInfo")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_qthb6")
 sectionInfo = NodePath("TabContainer/Selection/GridContainer/SectionInfo")
 mapPieceInfo = NodePath("TabContainer/Selection/GridContainer/MappieceInfo")
+connectionInfo = NodePath("TabContainer/Selection/GridContainer/ConnectionInfo")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 1
@@ -21,10 +22,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Selection" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -47,7 +47,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "MapPieceInfo"
 
+[node name="ConnectionInfo" type="Label" parent="TabContainer/Selection/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ConnectionInfo"
+
 [node name="Pathing" type="Control" parent="TabContainer" node_paths=PackedStringArray("BS", "pathDebugInfo")]
+visible = false
 layout_mode = 2
 script = ExtResource("2_sxobj")
 BS = NodePath("../..")
