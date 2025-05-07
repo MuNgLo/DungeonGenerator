@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buvynhrc3e56j"
-path="res://.godot/imported/ResetArrow.png-d73d770af753b6ecd85d70d3e2902a53.ctex"
+uid="uid://dy7y34131qly2"
+path="res://.godot/imported/Brain.png-04af529935f8a34fea6683715cca02f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/MSettings/ResetArrow.png"
-dest_files=["res://.godot/imported/ResetArrow.png-d73d770af753b6ecd85d70d3e2902a53.ctex"]
+source_file="res://addons/MGameAI/Icons/Brain.png"
+dest_files=["res://.godot/imported/Brain.png-04af529935f8a34fea6683715cca02f5.ctex"]
 
 [params]
 

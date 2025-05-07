@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using Godot;
-using Microsoft.VisualBasic;
-using Munglo.GameEvents;
 
 namespace Munglo.AI.Base
 {

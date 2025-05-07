@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using Godot;
 using Munglo.Commons;
-using Munglo.GameEvents;
 using System;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 
 namespace Munglo.AI.Inventory
 {
@@ -100,8 +97,9 @@ namespace Munglo.AI.Inventory
         private void Start()
         {
             //aiObject = GetComponent<AIObject>();
-            Munglo.GameEvents.Events.Units.OnUnitDeath += OnUnitDeath;
+            //Munglo.GameEvents.Events.Units.OnUnitDeath += OnUnitDeath;
         }
+        /*
         private void OnUnitDeath(object sender, UnitDeathEventArguments arg0)
         {
             if(unit.aiObjectID != arg0.AIObject.aiObjectID) { return; }
@@ -114,6 +112,7 @@ namespace Munglo.AI.Inventory
                 //item.GetComponent<Rigidbody>().AddRelativeTorque(Vector3.right * rotationalForce, ForceMode.Impulse);
             }
         }
+        */
         public IFood GetMostEfficientFood()
         {
             List<Node> picks = items.FindAll(p => p is IFood);

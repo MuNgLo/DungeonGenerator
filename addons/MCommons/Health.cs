@@ -1,7 +1,6 @@
 using System;
 using Godot;
-using Munglo.AI;
-using Munglo.GDLobby;
+
 
 namespace Munglo.Commons
 {
@@ -34,16 +33,12 @@ namespace Munglo.Commons
         {
             if(value > 0.0f)
             {
-                Chat.HudChat.AddNotification($"Health +{value}");
                 CurrentLife += value;
             }
         }
 
         private void UpdateCustomData(float delta)
         {
-            if(AIManager.Instance is null){return;}
-            // Update custom data 
-            if (AIManager.Selection.Selected == null || AIManager.Selection.SelectedUnit.GetNode<Health>("Health").GetInstanceId() != GetInstanceId()) { return; }
             lastCustomDataUpdate -= delta;
             if (lastCustomDataUpdate < 0.0f)
             {
@@ -65,12 +60,13 @@ namespace Munglo.Commons
             CurrentLife = CurrentLife - package.damage;
             if (isPlayer == false)
             {
-                GameEvents.Events.Units.RaiseUnitTookDamage(new GameEvents.UnitTookDamageEventArguments()
+                /*GameEvents.Events.Units.RaiseUnitTookDamage(new GameEvents.UnitTookDamageEventArguments()
                 {
                     damage = package.damage,
                     location = package.point,
                     normal = package.velocity.Normalized()
                 });
+                */
             }
             if (CurrentLife <= 0.0f)
             {
@@ -92,7 +88,7 @@ namespace Munglo.Commons
         {
             if (!isPlayer)
             {
-                GameEvents.Events.Units.RaiseUnitDeath(
+                /*GameEvents.Events.Units.RaiseUnitDeath(
                     new GameEvents.UnitDeathEventArguments()
                     {
                         GlobalPosition = package.point, 
@@ -101,6 +97,7 @@ namespace Munglo.Commons
                         dealer = package.dealer.Name
                     }
                     );
+                    */
                 GetParent().GetParent().QueueFree();
                 return;
             }

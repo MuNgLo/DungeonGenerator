@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Godot;
 using Munglo.AI.Debug;
 using Munglo.Commons;
-using Munglo.GameEvents;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Munglo.AI.Base
 {
