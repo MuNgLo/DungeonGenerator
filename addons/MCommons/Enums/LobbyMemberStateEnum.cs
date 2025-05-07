@@ -1,0 +1,4 @@
+namespace Munglo.Commons
+{
+    public enum LOBBYMEMBERSTATENUM { NONE, CONNECTING, CONNECTED, LOADING, DISCONNECTING }
+}
