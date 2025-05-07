@@ -1,0 +1,126 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2moetunvrqoh"]
+
+[ext_resource type="Script" uid="uid://ov0bydyt0wpi" path="res://MuNgLoModules/MungloSettingsModule/UISettingsEntry.cs" id="1_sitll"]
+[ext_resource type="Texture2D" uid="uid://buvynhrc3e56j" path="res://MuNgLoModules/MungloSettingsModule/ResetArrow.png" id="2_hitre"]
+
+[node name="SettingsEntry" type="Control" node_paths=PackedStringArray("elementParent")]
+custom_minimum_size = Vector2(350, 30)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 343.295
+offset_bottom = 24.0
+script = ExtResource("1_sitll")
+elementParent = NodePath("MarginContainer/Control")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Control" type="Control" parent="MarginContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="FieldName" type="Label" parent="MarginContainer/Control"]
+layout_mode = 2
+offset_left = 7.0
+offset_right = 120.0
+offset_bottom = 28.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Master"
+vertical_alignment = 1
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/Control"]
+layout_mode = 2
+offset_left = 126.0
+offset_right = 287.0
+offset_bottom = 28.0
+step = 0.01
+value = 100.0
+
+[node name="Value" type="Label" parent="MarginContainer/Control"]
+layout_mode = 1
+offset_left = 287.0
+offset_right = 347.0
+offset_bottom = 28.0
+theme_override_colors/font_color = Color(1, 0.843137, 0, 1)
+text = "69
+"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="MarginContainer/Control"]
+layout_mode = 2
+offset_left = 175.0
+offset_top = 4.0
+offset_right = 346.0
+offset_bottom = 24.0
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/Control"]
+layout_mode = 2
+offset_left = 287.0
+offset_right = 350.0
+offset_bottom = 28.0
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/Control"]
+layout_mode = 2
+offset_left = 287.0
+offset_right = 350.0
+offset_bottom = 28.0
+
+[node name="LineEdit" type="LineEdit" parent="MarginContainer/Control"]
+layout_mode = 2
+offset_left = 175.0
+offset_right = 350.0
+offset_bottom = 28.0
+
+[node name="KeyBind" type="Button" parent="MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -106.0
+offset_right = -79.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "W"
+
+[node name="KeyBindAlt" type="Button" parent="MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "W"
+
+[node name="btnReset" type="TextureButton" parent="MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -14.0
+offset_right = 30.0
+offset_bottom = 16.0
+grow_horizontal = 0
+grow_vertical = 2
+texture_normal = ExtResource("2_hitre")
+ignore_texture_size = true
+stretch_mode = 0
