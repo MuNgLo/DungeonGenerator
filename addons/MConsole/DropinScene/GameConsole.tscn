@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://de1od7uc00qsf"]
+[gd_scene load_steps=2 format=3 uid="uid://de1od7uc00qsf"]
 
-[ext_resource type="Script" uid="uid://d1h66op1ln0sj" path="res://Modules/ConsoleSystem/DropinScene/GameConsole.cs" id="1_fd6dq"]
-[ext_resource type="FontFile" uid="uid://bccrxbkhahcct" path="res://Fonts/VT323/VT323-Regular.ttf" id="2_wcun7"]
+[ext_resource type="Script" uid="uid://4tf0tkje0obj" path="res://addons/MConsole/DropinScene/GameConsole.cs" id="1_fd6dq"]
 
 [node name="GameConsole" type="Control" node_paths=PackedStringArray("outputArea", "inputArea")]
 layout_mode = 3
@@ -14,9 +13,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fd6dq")
+maxLineCount = 11
 outputArea = NodePath("PanelContainer/GridContainer/MarginContainer/RichTextLabel")
 inputArea = NodePath("PanelContainer/GridContainer/MarginContainer2/LineEdit")
-maxLineCount = 11
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -35,11 +34,6 @@ theme_override_constants/margin_right = 4
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/GridContainer/MarginContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
-theme_override_fonts/normal_font = ExtResource("2_wcun7")
-theme_override_fonts/mono_font = ExtResource("2_wcun7")
-theme_override_fonts/italics_font = ExtResource("2_wcun7")
-theme_override_fonts/bold_italics_font = ExtResource("2_wcun7")
-theme_override_fonts/bold_font = ExtResource("2_wcun7")
 bbcode_enabled = true
 text = "
 "
@@ -56,4 +50,3 @@ theme_override_constants/margin_bottom = 4
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/GridContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("2_wcun7")
