@@ -1,0 +1,2 @@
+When importing make the feet/head collision checkers their 
+own physics layer that do not collide with player. Should probably just collide with default.
