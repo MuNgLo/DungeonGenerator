@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="FloorResource" load_steps=16 format=3 uid="uid://b0etk4whx01gn"]
 
-[ext_resource type="Script" uid="uid://cx5bw2t6vgs8n" path="res://addons/MDunGen/Scripts/ResourceDefinitions/BuildRuleResource.cs" id="1_xpxpc"]
+[ext_resource type="Script" uid="uid://dc15bgjhm0e4e" path="res://addons/MDunGen/Scripts/ResourceDefinitions/BuildRuleResource.cs" id="1_xpxpc"]
 [ext_resource type="Resource" uid="uid://dk1ltui3mo7xj" path="res://addons/MDunGen/Config/Sections/DefaultStartRoom.tres" id="2_ptpeo"]
 [ext_resource type="Resource" uid="uid://bbm73lasohnsg" path="res://addons/MDunGen/Config/Sections/HallwayMid.tres" id="3_842s6"]
 [ext_resource type="Resource" uid="uid://cpo4pr8osbhnk" path="res://addons/MDunGen/Config/Sections/DefaultStandardRoom.tres" id="4_way2j"]
 [ext_resource type="Resource" uid="uid://fwwvfja283kt" path="res://addons/MDunGen/Config/Sections/DefaultCorridorMid.tres" id="5_3maia"]
 [ext_resource type="Resource" uid="uid://c7uncev2xr220" path="res://addons/MDunGen/Config/Sections/DefaultCorridorLong.tres" id="6_kh483"]
-[ext_resource type="Script" uid="uid://cnq06ms6fvqun" path="res://addons/MDunGen/Scripts/ResourceDefinitions/FloorResource.cs" id="7_nn5bf"]
+[ext_resource type="Script" uid="uid://u4jhmu3ufbd1" path="res://addons/MDunGen/Scripts/ResourceDefinitions/FloorResource.cs" id="7_nn5bf"]
 
 [sub_resource type="Resource" id="Resource_vj114"]
 script = ExtResource("1_xpxpc")
