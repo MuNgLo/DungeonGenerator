@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BiomeResource" load_steps=36 format=3 uid="uid://cs58xqyn4ofdy"]
 
 [ext_resource type="PackedScene" uid="uid://b0k5luvs28qyn" path="res://addons/MDunGen/Scenes/Standard/def_ceiling.tscn" id="1_jjr23"]
-[ext_resource type="Script" uid="uid://cdfyascobji4w" path="res://addons/MDunGen/Scripts/Commons/BiomeEntry.cs" id="2_ei6xj"]
+[ext_resource type="Script" uid="uid://cmmg2rn0o8wln" path="res://addons/MDunGen/Scripts/Commons/BiomeEntry.cs" id="2_ei6xj"]
 [ext_resource type="ArrayMesh" uid="uid://d3o1e38vsdqs0" path="res://addons/MDunGen/Meshes/Standard/Standard_dbArrow.res" id="3_u2eaq"]
 [ext_resource type="ArrayMesh" uid="uid://bkhtgsky7tf8u" path="res://addons/MDunGen/Meshes/Standard/Standard_dbError.res" id="4_vu743"]
 [ext_resource type="ArrayMesh" uid="uid://jsyys7e6t7gu" path="res://addons/MDunGen/Meshes/Standard/Standard_dbFaulty.res" id="5_480td"]
@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bkoxwnfj3xk1g" path="res://addons/MDunGen/Scenes/Standard/def_floor03.tscn" id="13_guq6r"]
 [ext_resource type="PackedScene" uid="uid://digcfyvxwb5hd" path="res://addons/MDunGen/Scenes/Standard/def_hallwayfloor01.tscn" id="14_k3g1e"]
 [ext_resource type="PackedScene" uid="uid://1b4yyt8ynq8u" path="res://addons/MDunGen/Scenes/Standard/def_hallwayfloor02.tscn" id="15_g4srk"]
-[ext_resource type="Script" uid="uid://dkc2drutl3ujn" path="res://addons/MDunGen/Scripts/ResourceDefinitions/BiomeResource.cs" id="16_41rgj"]
+[ext_resource type="Script" uid="uid://cbnndc7trwlv1" path="res://addons/MDunGen/Scripts/ResourceDefinitions/BiomeResource.cs" id="16_41rgj"]
 [ext_resource type="PackedScene" uid="uid://b8cjyfjwaqgea" path="res://addons/MDunGen/Scenes/Standard/def_wall01.tscn" id="17_p7b47"]
 [ext_resource type="PackedScene" uid="uid://bv6l13mlr0w6b" path="res://addons/MDunGen/Scenes/Standard/def_wall02.tscn" id="18_08lf2"]
 [ext_resource type="PackedScene" uid="uid://bel2njfu1ge0j" path="res://addons/MDunGen/Scenes/Standard/def_wall03.tscn" id="19_prw1t"]
