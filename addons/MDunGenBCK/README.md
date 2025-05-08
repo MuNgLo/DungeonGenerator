@@ -6,11 +6,11 @@
  
 # State-> 90% done
 
- Put all files in a folder called "MuNgLosDungeon" in your addons folder and activate.
+ Put all files in a folder called "MDunGen" in your addons folder and activate.
 
  Alternatively use Git subtree to add straight from repo
 
- git subtree add --prefix=addons/MuNgLosDungeon git@github.com:MuNgLo/DungeonGenerator.git main
+ git subtree add --prefix=addons/MDunGen git@github.com:MuNgLo/DungeonGenerator.git main
  
  Features
 	- Build
