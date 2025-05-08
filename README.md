@@ -1,13 +1,22 @@
 # DungeonGenerator
  addon for Godot 4.2.2 written in C#
+
+ [![Watch the video](https://img.youtube.com/vi/sLbqZpDT7UQ/0.jpg)](https://www.youtube.com/watch?v=sLbqZpDT7UQ)<br>
+
  
- Put the "MuNgLosDungeon" folder in your addons folder and activate.
+# State-> 90% done
+
+ Put all files in a folder called "MuNgLosDungeon" in your addons folder and activate.
+
+ Alternatively use Git subtree to add straight from repo
+
+ git subtree add --prefix=addons/MuNgLosDungeon git@github.com:MuNgLo/DungeonGenerator.git main
  
  Features
 	- Build
 	- Clear
 	- Show flags
-	- Buttons to open configuration resources in inpector
+	- Buttons to open configuration resources in inspector
 	- Export to save generated level to a scene
 	- View section of dungeon data
 	
