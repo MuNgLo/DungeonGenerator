@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SectionResource" load_steps=2 format=3 uid="uid://dk1ltui3mo7xj"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/SectionResource.cs" id="1_u2vxy"]
+
+[resource]
+script = ExtResource("1_u2vxy")
+sectionName = "Start Room"
+sectionType = "RoomSection"
+sectionStyle = ""
+defaultResponses = 15
+sizeWidthMin = 5
+sizeWidthMax = 8
+sizeDepthMin = 5
+sizeDepthMax = 8
+nbFloorsMin = 1
+nbFloorsMax = 1
+debug = false
+nbDoorsPerFloorMin = 0
+nbDoorsPerFloorMax = 0
+placers = []
+centerSpiralStairs = false
+firstPieceDoor = false
+backDoorChance = 30
+allFloor = false

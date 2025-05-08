@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://msnmrjeaqh84"]
+
+[ext_resource type="Texture2D" uid="uid://culspwun10yjl" path="res://addons/MuNgLosDungeon/Materials/Textures/CaveTilable.png" id="1_1ak24"]
+
+[resource]
+diffuse_mode = 1
+specular_mode = 2
+albedo_color = Color(0.247059, 0.239216, 0.223529, 1)
+albedo_texture = ExtResource("1_1ak24")
+uv1_scale = Vector3(0.205, 0.205, 0.205)
+uv1_triplanar = true
+uv1_world_triplanar = true

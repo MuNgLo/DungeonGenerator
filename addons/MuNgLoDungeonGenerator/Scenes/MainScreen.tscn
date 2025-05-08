@@ -1,0 +1,372 @@
+[gd_scene load_steps=28 format=3 uid="uid://66fkglptwkl1"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DungeonViewerToolbar.cs" id="2_btfr4"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/Selection/SelectOnClick.cs" id="2_tq51n"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionTypeListButton.cs" id="3_bakif"]
+[ext_resource type="Environment" uid="uid://bn1cwyorljhq2" path="res://addons/MuNgLosDungeon/ViewerEnv.tres" id="3_ubg15"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ScreenDungeonVisualizer.cs" id="4_ey6f7"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/Notifications.cs" id="7_cfcxe"]
+[ext_resource type="Texture2D" uid="uid://dv255qe1oq6xd" path="res://addons/MuNgLosDungeon/Icons/Plus.png" id="16_nrt1g"]
+[ext_resource type="Texture2D" uid="uid://c1d535us2x45r" path="res://addons/MuNgLosDungeon/Icons/AddonIcon_big.png" id="17_kon6s"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/FloorOptions.cs" id="17_usypf"]
+[ext_resource type="Texture2D" uid="uid://bqy2qf25o7ju4" path="res://addons/MuNgLosDungeon/Icons/Minus.png" id="17_wfx1p"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelector.cs" id="21_siix3"]
+[ext_resource type="Theme" uid="uid://c0br7ijjnpfqo" path="res://addons/MuNgLosDungeon/Config/MainScreenTheme.tres" id="29_j2fmg"]
+[ext_resource type="Texture2D" uid="uid://druq5meumhh8v" path="res://addons/MuNgLosDungeon/Icons/Floorbox.png" id="29_le75x"]
+[ext_resource type="Texture2D" uid="uid://bbm8d0xvbhdl3" path="res://addons/MuNgLosDungeon/Icons/ProfileIcon.png" id="31_7xw7w"]
+[ext_resource type="Texture2D" uid="uid://cox2hruyd1v8o" path="res://addons/MuNgLosDungeon/Icons/CogIcon.png" id="32_m0fwq"]
+[ext_resource type="Texture2D" uid="uid://dgb6ce56b7orr" path="res://addons/MuNgLosDungeon/Icons/BiomeIcon.png" id="33_ck4ds"]
+[ext_resource type="Texture2D" uid="uid://wnh4mm6q2vxl" path="res://addons/MuNgLosDungeon/Icons/ExportIcon.png" id="34_3dg3h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xqdge"]
+
+[sub_resource type="World3D" id="World3D_qk8pl"]
+environment = ExtResource("3_ubg15")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_blo15"]
+auto_exposure_enabled = true
+auto_exposure_min_sensitivity = 400.0
+auto_exposure_max_sensitivity = 600.0
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_pbb25"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sfpnj"]
+albedo_color = Color(0.956863, 0.294118, 0.666667, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_sqo4d"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nw88t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fkwmv"]
+bg_color = Color(0.211765, 0.211765, 0.211765, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="DungeonViewer" type="Control"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("1_t5mpj")
+
+[node name="DungeonViewerToolbar" type="HBoxContainer" parent="." node_paths=PackedStringArray("btnModeToggle", "btnClear", "btnBuild", "btnRandomToggle", "btnView", "btnSectionTypeList", "btnSectionSelector")]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 1.0
+offset_bottom = 25.0
+grow_horizontal = 2
+script = ExtResource("2_btfr4")
+btnModeToggle = NodePath("btnMode")
+btnClear = NodePath("btnClear")
+btnBuild = NodePath("btnBuild")
+btnRandomToggle = NodePath("btnRandom")
+btnView = NodePath("btnView")
+btnSectionTypeList = NodePath("btnSectionTypeList")
+btnSectionSelector = NodePath("SectionResourceSelector")
+
+[node name="btnMode" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "DungeonMode"
+
+[node name="VSeparator" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnClear" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "Clear"
+
+[node name="VSeparator2" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnBuild" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "Build"
+
+[node name="btnRandom" type="Button" parent="DungeonViewerToolbar"]
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xqdge")
+text = "Random"
+
+[node name="VSeparator3" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnView" type="MenuButton" parent="DungeonViewerToolbar"]
+layout_mode = 2
+tooltip_text = "Check the things you want to show after a build"
+theme_type_variation = &"FlatMenuButton"
+theme_override_font_sizes/font_size = 11
+toggle_mode = false
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "View"
+item_count = 5
+popup/item_0/text = "Floors"
+popup/item_0/checkable = 1
+popup/item_0/checked = true
+popup/item_1/text = "Walls"
+popup/item_1/checkable = 1
+popup/item_1/checked = true
+popup/item_1/id = 1
+popup/item_2/text = "Ceilings"
+popup/item_2/checkable = 1
+popup/item_2/checked = true
+popup/item_2/id = 2
+popup/item_3/text = "Extras"
+popup/item_3/checkable = 1
+popup/item_3/checked = true
+popup/item_3/id = 5
+popup/item_4/text = "PathingPass"
+popup/item_4/checkable = 1
+popup/item_4/checked = true
+popup/item_4/id = 4
+
+[node name="VSeparator4" type="VSeparator" parent="DungeonViewerToolbar"]
+layout_mode = 2
+
+[node name="btnSectionTypeList" type="OptionButton" parent="DungeonViewerToolbar"]
+layout_mode = 2
+tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
+selected = 0
+item_count = 3
+popup/item_0/text = "HallwaySection"
+popup/item_1/text = "PathSection"
+popup/item_1/id = 1
+popup/item_2/text = "RoomSection"
+popup/item_2/id = 2
+script = ExtResource("3_bakif")
+
+[node name="SectionResourceSelector" type="OptionButton" parent="DungeonViewerToolbar"]
+layout_mode = 2
+tooltip_text = "If a Section Type is selected above this will show all resources of that Type stored in correct paths."
+script = ExtResource("21_siix3")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 27.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+script = ExtResource("2_tq51n")
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+process_mode = 3
+own_world_3d = true
+world_3d = SubResource("World3D_qk8pl")
+handle_input_locally = false
+size = Vector2i(1152, 628)
+render_target_clear_mode = 2
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(-0.34031, -0.790434, 0.509315, 0, 0.541644, 0.840608, -0.940313, 0.286067, -0.184327, 3.13087, 5.1674, -1.1331)
+environment = ExtResource("3_ubg15")
+attributes = SubResource("CameraAttributesPractical_blo15")
+current = true
+fov = 37.8493
+size = 59.787
+script = ExtResource("1_tt5em")
+speed = 10.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.265, -0.425, 0)
+light_energy = 6.0
+light_size = 0.028
+light_bake_mode = 0
+shadow_enabled = true
+omni_range = 30.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(0.307938, 0.679591, -0.66583, 2.53496e-08, 0.699838, 0.714302, 0.951406, -0.219961, 0.215507, 0, 3, 0)
+shadow_enabled = true
+directional_shadow_split_1 = 0.262
+directional_shadow_split_2 = 0.444
+directional_shadow_split_3 = 0.731
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.906
+
+[node name="Dungeon" type="Node3D" parent="SubViewportContainer/SubViewport"]
+script = ExtResource("4_ey6f7")
+
+[node name="Generated" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport/Dungeon"]
+navigation_mesh = SubResource("NavigationMesh_pbb25")
+
+[node name="GeneratedDebug" type="Node3D" parent="SubViewportContainer/SubViewport/Dungeon"]
+visible = false
+
+[node name="Target" type="Node3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Target"]
+material_override = SubResource("StandardMaterial3D_sfpnj")
+mesh = SubResource("SphereMesh_sqo4d")
+skeleton = NodePath("../..")
+
+[node name="Gizmos" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="FloorOptions" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -65.0
+offset_top = 26.0
+offset_right = 65.0
+offset_bottom = 43.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("17_usypf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FloorOptions"]
+layout_mode = 2
+
+[node name="SpinBox" type="SpinBox" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("29_j2fmg")
+select_all_on_focus = true
+
+[node name="Plus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("16_nrt1g")
+stretch_mode = 5
+
+[node name="FloorBox" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("29_le75x")
+stretch_mode = 5
+
+[node name="Minus" type="TextureButton" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("17_wfx1p")
+stretch_mode = 5
+
+[node name="EndVisibleFloor" type="Label" parent="FloorOptions/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("29_j2fmg")
+text = "3"
+
+[node name="Control" type="Control" parent="FloorOptions/HBoxContainer"]
+custom_minimum_size = Vector2(17.46, 0)
+layout_mode = 2
+
+[node name="Notification" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -114.0
+offset_right = 14.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.658824, 0.509804, 0.223529, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/normal_font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxTexture_nw88t")
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+script = ExtResource("7_cfcxe")
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 47.0
+offset_right = -12.0
+offset_bottom = 207.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fkwmv")
+
+[node name="Profile" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -1.0
+offset_right = 127.0
+offset_bottom = 128.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Profile: Open the profile resource in the Inspector"
+texture_normal = ExtResource("31_7xw7w")
+stretch_mode = 5
+
+[node name="Settings" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 32.0
+offset_right = 126.0
+offset_bottom = 160.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Show the settings resource in the inspector"
+texture_normal = ExtResource("32_m0fwq")
+stretch_mode = 5
+
+[node name="Biome" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 64.0
+offset_right = 126.0
+offset_bottom = 192.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Show the biome resource in the inspector"
+texture_normal = ExtResource("33_ck4ds")
+stretch_mode = 5
+
+[node name="Export" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 96.0
+offset_right = 126.0
+offset_bottom = 224.0
+scale = Vector2(0.25, 0.25)
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("34_3dg3h")
+stretch_mode = 5
+
+[node name="MasterConfig" type="TextureButton" parent="Panel2"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 131.0
+offset_right = 38.0
+offset_bottom = 163.0
+scale = Vector2(0.5, 0.5)
+tooltip_text = "Export the generated Dungeon to a scene"
+texture_normal = ExtResource("17_kon6s")
+stretch_mode = 5

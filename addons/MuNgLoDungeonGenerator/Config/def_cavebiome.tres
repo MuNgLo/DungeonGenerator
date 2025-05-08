@@ -1,0 +1,134 @@
+[gd_resource type="Resource" script_class="BiomeResource" load_steps=48 format=3 uid="uid://cja3tdsn4jffs"]
+
+[ext_resource type="PackedScene" uid="uid://bfo02c5yt1wo3" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_ceiling_cave.tscn" id="2_22a3s"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/Commons/BiomeEntry.cs" id="2_ewuuo"]
+[ext_resource type="ArrayMesh" uid="uid://4ukiwxvbdo6w" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_DebugMESH.res" id="3_lqstm"]
+[ext_resource type="ArrayMesh" uid="uid://bvs0cv3bt8ys5" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_ErrorMESH.res" id="4_fqqev"]
+[ext_resource type="ArrayMesh" uid="uid://c5lxvxmcsj0wg" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_FaultyMESH.res" id="5_eewic"]
+[ext_resource type="ArrayMesh" uid="uid://uhhjwvr4ucup" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagGreenMESH.res" id="6_3iwpu"]
+[ext_resource type="ArrayMesh" uid="uid://jen6htq17bmr" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_WallFlagRedMESH.res" id="7_pr1sv"]
+[ext_resource type="ArrayMesh" uid="uid://dip3qmewlum88" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_PathEndMESH.res" id="8_jsmm0"]
+[ext_resource type="ArrayMesh" uid="uid://cxctrful7f36o" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_BridgeMESH.res" id="9_mlftf"]
+[ext_resource type="ArrayMesh" uid="uid://dhnsne2ie12xf" path="res://addons/MuNgLosDungeon/Meshes/DefaultMeshes_StairMESH.res" id="10_djwh7"]
+[ext_resource type="PackedScene" uid="uid://bhvry231twumv" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_floor_cave.tscn" id="11_6vl5m"]
+[ext_resource type="PackedScene" uid="uid://c14criy0er1f8" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_arch_cave.tscn" id="15_uwwxo"]
+[ext_resource type="PackedScene" uid="uid://hn50bo75qswv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgesection.tscn" id="16_b0bma"]
+[ext_resource type="PackedScene" uid="uid://83plyprbfnje" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_arch_corner_cave.tscn" id="16_p7e7g"]
+[ext_resource type="PackedScene" uid="uid://be4pne6q3rspc" path="res://addons/MuNgLosDungeon/Scenes/def_bridgesection02.tscn" id="17_v0itf"]
+[ext_resource type="PackedScene" uid="uid://byraj4hodkrp7" path="res://addons/MuNgLosDungeon/Scenes/def_bridgefoundation.tscn" id="18_jffwj"]
+[ext_resource type="PackedScene" uid="uid://dedlv67rsc2kp" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail.tscn" id="19_c2ksg"]
+[ext_resource type="PackedScene" uid="uid://dxmsx0og05v3r" path="res://addons/MuNgLosDungeon/Scenes/def_bridgerail02.tscn" id="20_wgg6p"]
+[ext_resource type="PackedScene" uid="uid://da4kispjxtxwv" path="res://addons/MuNgLosDungeon/Scenes/def_bridgepost.tscn" id="21_donxu"]
+[ext_resource type="PackedScene" uid="uid://b2tla62s2g83v" path="res://addons/MuNgLosDungeon/Scenes/def_balcony.tscn" id="22_iguw5"]
+[ext_resource type="PackedScene" uid="uid://dpliftngpsoho" path="res://addons/MuNgLosDungeon/Scenes/def_stairsplatform.tscn" id="26_ipv6e"]
+[ext_resource type="PackedScene" uid="uid://bch2kn6ntmb4u" path="res://addons/MuNgLosDungeon/Scenes/def_stairs01.tscn" id="27_1wrqg"]
+[ext_resource type="PackedScene" uid="uid://yqrnyyhsvjgi" path="res://addons/MuNgLosDungeon/Scenes/def_stairs02.tscn" id="28_apae8"]
+[ext_resource type="PackedScene" uid="uid://nxvpgv6ehoxa" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_wall_cave.tscn" id="28_opwum"]
+[ext_resource type="PackedScene" uid="uid://cosw3s35mahlh" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_wall_opening_cave.tscn" id="29_mkxdi"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/BiomeResource.cs" id="29_q157a"]
+[ext_resource type="PackedScene" uid="uid://e111sweiynw3" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_wall_opening_wide_cave.tscn" id="30_kks6w"]
+[ext_resource type="PackedScene" uid="uid://d4g1asmywmysa" path="res://addons/MuNgLosDungeon/Scenes/Cave/def_wallcorner_cave.tscn" id="32_74y3x"]
+
+[sub_resource type="Resource" id="Resource_hcjvs"]
+script = ExtResource("2_ewuuo")
+key = 9
+resources = [ExtResource("2_22a3s")]
+
+[sub_resource type="Resource" id="Resource_3gpkb"]
+script = ExtResource("2_ewuuo")
+key = 3
+resources = [ExtResource("3_lqstm")]
+
+[sub_resource type="Resource" id="Resource_ephk1"]
+script = ExtResource("2_ewuuo")
+key = 1
+resources = [ExtResource("4_fqqev")]
+
+[sub_resource type="Resource" id="Resource_qgcu4"]
+script = ExtResource("2_ewuuo")
+key = 2
+resources = [ExtResource("5_eewic")]
+
+[sub_resource type="Resource" id="Resource_e8l86"]
+script = ExtResource("2_ewuuo")
+key = 4
+resources = [ExtResource("6_3iwpu")]
+
+[sub_resource type="Resource" id="Resource_7d5xo"]
+script = ExtResource("2_ewuuo")
+key = 5
+resources = [ExtResource("7_pr1sv")]
+
+[sub_resource type="Resource" id="Resource_docgt"]
+script = ExtResource("2_ewuuo")
+key = 27
+resources = [ExtResource("8_jsmm0")]
+
+[sub_resource type="Resource" id="Resource_prbbt"]
+script = ExtResource("2_ewuuo")
+key = 26
+resources = [ExtResource("9_mlftf")]
+
+[sub_resource type="Resource" id="Resource_r61tm"]
+script = ExtResource("2_ewuuo")
+key = 25
+resources = [ExtResource("10_djwh7")]
+
+[sub_resource type="Resource" id="Resource_sq8ea"]
+script = ExtResource("2_ewuuo")
+key = 7
+resources = [ExtResource("11_6vl5m")]
+
+[sub_resource type="Resource" id="Resource_2b0l0"]
+script = ExtResource("2_ewuuo")
+key = 15
+resources = [ExtResource("15_uwwxo")]
+
+[sub_resource type="Resource" id="Resource_ubjud"]
+script = ExtResource("2_ewuuo")
+key = 16
+resources = [ExtResource("16_p7e7g")]
+
+[sub_resource type="Resource" id="Resource_j08gh"]
+script = ExtResource("2_ewuuo")
+key = 24
+resources = [ExtResource("16_b0bma"), ExtResource("17_v0itf"), ExtResource("18_jffwj"), ExtResource("19_c2ksg"), ExtResource("20_wgg6p"), ExtResource("21_donxu"), ExtResource("22_iguw5")]
+
+[sub_resource type="Resource" id="Resource_a6w81"]
+script = ExtResource("2_ewuuo")
+key = 23
+resources = [ExtResource("26_ipv6e")]
+
+[sub_resource type="Resource" id="Resource_0y3vb"]
+script = ExtResource("2_ewuuo")
+key = 21
+resources = [ExtResource("27_1wrqg"), ExtResource("28_apae8")]
+
+[sub_resource type="Resource" id="Resource_ot12k"]
+script = ExtResource("2_ewuuo")
+key = 11
+resources = [ExtResource("28_opwum")]
+
+[sub_resource type="Resource" id="Resource_monmn"]
+script = ExtResource("2_ewuuo")
+key = 12
+resources = [ExtResource("29_mkxdi")]
+
+[sub_resource type="Resource" id="Resource_va16j"]
+script = ExtResource("2_ewuuo")
+key = 13
+resources = [ExtResource("30_kks6w")]
+
+[sub_resource type="Resource" id="Resource_wl7py"]
+script = ExtResource("2_ewuuo")
+key = 14
+resources = [ExtResource("32_74y3x")]
+
+[resource]
+script = ExtResource("29_q157a")
+size = Vector3i(6, 6, 6)
+debug = [SubResource("Resource_3gpkb"), SubResource("Resource_ephk1"), SubResource("Resource_qgcu4"), SubResource("Resource_e8l86"), SubResource("Resource_7d5xo"), SubResource("Resource_docgt"), SubResource("Resource_prbbt"), SubResource("Resource_r61tm")]
+walls = [SubResource("Resource_ot12k"), SubResource("Resource_monmn"), SubResource("Resource_va16j"), SubResource("Resource_wl7py")]
+floors = [SubResource("Resource_sq8ea")]
+ceilings = [SubResource("Resource_hcjvs")]
+props = [SubResource("Resource_2b0l0"), SubResource("Resource_ubjud"), SubResource("Resource_j08gh"), SubResource("Resource_a6w81"), SubResource("Resource_0y3vb")]

@@ -1,0 +1,51 @@
+[gd_scene load_steps=44 format=3 uid="uid://66fkglptwkl1"]
+
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/MainScreen.cs" id="1_t5mpj"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/CameraControls.cs" id="1_tt5em"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/DuengeonSelector.cs" id="2_tq51n"]
+[ext_resource type="PackedScene" uid="uid://cok3u5man8n7s" path="res://addons/MuNgLosDungeon/ToolMeshCursor3DBox.glb" id="3_8fs6d"]
+[ext_resource type="Environment" uid="uid://bn1cwyorljhq2" path="res://addons/MuNgLosDungeon/ViewerEnv.tres" id="3_ubg15"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ScreenDungeonVisualizer.cs" id="4_ey6f7"]
+[ext_resource type="Resource" uid="uid://rwtr675ir2dk" path="res://addons/MuNgLosDungeon/Config/def_addonconfig.tres" id="6_gyna8"]
+[ext_resource type="Texture2D" uid="uid://dtjyxe2ilemxm" path="res://addons/MuNgLosDungeon/Icons/ArrowUp.png" id="15_xmst8"]
+[ext_resource type="Texture2D" uid="uid://dv255qe1oq6xd" path="res://addons/MuNgLosDungeon/Icons/Plus.png" id="16_nrt1g"]
+[ext_resource type="Texture2D" uid="uid://bqy2qf25o7ju4" path="res://addons/MuNgLosDungeon/Icons/Minus.png" id="17_wfx1p"]
+[ext_resource type="Texture2D" uid="uid://dq57hbhbk8mab" path="res://addons/MuNgLosDungeon/Icons/ArrowDown.png" id="18_bqin5"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/ModeSelection.cs" id="20_tvmsy"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerSelection.cs" id="21_rut2o"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/SectionSelector.cs" id="21_siix3"]
+[ext_resource type="Texture2D" uid="uid://8555w8eydq84" path="res://addons/MuNgLosDungeon/Icons/ArrowLeft.png" id="23_b3bau"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerNavigationBar.cs" id="23_sw2ff"]
+[ext_resource type="Texture2D" uid="uid://c2o24ip52ufku" path="res://addons/MuNgLosDungeon/Icons/ArrowRight.png" id="24_kk61u"]
+[ext_resource type="Texture2D" uid="uid://bvpiege84x6yg" path="res://addons/MuNgLosDungeon/Icons/HammerIcon.png" id="26_op7t4"]
+[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/PlacerBar.cs" id="26_xnkuc"]
+[ext_resource type="Texture2D" uid="uid://h27oxefjs4p7" path="res://addons/MuNgLosDungeon/Icons/ClearIcon.png" id="27_2lruq"]
+[ext_resource type="Texture2D" uid="uid://dbtj37kwtffth" path="res://addons/MuNgLosDungeon/Icons/DebugIcon.png" id="28_a1cq0"]
+[ext_resource type="Texture2D" uid="uid://s8b4xers08bq" path="res://addons/MuNgLosDungeon/Icons/DiceIcon.png" id="29_286he"]
+[ext_resource type="Texture2D" uid="uid://dwaqs2kxfisr6" path="res://addons/MuNgLosDungeon/Icons/ShowIcon.png" id="29_s37yq"]
+[ext_resource type="Texture2D" uid="uid://bbm8d0xvbhdl3" path="res://addons/MuNgLosDungeon/Icons/ProfileIcon.png" id="31_7xw7w"]
+[ext_resource type="Texture2D" uid="uid://cox2hruyd1v8o" path="res://addons/MuNgLosDungeon/Icons/CogIcon.png" id="32_m0fwq"]
+[ext_resource type="Texture2D" uid="uid://dgb6ce56b7orr" path="res://addons/MuNgLosDungeon/Icons/BiomeIcon.png" id="33_ck4ds"]
+[ext_resource type="Texture2D" uid="uid://wnh4mm6q2vxl" path="res://addons/MuNgLosDungeon/Icons/ExportIcon.png" id="34_3dg3h"]
+
+[sub_resource type="World3D" id="World3D_qk8pl"]
+environment = ExtResource("3_ubg15")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_blo15"]
+auto_exposure_enabled = true
+auto_exposure_min_sensitivity = 400.0
+auto_exposure_max_sensitivity = 600.0
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_pbb25"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sfpnj"]
+albedo_color = Color(0.956863, 0.294118, 0.666667, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_sqo4d"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nw88t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fkwmv"]
+bg_color = Color(0.211765, 0.211765, 0.2117
