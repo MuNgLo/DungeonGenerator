@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://digcfyvxwb5hd"]
+
+[ext_resource type="ArrayMesh" uid="uid://415aa4vg2h4m" path="res://addons/MDunGen/Meshes/Hallway/Hallway_Floor01.res" id="1_gpodi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r6g64"]
+size = Vector3(6, 7, 24)
+
+[node name="Floor" type="Node3D"]
+
+[node name="HallwayFloor01" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("1_gpodi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HallwayFloor01"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HallwayFloor01/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.5, 9)
+shape = SubResource("BoxShape3D_r6g64")

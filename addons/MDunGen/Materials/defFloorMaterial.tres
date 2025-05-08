@@ -1,0 +1,30 @@
+[gd_resource type="StandardMaterial3D" load_steps=7 format=3 uid="uid://dkj4wkj6kfoti"]
+
+[ext_resource type="Texture2D" uid="uid://d0hspepxcf3xj" path="res://addons/MDunGen/Materials/Textures/defWallTexture.png" id="1_csyik"]
+[ext_resource type="Texture2D" uid="uid://dbo6ecrh7llep" path="res://addons/MDunGen/Materials/Textures/defWallTextureRoughness.png" id="2_i8n8c"]
+[ext_resource type="Texture2D" uid="uid://duscif74q1x8b" path="res://addons/MDunGen/Materials/Textures/defFloorNRM.png" id="3_n6bgo"]
+
+[sub_resource type="Gradient" id="Gradient_irtdk"]
+offsets = PackedFloat32Array(0, 0.359827, 0.689306, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_g3q3k"]
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1cno0"]
+seamless = true
+color_ramp = SubResource("Gradient_irtdk")
+noise = SubResource("FastNoiseLite_g3q3k")
+
+[resource]
+albedo_color = Color(0.301961, 0.286275, 0.317647, 1)
+albedo_texture = SubResource("NoiseTexture2D_1cno0")
+normal_scale = 2.19
+normal_texture = ExtResource("3_n6bgo")
+detail_enabled = true
+detail_mask = ExtResource("2_i8n8c")
+detail_blend_mode = 3
+detail_albedo = ExtResource("1_csyik")
+uv1_scale = Vector3(0.325, 0.325, 0.325)
+uv1_triplanar = true
+uv1_world_triplanar = true

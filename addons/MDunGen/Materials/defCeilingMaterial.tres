@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b0pphjs1lefh6"]
+
+[ext_resource type="Texture2D" uid="uid://duh2a4eq63rda" path="res://addons/MDunGen/Materials/Textures/defCeilingTexture.png" id="1_vi0wu"]
+
+[resource]
+albedo_color = Color(0.290196, 0.262745, 0.207843, 1)
+albedo_texture = ExtResource("1_vi0wu")
+metallic_specular = 0.23
+roughness_texture = ExtResource("1_vi0wu")
+uv1_scale = Vector3(0.126, 0.126, 0.126)
+uv1_triplanar = true
+uv1_world_triplanar = true
