@@ -17,15 +17,15 @@ namespace Munglo.DungeonGenerator
         private BottomScreen bscreen;
         private SubViewportContainer subV;
         private CameraControls cam;
-        private PackedScene mainPrefab = ResourceLoader.Load<PackedScene>("res://addons/MuNgLosDungeon/Scenes/MainScreen.tscn");
-        private PackedScene bottomPrefab = ResourceLoader.Load<PackedScene>("res://addons/MuNgLosDungeon/Scenes/BottomScreen.tscn");
-        public ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
+        private PackedScene mainPrefab = ResourceLoader.Load<PackedScene>("res://addons/MDunGen/Scenes/MainScreen.tscn");
+        private PackedScene bottomPrefab = ResourceLoader.Load<PackedScene>("res://addons/MDunGen/Scenes/BottomScreen.tscn");
+        public ProfileResource Profile = ResourceLoader.Load("res://addons/MDunGen/Config/def_profile.tres") as ProfileResource;
         private EditorFileDialog popup;
         #region Overrides
         public override void _EnterTree()
         {
             GD.Print("Loaded MuNgLo's Dungeon Plugin");
-            masterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettingsResource;
+            masterConfig = ResourceLoader.Load("res://addons/MDunGen/Config/def_addonconfig.tres") as AddonSettingsResource;
 
             // Centerscreen
             screen = (MainScreen)mainPrefab.Instantiate();
@@ -112,7 +112,7 @@ namespace Munglo.DungeonGenerator
         }
         public override Texture2D _GetPluginIcon()
         {
-            Texture2D icon = ResourceLoader.Load("res://addons/MuNgLosDungeon/Icons/AddonIcon.png") as Texture2D;
+            Texture2D icon = ResourceLoader.Load("res://addons/MDunGen/Icons/AddonIcon.png") as Texture2D;
             return icon;
         }
         public override void _MakeVisible(bool visible)

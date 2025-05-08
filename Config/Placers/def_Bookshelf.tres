@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="DropTablePlacer" load_steps=7 format=3 uid="uid://cbkcsslumic5w"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/Placers/DropTablePlacer.cs" id="1_srqus"]
-[ext_resource type="PackedScene" uid="uid://bpuybu7x2kylu" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_bookshelf.tscn" id="2_vdfkp"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/DropTableEntryResource.cs" id="3_pu2my"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/DropTableResource.cs" id="4_lu4l0"]
+[ext_resource type="Script" uid="uid://y3wqocwy8is2" path="res://addons/MDunGen/Scripts/Placers/DropTablePlacer.cs" id="1_srqus"]
+[ext_resource type="PackedScene" uid="uid://bpuybu7x2kylu" path="res://addons/MDunGen/Scenes/Props/prop_bookshelf.tscn" id="2_vdfkp"]
+[ext_resource type="Script" uid="uid://chdbqihv75x6g" path="res://addons/MDunGen/Scripts/ResourceDefinitions/DropTableEntryResource.cs" id="3_pu2my"]
+[ext_resource type="Script" uid="uid://m64twlgoibtb" path="res://addons/MDunGen/Scripts/ResourceDefinitions/DropTableResource.cs" id="4_lu4l0"]
 
 [sub_resource type="Resource" id="Resource_k7h1r"]
 script = ExtResource("3_pu2my")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bo1vvej54i8o"]
 
-[ext_resource type="ArrayMesh" uid="uid://bu1r35hoogy73" path="res://addons/MuNgLosDungeon/Meshes/Standard/Standard_Floor01.res" id="1_435x3"]
+[ext_resource type="ArrayMesh" uid="uid://bu1r35hoogy73" path="res://addons/MDunGen/Meshes/Standard/Standard_Floor01.res" id="1_435x3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_taeds"]
 size = Vector3(6, 1, 6)

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="SectionResource" load_steps=2 format=3 uid="uid://dk1ltui3mo7xj"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/SectionResource.cs" id="1_u2vxy"]
+[ext_resource type="Script" uid="uid://boofliorct6nk" path="res://addons/MDunGen/Scripts/ResourceDefinitions/SectionResource.cs" id="1_u2vxy"]
 
 [resource]
 script = ExtResource("1_u2vxy")

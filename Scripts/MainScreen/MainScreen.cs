@@ -49,7 +49,7 @@ namespace Munglo.DungeonGenerator.UI
         }
         private void PopupInitialSettingsDialougue()
         {
-            PackedScene pScn = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/InitialPopup.tscn") as PackedScene;
+            PackedScene pScn = ResourceLoader.Load("res://addons/MDunGen/Scenes/InitialPopup.tscn") as PackedScene;
             InitialPopup pop = pScn.Instantiate<InitialPopup>();
             pop.screen = this;
             AddChild(pop);

@@ -8,19 +8,19 @@ namespace Munglo.DungeonGenerator
     [Tool, GlobalClass]
     public partial class AddonSettingsResource : DungeonAddonResource
     {
-        [Export] public string lastUsedProfile = "res://addons/MuNgLosDungeon/Config/def_profile.tres";
+        [Export] public string lastUsedProfile = "res://addons/MDunGen/Config/def_profile.tres";
         [Export] public string ProjectResourcePath = string.Empty;
 
-        public string SectionResourcePathDefault = "res://addons/MuNgLosDungeon/Config/Sections/";
+        public string SectionResourcePathDefault = "res://addons/MDunGen/Config/Sections/";
         public string SectionResourcePath => ProjectResourcePath +"Sections/";
 
 
 
-        public string defaultBiome = "res://addons/MuNgLosDungeon/Config/def_biome.tres";
-        public string defaultSettings = "res://addons/MuNgLosDungeon/Config/def_settings.tres";
+        public string defaultBiome = "res://addons/MDunGen/Config/def_biome.tres";
+        public string defaultSettings = "res://addons/MDunGen/Config/def_settings.tres";
 
-        public string defaultStartRoom = "res://addons/MuNgLosDungeon/Config/Rooms/DefaultStartRoom.tres";
-        public string defaultStandardRoom = "res://addons/MuNgLosDungeon/Config/Rooms/DefaultStandardRoom.tres";
+        public string defaultStartRoom = "res://addons/MDunGen/Config/Rooms/DefaultStartRoom.tres";
+        public string defaultStandardRoom = "res://addons/MDunGen/Config/Rooms/DefaultStandardRoom.tres";
 
         [ExportCategory("Visual Floors")]
         [Export] public int visibleFloorStart = 0;

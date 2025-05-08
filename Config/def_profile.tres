@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="ProfileResource" load_steps=4 format=3 uid="uid://c18oe4qok4s1t"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/ProfileResource.cs" id="1_aoufu"]
-[ext_resource type="Resource" uid="uid://cs58xqyn4ofdy" path="res://addons/MuNgLosDungeon/Config/Biomes/def_biome.tres" id="1_w5wee"]
-[ext_resource type="Resource" uid="uid://6su0i5s3ukgo" path="res://addons/MuNgLosDungeon/Config/def_settings.tres" id="3_051hi"]
+[ext_resource type="Script" uid="uid://mi24mb3s4wyq" path="res://addons/MDunGen/Scripts/ResourceDefinitions/ProfileResource.cs" id="1_aoufu"]
+[ext_resource type="Resource" uid="uid://cs58xqyn4ofdy" path="res://addons/MDunGen/Config/Biomes/def_biome.tres" id="1_w5wee"]
+[ext_resource type="Resource" uid="uid://6su0i5s3ukgo" path="res://addons/MDunGen/Config/def_settings.tres" id="3_051hi"]
 
 [resource]
 script = ExtResource("1_aoufu")

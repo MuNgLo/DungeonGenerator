@@ -1,8 +1,6 @@
 ﻿using Godot;
 using System;
 using System.Collections.Generic;
-using static System.Collections.Specialized.BitVector32;
-using DungeonAddonTester.addons.MuNgLosDungeon.Scripts.ResourceDefinitions;
 
 namespace Munglo.DungeonGenerator.Sections
 {

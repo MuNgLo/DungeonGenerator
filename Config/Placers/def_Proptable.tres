@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="DropTablePlacer" load_steps=11 format=3 uid="uid://cw3p0voay7aav"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/Placers/DropTablePlacer.cs" id="1_okk5q"]
-[ext_resource type="PackedScene" uid="uid://cxnyxymsxtnps" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_crate1m.tscn" id="2_3ham4"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/DropTableEntryResource.cs" id="3_l57an"]
-[ext_resource type="PackedScene" uid="uid://bgsc0nt1bdyx3" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_barrel.tscn" id="4_pgnkf"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/DropTableResource.cs" id="5_gwaam"]
-[ext_resource type="PackedScene" uid="uid://fh0u3j608fr6" path="res://addons/MuNgLosDungeon/Scenes/Props/prop_brazier01.tscn" id="5_ijh2p"]
+[ext_resource type="Script" uid="uid://y3wqocwy8is2" path="res://addons/MDunGen/Scripts/Placers/DropTablePlacer.cs" id="1_okk5q"]
+[ext_resource type="PackedScene" uid="uid://cxnyxymsxtnps" path="res://addons/MDunGen/Scenes/Props/prop_crate1m.tscn" id="2_3ham4"]
+[ext_resource type="Script" uid="uid://chdbqihv75x6g" path="res://addons/MDunGen/Scripts/ResourceDefinitions/DropTableEntryResource.cs" id="3_l57an"]
+[ext_resource type="PackedScene" uid="uid://bgsc0nt1bdyx3" path="res://addons/MDunGen/Scenes/Props/prop_barrel.tscn" id="4_pgnkf"]
+[ext_resource type="Script" uid="uid://m64twlgoibtb" path="res://addons/MDunGen/Scripts/ResourceDefinitions/DropTableResource.cs" id="5_gwaam"]
+[ext_resource type="PackedScene" uid="uid://fh0u3j608fr6" path="res://addons/MDunGen/Scenes/Props/prop_brazier01.tscn" id="5_ijh2p"]
 
 [sub_resource type="Resource" id="Resource_qchi5"]
 script = ExtResource("3_l57an")

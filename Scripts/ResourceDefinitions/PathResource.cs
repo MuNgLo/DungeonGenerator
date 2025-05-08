@@ -1,7 +1,6 @@
 ﻿using Godot;
-using Munglo.DungeonGenerator;
 
-namespace DungeonAddonTester.addons.MuNgLosDungeon.Scripts.ResourceDefinitions
+namespace Munglo.DungeonGenerator
 {
     [Tool,GlobalClass]
     internal partial class PathResource : SectionResource

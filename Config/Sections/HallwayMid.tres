@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PathResource" load_steps=2 format=3 uid="uid://bbm73lasohnsg"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/PathResource.cs" id="1_y5hpc"]
+[ext_resource type="Script" uid="uid://dsr1trfcnf7v4" path="res://addons/MDunGen/Scripts/ResourceDefinitions/PathResource.cs" id="1_y5hpc"]
 
 [resource]
 script = ExtResource("1_y5hpc")

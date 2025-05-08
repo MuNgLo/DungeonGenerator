@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://csd43eh854m4d"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/MainScreen/InitialPopup.cs" id="1_u8nbk"]
+[ext_resource type="Script" uid="uid://mr4q1v6tlg6" path="res://addons/MDunGen/Scripts/MainScreen/InitialPopup.cs" id="1_u8nbk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ykq0x"]
 bg_color = Color(0.101961, 0.101961, 0.101961, 0.501961)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhvry231twumv"]
 
-[ext_resource type="ArrayMesh" uid="uid://dqbk8gjoxaa7b" path="res://addons/MuNgLosDungeon/Meshes/Cave/DefaultCave_FloorCave.res" id="1_fi08w"]
+[ext_resource type="ArrayMesh" uid="uid://dqbk8gjoxaa7b" path="res://addons/MDunGen/Meshes/Cave/DefaultCave_FloorCave.res" id="1_fi08w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_taeds"]
 size = Vector3(6, 1, 6)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://1b4yyt8ynq8u"]
 
-[ext_resource type="ArrayMesh" uid="uid://babtkbg38c7ky" path="res://addons/MuNgLosDungeon/Meshes/Hallway/Hallway_Floor02.res" id="2_b1625"]
+[ext_resource type="ArrayMesh" uid="uid://babtkbg38c7ky" path="res://addons/MDunGen/Meshes/Hallway/Hallway_Floor02.res" id="2_b1625"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r6g64"]
 size = Vector3(6, 1, 12)

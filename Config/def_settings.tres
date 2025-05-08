@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="GenerationSettingsResource" load_steps=3 format=3 uid="uid://6su0i5s3ukgo"]
 
-[ext_resource type="Resource" uid="uid://b0etk4whx01gn" path="res://addons/MuNgLosDungeon/Config/Floors/def_floor.tres" id="1_4bk8j"]
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/GenerationSettingsResource.cs" id="1_t4wih"]
+[ext_resource type="Resource" uid="uid://b0etk4whx01gn" path="res://addons/MDunGen/Config/Floors/def_floor.tres" id="1_4bk8j"]
+[ext_resource type="Script" uid="uid://vrppinxk3qvt" path="res://addons/MDunGen/Scripts/ResourceDefinitions/GenerationSettingsResource.cs" id="1_t4wih"]
 
 [resource]
 script = ExtResource("1_t4wih")

@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="AddonSettingsResource" load_steps=2 format=3 uid="uid://blngor0u0dbk4"]
 
-[ext_resource type="Script" path="res://addons/MuNgLosDungeon/Scripts/ResourceDefinitions/AddonSettingsResource.cs" id="1_5xn5v"]
+[ext_resource type="Script" uid="uid://dmkybjf1iwg4r" path="res://addons/MDunGen/Scripts/ResourceDefinitions/AddonSettingsResource.cs" id="1_5xn5v"]
 
 [resource]
 script = ExtResource("1_5xn5v")
 lastUsedProfile = "res://addons/MuNgLosDungeon/Config/def_profile.tres"
-ProjectResourcePath = "res://Dungeon/"
+ProjectResourcePath = "res://DungeonStuff/"
 visibleFloorStart = 0
 maxVisibleFloors = 3
 showFloors = true

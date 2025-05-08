@@ -7,13 +7,13 @@ namespace Munglo.DungeonGenerator.UI
 	{
         private AddonSettingsResource MasterConfig;
         private MainScreen MS;
-        private ProfileResource Profile = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_profile.tres") as ProfileResource;
+        private ProfileResource Profile = ResourceLoader.Load("res://addons/MDunGen/Config/def_profile.tres") as ProfileResource;
 
 
         // Called when the node enters the scene tree for the first time.
         public override void _Ready()
 		{
-            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettingsResource;
+            MasterConfig = ResourceLoader.Load("res://addons/MDunGen/Config/def_addonconfig.tres") as AddonSettingsResource;
             MS = GetParent<MainScreen>();
             // Spinbox
             (FindChild("SpinBox") as SpinBox).ValueChanged += WhenSpinBoxValueChanged;

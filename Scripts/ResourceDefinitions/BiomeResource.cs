@@ -20,8 +20,8 @@ namespace Munglo.DungeonGenerator
         [ExportCategory("Extras")]
         [Export] public BiomeEntry[] extras;
 
-        private readonly string standardMeshPath = "res://addons/MuNgLosDungeon/Meshes/Standard/Standard_";
-        private readonly string standardScenePath = "res://addons/MuNgLosDungeon/Scenes/Standard/";
+        private readonly string standardMeshPath = "res://addons/MDunGen/Meshes/Standard/Standard_";
+        private readonly string standardScenePath = "res://addons/MDunGen/Scenes/Standard/";
         internal bool GetResource(PIECEKEYS key, int variantID, out Resource result)
         {
             result = null;

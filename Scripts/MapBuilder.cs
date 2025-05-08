@@ -484,7 +484,7 @@ internal class MapBuilder
         ulong[] bosse = new ulong[4] { (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999), (ulong)rng.Next(1111, 9999) };
         startpoint.Orientation = dir;
 
-        SectionResource corr = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/Sections/DefaultCorridor.tres") as SectionResource;
+        SectionResource corr = ResourceLoader.Load("res://addons/MDunGen/Config/Sections/DefaultCorridor.tres") as SectionResource;
 
 
         SectionbBuildArguments args = new SectionbBuildArguments() { sectionDefinition = corr, map = map, piece = startpoint, sectionID = map.Sections.Count, sectionSeed = bosse, cfg = Args };

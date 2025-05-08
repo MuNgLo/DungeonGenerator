@@ -26,7 +26,7 @@ namespace Munglo.DungeonGenerator.UI
         public override void _EnterTree()
         {
             screen = GetParent().GetParent().GetParent() as MainScreen;
-            MasterConfig = ResourceLoader.Load("res://addons/MuNgLosDungeon/Config/def_addonconfig.tres") as AddonSettingsResource;
+            MasterConfig = ResourceLoader.Load("res://addons/MDunGen/Config/def_addonconfig.tres") as AddonSettingsResource;
         }
         public async void BuildDungeon(GenerationSettingsResource settings, FloorResource floor, BiomeResource biome)
         {

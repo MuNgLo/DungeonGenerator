@@ -39,10 +39,10 @@ internal class Manager
         addon = dun;
         MS = ms;
         dunVis = dv;
-        gizmoDiamond = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/diamond.tscn") as PackedScene;
-        gizmoConnParent = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/connparent.tscn") as PackedScene;
-        gizmoConnChild = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/connchild.tscn") as PackedScene;
-        gizmoSegmented = ResourceLoader.Load("res://addons/MuNgLosDungeon/Scenes/Gizmos/segmented.tscn") as PackedScene;
+        gizmoDiamond = ResourceLoader.Load("res://addons/MDunGen/Scenes/Gizmos/diamond.tscn") as PackedScene;
+        gizmoConnParent = ResourceLoader.Load("res://addons/MDunGen/Scenes/Gizmos/connparent.tscn") as PackedScene;
+        gizmoConnChild = ResourceLoader.Load("res://addons/MDunGen/Scenes/Gizmos/connchild.tscn") as PackedScene;
+        gizmoSegmented = ResourceLoader.Load("res://addons/MDunGen/Scenes/Gizmos/segmented.tscn") as PackedScene;
         MS.OnMainScreenUIUpdate += UpdateGizmos;
     }
     private void RaiseSelectionChanged()
