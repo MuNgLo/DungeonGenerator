@@ -100,7 +100,7 @@ public partial class UIKeybindPopup : Control
     {
         if (Instance is null)
         {
-            Core.LogError("UIKeybindPopup::StartKeyBind() Instance not set! Make sure there is a UI Popup in the scene.");
+           //Core.LogError("UIKeybindPopup::StartKeyBind() Instance not set! Make sure there is a UI Popup in the scene.");
             return;
         }
         Instance.settingsName = sName;

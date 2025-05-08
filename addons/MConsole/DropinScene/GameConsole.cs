@@ -29,7 +29,7 @@ public partial class GameConsole : Control
         outputArea.Text += System.Environment.NewLine;
         Hide();
         // To show log messages from your own system do something like this
-        Core.OnLogMessagePushed += WhenLogMessagePushed;
+        //Core.OnLogMessagePushed += WhenLogMessagePushed;
     }
 
     private void WhenLogMessagePushed(object sender, string[] e)

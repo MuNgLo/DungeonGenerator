@@ -16,7 +16,6 @@ public partial class Motor : MMNode
     [Export] private int recursion = 5;
     [Export] private RigidBody3D controlledRigidBody3D;
     [Export] private Node3D ViewPivvot;
-    private PlayerInput CMD;
     public Vector3 velocity;
     //public Vector3 velocity { set { if (float.IsNaN(value.X)) GD.PushError(); velocityPRIV = value; } get => velocityPRIV; }
 
@@ -74,6 +73,12 @@ public partial class Motor : MMNode
     public Vector3 GlobalRotation { get => RigidBody.GlobalRotation; set => RigidBody.GlobalRotation = value; }
     #endregion
 
+    public delegate Vector2 V2InputGet();
+    public delegate Vector3 V3InputGet();
+    public delegate bool FlagInputGet();
+    private V2InputGet mouseVel;
+    private V3InputGet inputVector;
+    private FlagInputGet isJumping;
 
 
     #endregion
@@ -90,17 +95,19 @@ public partial class Motor : MMNode
         velocity = Vector3.Zero;
     }
     /// <summary>
-    /// Feed the playerinput isntance here that should control this avatar
+    /// Feed the playerinput instance here that should control this avatar
     /// Returns true if the internal cmd reference is not NULL
     ///  SImplified for now Might nneed work
     /// </summary>
     /// <param name="cmd"></param>
     /// <returns></returns>
-    public bool TakeControl(PlayerInput cmd)
+    public bool TakeControl(V2InputGet mVel, V3InputGet inVec, FlagInputGet jumpFlag)
     {
-        CMD = cmd;
+        mouseVel = mVel;
+        inputVector = inVec;
+        isJumping = jumpFlag;
         velocity = Vector3.Zero;
-        return CMD is not null;
+        return mouseVel is not null;
     }
     /// <summary>
     /// Run movement
@@ -108,9 +115,9 @@ public partial class Motor : MMNode
     /// <param name="delta"></param>
     public override void _PhysicsProcess(double delta)
     {
-        if (CMD is null) { return; }
+        if (mouseVel is null) { return; }
         ProcessMouseRotation(delta);
-        wishDir = mmPhysics.gravityPlane.Project(controlledRigidBody3D.Transform.Basis * CMD.inVec).Normalized();
+        wishDir = mmPhysics.gravityPlane.Project(controlledRigidBody3D.Transform.Basis * inputVector.Invoke()).Normalized();
 
 
         GravityCompliance((float)delta, false);
@@ -125,7 +132,7 @@ public partial class Motor : MMNode
 
         GroundCheck();
 
-        if (IsGrounded && jump.CanJump(this) && CMD.isJumping)
+        if (IsGrounded && jump.CanJump(this) && isJumping.Invoke())
         {
             if (debug) { GD.Print("Motor::_PhysicsProcess() JUMPED!"); }
             velocity = jump.DoJump(this, velocity);
@@ -319,7 +326,7 @@ public partial class Motor : MMNode
     private double rbCollisionTS = 0;
     public override void _Process(double delta)
     {
-        ProcessMouseInput(delta);
+        ProcessMouseInput(mouseVel.Invoke(), delta);
 
         if (!Multiplayer.IsServer()) { return; }
         if (rbCollisionTS > 0)
@@ -334,10 +341,8 @@ public partial class Motor : MMNode
             }
         }
     }
-    private void ProcessMouseInput(double delta)
+    private void ProcessMouseInput(Vector2 mVel, double delta)
     {
-        // MouseInput
-        Vector2 mVel = CMD.MouseIn;
         if (mVel != Vector2.Zero)
         {
             hRotation += (double)mVel.X;
@@ -377,7 +382,7 @@ public partial class Motor : MMNode
         Vector3 fallVelocity = velocity - flatVelocity;
         //if (debug) { GD.Print($"Motor::AirMovement() wishDir[{wishDir}] CMD.inVec[{CMD.inVec}] flatVelocity[{flatVelocity}] fallVelocity[{fallVelocity}]"); }
         // In air we adjust the flat velocity to let gravity build over frames in the fall velocity
-        flatVelocity = airMovement.AirMove(flatVelocity, wishDir, CMD, delta);
+        flatVelocity = airMovement.AirMove(flatVelocity, wishDir, inputVector.Invoke(), delta);
         // Apply velocity changes
         velocity = flatVelocity + fallVelocity;
     }

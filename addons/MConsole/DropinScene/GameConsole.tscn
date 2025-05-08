@@ -13,9 +13,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_fd6dq")
-maxLineCount = 11
 outputArea = NodePath("PanelContainer/GridContainer/MarginContainer/RichTextLabel")
 inputArea = NodePath("PanelContainer/GridContainer/MarginContainer2/LineEdit")
+maxLineCount = 11
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1

@@ -17,7 +17,7 @@ namespace Munglo.Movement.Nodes
         [Export] private float strafeOnlyAirControl = 0.14f;      // How precise air control is when only using strafe
         [Export] private float strafeOnlyAirAcceleration = 10.0f;  // Air accel when only sideStrafe
         [Export] private float strafeOnlyMaxSpeed = 1.5f;          // What the max speed to generate when side strafing
-        internal Vector3 AirMove(Vector3 playerVelocity, Vector3 wishdir, PlayerInput cmd, float delta)
+        internal Vector3 AirMove(Vector3 playerVelocity, Vector3 wishdir, Vector3 inVec, float delta)
         {
             float control = airControl;
             float wishspeed = wishdir.Length();
@@ -30,7 +30,7 @@ namespace Munglo.Movement.Nodes
                 accel = airAcceleration;
             // If the player is ONLY strafing left or right
             
-            if (cmd.inVec.Z == 0 && cmd.inVec.X != 0)
+            if (inVec.Y == 0 && inVec.X != 0)
             {
                 if (wishspeed > strafeOnlyMaxSpeed)
                     wishspeed = strafeOnlyMaxSpeed;
@@ -38,7 +38,7 @@ namespace Munglo.Movement.Nodes
                 control = strafeOnlyAirControl;
             }
             Accelerate(ref playerVelocity, wishdir, wishspeed, accel, delta);
-            AirControl(ref playerVelocity, wishdir, wishspeed, cmd, control);
+            AirControl(ref playerVelocity, wishdir, wishspeed, control);
             return playerVelocity;
         }
         private void Accelerate(ref Vector3 playerVelocity, Vector3 wishdir, float wishspeed, float accel, float delta)
@@ -66,7 +66,7 @@ namespace Munglo.Movement.Nodes
             playerVelocity += accelspeed * wishdir.Project(playerVelocity);
         }
 
-        private void AirControl(ref Vector3 playerVelocity, Vector3 wishdir, float wishspeed, PlayerInput cmd, float control)
+        private void AirControl(ref Vector3 playerVelocity, Vector3 wishdir, float wishspeed, float control)
         {
             if (debug) { GD.Print($"AirMovement::AirControl()"); }
             float speed = playerVelocity.Length();

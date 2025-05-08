@@ -14,7 +14,7 @@ public interface ICartridge
     /// </summary>
     public void ReturnToPool();
     public void SetCartridgeValues(int cartIndex, CartridgeDefinition cDef);
-    public void Fire(Node3D muzzle, float speed, float damageMultiplier, IWeapon weapon, int ownerID);
+    public void Fire(Node3D muzzle, Node3D container, float speed, float damageMultiplier, IWeapon weapon, int ownerID);
     public void SetDamagePackage(CartridgeDefinition package);
     public void Hide();
     public void Show();

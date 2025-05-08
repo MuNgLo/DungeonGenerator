@@ -2,7 +2,6 @@
 using Godot;
 using Munglo.Commons;
 using Munglo.WeaponsSystem.Cartridges;
-using Players;
 
 namespace Munglo.WeaponsSystem;
 /// <summary>
@@ -38,13 +37,13 @@ public partial class Cartridge : RigidBody3D, ICartridge
             return;
         }
     }
-    public void Fire(Node3D muzzle, float speed, float damageMultiplier, IWeapon weapon, int ownerAIOID)
+    public void Fire(Node3D muzzle, Node3D container, float speed, float damageMultiplier, IWeapon weapon, int ownerAIOID)
     {
         if(!Multiplayer.IsServer()){ return; }
         if (spent) { return; }
-        if(debug){GD.Print($"{Core.WHO}Cartridge::Fire()");}
+        if(debug){GD.Print($"Cartridge::Fire()");}
         spent = true;
-        damage.projContainer = Core.ProjectileContainer;
+        damage.projContainer = container;
         damage.lData = new Dictionary<string, ProjectileListenerData>();
         damage.cartAmount = Amount;
         List<int> addL = new List<int>();
@@ -54,8 +53,8 @@ public partial class Cartridge : RigidBody3D, ICartridge
         for (int i = 0; i < Amount; i++)
         {
             Node3D proj = Projectiles.ProjectileManager.GetProjectile(projectileIndex) as Node3D;
-            Core.ProjectileContainer.AddChild(proj);
-            proj.Owner = Core.ProjectileContainer;
+            container.AddChild(proj);
+            proj.Owner = container;
             proj.GlobalPosition = muzzle.GlobalPosition;
             proj.GlobalRotation = muzzle.GlobalRotation;
             proj.Show();
@@ -76,8 +75,8 @@ public partial class Cartridge : RigidBody3D, ICartridge
     }
     public void Eject()
     {
-        if (ProcessMode != ProcessModeEnum.Disabled) { GD.Print($"{Core.WHO}Cartridge::Eject() Eject called on disabled cartridge"); }
-        Reparent(Core.TempContainer);
+        if (ProcessMode != ProcessModeEnum.Disabled) { GD.Print($"Cartridge::Eject() Eject called on disabled cartridge"); }
+        //Reparent(Core.TempContainer);
         //rb.isKinematic = false;
         //GetNode<TimeToLive>("").Enable();
     }
@@ -118,7 +117,7 @@ public partial class Cartridge : RigidBody3D, ICartridge
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void RPCSetClientMesh(string path)
     {
-        if(debug){GD.Print($"{Core.WHO}Cartridge::RPCSetClientMesh({path})");}
+        if(debug){GD.Print($"Cartridge::RPCSetClientMesh({path})");}
         model.Mesh = GD.Load<Mesh>(path);
     }
     #endregion

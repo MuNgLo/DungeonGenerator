@@ -42,7 +42,7 @@ public partial class Weaponparts : WeaponSystemNode
             cartridge.Owner = cartridgePoint;
             cartridge.Position = Vector3.Zero;
             cartridge.Rotation = Vector3.Zero;
-            if(debug){GD.Print($"{Core.WHO}Weaponparts::MountCartridge() Cart Path[{cartridge.GetPath()}] show[{show}]");}
+            if(debug){GD.Print($"Weaponparts::MountCartridge() Cart Path[{cartridge.GetPath()}] show[{show}]");}
         }
     }
     /// <summary>

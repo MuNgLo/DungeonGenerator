@@ -2,7 +2,6 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Munglo.GameEvents;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Munglo.Commons;
@@ -21,7 +20,7 @@ internal partial class LobbyManager : MultiplayerSpawner
     private IPAddress ip;
     private List<Member> Members;
 
-    private HostConfig Config => SettingsModule.Settings.GetCachedSettings("HostConfig") as HostConfig;
+    //private HostConfig Config => SettingsModule.Settings.GetCachedSettings("HostConfig") as HostConfig;
     //internal EventHandler OnConnectAttempt;
     private ENetMultiplayerPeer localPeer;
 
@@ -43,7 +42,7 @@ internal partial class LobbyManager : MultiplayerSpawner
     /// </summary>
     private void OnConnectedToServer()
     {
-        Core.Log($"LobbyManager::OnConnectedToServer()");
+        //Core.Log($"LobbyManager::OnConnectedToServer()");
     }
     /// <summary>
     /// Fires when a clients is started but timesout after ~34s
@@ -51,7 +50,7 @@ internal partial class LobbyManager : MultiplayerSpawner
     /// </summary>
     private void OnConnectionFailed()
     {
-        Core.Log($"LobbyManager::OnConnectionFailed()");
+        //Core.Log($"LobbyManager::OnConnectionFailed()");
         GetTree().GetMultiplayer().MultiplayerPeer = null; // Remove peer.
     }
     /// <summary>
@@ -61,7 +60,7 @@ internal partial class LobbyManager : MultiplayerSpawner
     {
         if (debug)
         {
-            Core.Log($"LobbyManager::OnServerDisconnected()");
+            //Core.Log($"LobbyManager::OnServerDisconnected()");
             GetTree().GetMultiplayer().MultiplayerPeer.Close();
         }
     }
@@ -71,12 +70,12 @@ internal partial class LobbyManager : MultiplayerSpawner
     /// <param name="id"></param>
     private void OnPeerDisconnected(long id)
     {
-        Core.Log($"LobbyManager::PeerDisconnected({id})");
+        //Core.Log($"LobbyManager::PeerDisconnected({id})");
         if (MP.IsServer())
         {
             Member pl = Members.Find(p => p.PeerID == id);
             Members.Remove(pl);
-            Events.Lobby.RaiseMemberDisconnected(id);
+            //Events.Lobby.RaiseMemberDisconnected(id);
             pl.QueueFree();
         }
     }
@@ -87,7 +86,7 @@ internal partial class LobbyManager : MultiplayerSpawner
     /// <param name="id"></param>
     private void OnPeerConnected(long id) // Seems connecting client has id as 1 and host has the random peer ID
     {
-        Core.Log($"LobbyManager::OnPeerConnected({id})");
+        //Core.Log($"LobbyManager::OnPeerConnected({id})");
         //Events.NET.RaiseGameConnectedEvent();
         AddMember(id, LOBBYMEMBERSTATENUM.CONNECTING);
     }
@@ -101,11 +100,11 @@ internal partial class LobbyManager : MultiplayerSpawner
     {
         if (MP.IsServer())
         {
-            Core.Log($"LobbyManager::StopHost()");
+            //Core.Log($"LobbyManager::StopHost()");
             MP.MultiplayerPeer.Close(); // OnServerDisconnected fires on clients. NOT on host
             MP.MultiplayerPeer = null;
             ClearAll();
-            Events.Lobby.RaiseHostClosed();
+            //Events.Lobby.RaiseHostClosed();
             // REMOVE Node named HOST that was added for debuggin
             GetTree().CurrentScene.GetNode("HOST").QueueFree();
         }
@@ -115,28 +114,28 @@ internal partial class LobbyManager : MultiplayerSpawner
     /// Only fails if adress is in use
     /// When succeded, raises Events.NET.RaiseGameConnectedEvent (disabled now)
     /// </summary>
-    public async void StartHost()
+    public async void StartHost(int maxPlayers)
     {
         if (state != LOBBYSTATE.OFFLINE) { return; }
         if (GetChildCount() > 0)
         {
-            Core.Log($"LobbyManager::StartHost() Can't host, Manager Node has [{GetChildCount()}]Children left.");
+            //Core.Log($"LobbyManager::StartHost() Can't host, Manager Node has [{GetChildCount()}]Children left.");
             return;
         }
         state = LOBBYSTATE.LAUNCHING;
         string lobbyKey = await TryUPNP();
-        Events.Lobby.RaiseHostKeyResolved(lobbyKey);
+        //Events.Lobby.RaiseHostKeyResolved(lobbyKey);
         localPeer = new ENetMultiplayerPeer();
-        Error err = localPeer.CreateServer(port, Config.maxPlayers);
+        Error err = localPeer.CreateServer(port, maxPlayers);
         if (err != Error.Ok)
         {
             // Is another server running?
-            Core.Log($"LobbyManager::StartHost() Can't host, address in use.");
+            //Core.Log($"LobbyManager::StartHost() Can't host, address in use.");
             state = LOBBYSTATE.OFFLINE;
             localPeer = null;
             return;
         }
-        Core.Log($"LobbyManager::StartHost() Lobby [{lobbyKey}] maxPlayers[{Config.maxPlayers}]"); 
+        //Core.Log($"LobbyManager::StartHost() Lobby [{lobbyKey}] maxPlayers[{Config.maxPlayers}]"); 
         GetTree().GetMultiplayer().MultiplayerPeer = localPeer;
         state = LOBBYSTATE.RUNNING;
         // ADD Node named HOST for debuggin
@@ -144,7 +143,7 @@ internal partial class LobbyManager : MultiplayerSpawner
         GetTree().CurrentScene.AddChild(n);
         Members = new();
         AddMember(1, LOBBYMEMBERSTATENUM.CONNECTING);
-        Events.Lobby.RaiseHostSetupReady();
+        //Events.Lobby.RaiseHostSetupReady();
     }
     public void JoinHost(string lobbyKey)
     {
@@ -184,7 +183,7 @@ internal partial class LobbyManager : MultiplayerSpawner
             MP.MultiplayerPeer.Close();
             MP.MultiplayerPeer = null;
             state = LOBBYSTATE.OFFLINE;
-            Events.Lobby.RaiseLeavingHost();
+            //Events.Lobby.RaiseLeavingHost();
         }
     }
 
@@ -219,7 +218,7 @@ internal partial class LobbyManager : MultiplayerSpawner
         {
             Members.Find(p => p.PeerID == id).SetState(LOBBYMEMBERSTATENUM.CONNECTED);
         }
-        Events.Lobby.RaiseHostMemberValidated(id);
+        //Events.Lobby.RaiseHostMemberValidated(id);
     }
 
 
@@ -256,7 +255,7 @@ internal partial class LobbyManager : MultiplayerSpawner
         // No UPNP device found so setting all read
         if (upnp.GetDeviceCount() < 1)
         {
-            Core.Log($"LobbyManager::TryUPNP() No UPNP device found");
+            //Core.Log($"LobbyManager::TryUPNP() No UPNP device found");
             return "";
         }
 
@@ -281,7 +280,7 @@ internal partial class LobbyManager : MultiplayerSpawner
             else
             {
                 // Failed get exterrnalIP
-                Core.Log($"LobbyManager::TryUPNP() Failed get exterrnalIP");
+                //Core.Log($"LobbyManager::TryUPNP() Failed get exterrnalIP");
             }
         });
         return AddressAndPortToString(ip, port);
@@ -309,7 +308,7 @@ internal partial class LobbyManager : MultiplayerSpawner
         }
         catch (Exception ex)
         {
-            Core.Log($"LobbyManager::StringToAddressAndPort() {ex}");
+            //Core.Log($"LobbyManager::StringToAddressAndPort() {ex}");
         }
         if (addressAndPortBytes.Length < 2) { return false; }
         port = BitConverter.ToUInt16(addressAndPortBytes, 0);

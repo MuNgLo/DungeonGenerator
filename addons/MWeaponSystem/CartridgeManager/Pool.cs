@@ -60,7 +60,7 @@ class Pool
         {
             AddOne();
             go = pool[pool.Count - 1];
-            if (debug) { GD.Print($"{Core.WHO}Pool{prefab.Name} extending. Size {pool.Count}"); }
+            if (debug) { GD.Print($"Pool{prefab.Name} extending. Size {pool.Count}"); }
         }
         go.IsInUse = true;
         return go;
@@ -78,7 +78,7 @@ class Pool
 
     internal void ReturnObject(PoolableCartridge go)
     {
-        if(debug){ GD.Print($"{Core.WHO}Pool::ReturnObject() returning[{go.GetParent().Name}]");}
+        if(debug){ GD.Print($"Pool::ReturnObject() returning[{go.GetParent().Name}]");}
         Node3D n = go.GetParent<Node3D>();
         n.GetParent().RemoveChild(n);
         n.RequestReady();

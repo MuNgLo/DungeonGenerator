@@ -13,6 +13,6 @@ public partial class PoolableProjectile : PoolableObjectBase, IPoolableObject
     public override void ResetObject()
     {
         IsInUse = false;
-        GetParent<StandardProjectile>().ResetForPool();
+        //GetParent<StandardProjectile>().ResetForPool();
     }
 }// EOF CLASS

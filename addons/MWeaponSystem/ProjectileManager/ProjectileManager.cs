@@ -1,5 +1,4 @@
 using Godot;
-using Munglo.GameEvents;
 using System.Collections.Generic;
 using Munglo.Commons;
 using System;
@@ -24,16 +23,16 @@ public partial class ProjectileManager : WeaponSystemNode3D
     }
     public override void _Ready()
     {
-        Events.Lobby.OnHostSetupReady += WhenHostSetupReady;
+        //Events.Lobby.OnHostSetupReady += WhenHostSetupReady;
     }
     private void WhenHostSetupReady(object sender, EventArgs e)
     {
-        if (debug) { GD.Print($"{Core.WHO}ProjectileManager::WhenHostSetupReady()"); }
+        if (debug) { GD.Print($"ProjectileManager::WhenHostSetupReady()"); }
         BuildPools();
     }
     private void BuildPools()
     {
-        if (debug) { GD.Print($"{Core.WHO}ProjectileManager::BuildPools()"); }
+        if (debug) { GD.Print($"ProjectileManager::BuildPools()"); }
         foreach (ProjectileDefinition projDef in projectileDefinitions)
         {
             if (projDef.ResourceName == "UnNamedProjectileVariant") { GD.Print($"Can't build pool from {projDef.ResourceName}"); continue; }
@@ -52,7 +51,7 @@ public partial class ProjectileManager : WeaponSystemNode3D
             {
                 count += pool.Count;
             }
-            GD.Print($"{Core.WHO}ProjectileManager: Initialized {pools.Keys.Count} pools with a total of {count} objects from {projectileDefinitions.Length} projectileDefinitions.");
+            GD.Print($"ProjectileManager: Initialized {pools.Keys.Count} pools with a total of {count} objects from {projectileDefinitions.Length} projectileDefinitions.");
         }
     }
 

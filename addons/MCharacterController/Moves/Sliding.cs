@@ -42,18 +42,18 @@ internal partial class Sliding : MMNode
         Vector3 slideAcceleration = MakeSlideAccelVector(mm.Gravity, mm.GroundPlane);
         float inclineModifier = (flatVelocity.Normalized().Dot(-slideAcceleration.Normalized()) + 1.0f) * 0.5f  + 1.0f;
         slideAcceleration *= inclineModifier * 50.0f;
-        if (debug) { Core.DrawGizmo(mm.GlobalPosition + Vector3.Up * 0.1f, lineDuration, slideAcceleration * lineScale, acceleration); }
+        //if (debug) { Core.DrawGizmo(mm.GlobalPosition + Vector3.Up * 0.1f, lineDuration, slideAcceleration * lineScale, acceleration); }
 
         if (canControl)
         {
             slideAcceleration = slideAcceleration.Lerp(wishDir * slideControl, slideControl);
-            if (debug) { Core.DrawGizmo(mm.GlobalPosition + Vector3.Up * 0.1f, lineDuration, slideAcceleration, adjustedWish); }
+            //if (debug) { Core.DrawGizmo(mm.GlobalPosition + Vector3.Up * 0.1f, lineDuration, slideAcceleration, adjustedWish); }
         }
 
 
 
         flatVelocity += slideAcceleration * delta;
-        if (debug) { Core.DrawGizmo(mm.GlobalPosition + Vector3.Up * 0.1f, lineDuration, flatVelocity * lineScale, finalVelocity); }
+        //if (debug) { Core.DrawGizmo(mm.GlobalPosition + Vector3.Up * 0.1f, lineDuration, flatVelocity * lineScale, finalVelocity); }
 
         mm.velocity = flatVelocity + fallVelocity;
         return true;

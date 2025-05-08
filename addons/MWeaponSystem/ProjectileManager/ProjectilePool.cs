@@ -60,7 +60,7 @@ class ProjectilePool
         {
             AddOne();
             go = pool[pool.Count - 1];
-            if (debug) { GD.Print($"{Core.WHO}ProjectilePool::GetObject() {prefab.Name} extending. Size {pool.Count}"); }
+            //if (debug) { GD.Print($"{Core.WHO}ProjectilePool::GetObject() {prefab.Name} extending. Size {pool.Count}"); }
         }
         go.IsInUse = true;
         go.GetParent<Node3D>().Scale = Vector3.One;

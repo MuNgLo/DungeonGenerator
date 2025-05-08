@@ -1,4 +1,4 @@
-using Munglo.GameEvents;
+//using Munglo.GameEvents;
 using System.Collections.Generic;
 using System;
 namespace Munglo.AI.Debug
@@ -22,16 +22,10 @@ namespace Munglo.AI.Debug
         public AIDebugSignals()
         {
             Singleton = this;
-            if (Events.Units is not null)
+            /*if (Events.Units is not null)
             {
                 Events.Units.OnUnitDeath += OnUnitDeath;
-            }
-            //ClearDebugInfo = new UnityEvent();
-            //OnAILog = new UnityEvent<AILogMessage>();
-            //OnAICustomData = new UnityEvent<AICustomData>();
-            //OnActionPossible = new UnityEvent<ActionDebugInfo>();
-            //OnActionNotPossible = new UnityEvent<ActionNonPossibleDebugInfo>();
-
+            }*/
             lastActions = new List<string>();
         }
 
@@ -45,10 +39,10 @@ namespace Munglo.AI.Debug
             OnAILog?.Invoke(Singleton, msg);
         }
 
-        private void OnUnitDeath(Object sender, UnitDeathEventArguments arg0)
+        /*private void OnUnitDeath(Object sender, UnitDeathEventArguments arg0)
         {
             if (arg0.AIObject == AIManager.Selection.Selected) { AIManager.Selection.Select(null); }
-        }
+        }*/
 
         public void RaiseSignal(ActionDebugInfoStruct incomming)
         {

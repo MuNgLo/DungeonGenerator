@@ -1,5 +1,4 @@
 using Munglo.Commons;
-using Munglo.GameEvents;
 using System.Collections.Generic;
 using Godot;
 using System;
@@ -28,18 +27,18 @@ public partial class CartridgeManager : WeaponSystemNode3D
     }
     public override void _Ready()
     {
-        Events.Lobby.OnHostSetupReady += WhenHostSetupReady;
+        //Events.Lobby.OnHostSetupReady += WhenHostSetupReady;
     }
 
     private void WhenHostSetupReady(object sender, EventArgs e)
     {
-        if (debug) { GD.Print($"{Core.WHO}CartridgeManager::WhenHostSetupReady()"); }
+        //if (debug) { GD.Print($"{Core.WHO}CartridgeManager::WhenHostSetupReady()"); }
         BuildPools();
     }
 
     private void BuildPools()
     {
-        if (debug) { GD.Print($"{Core.WHO}CartridgeManager::BuildPools()"); }
+        if (debug) { GD.Print($"CartridgeManager::BuildPools()"); }
         foreach (CartridgeDefinition cartDef in cartridgeDefinitions)
         {
             if (cartDef.ResourceName == "UnNamedCartridgeVariant") { GD.Print($"Can't build pool from {cartDef.ResourceName}"); continue; }
@@ -56,7 +55,7 @@ public partial class CartridgeManager : WeaponSystemNode3D
             {
                 count += pool.Count;
             }
-            GD.Print($"{Core.WHO}CartridgeManager: Initilized {pools.Keys.Count} pools with a total of {count} objects.");
+            GD.Print($"CartridgeManager: Initilized {pools.Keys.Count} pools with a total of {count} objects.");
         }
     }
 
@@ -134,7 +133,7 @@ public partial class CartridgeManager : WeaponSystemNode3D
 
     static public void ReturnObject(PoolableCartridge go)
     {
-        if (Instance.debug) { GD.Print($"{Core.WHO}CartridgeManager::ReturnObject({go.GetParent().Name})"); }
+        if (Instance.debug) { GD.Print($"CartridgeManager::ReturnObject({go.GetParent().Name})"); }
         Instance.pools[go.PoolIndex].ReturnObject(go);
     
     }
