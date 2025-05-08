@@ -16,6 +16,8 @@ mono_crash.*.json
 
 *.blend1
 *.depren
+*.uid
+*.import
 .vs/
 .vscode
 
