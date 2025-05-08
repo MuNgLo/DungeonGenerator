@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PathResource" load_steps=2 format=3 uid="uid://fwwvfja283kt"]
+
+[ext_resource type="Script" uid="uid://dsr1trfcnf7v4" path="res://addons/MDunGen/Scripts/ResourceDefinitions/PathResource.cs" id="1_w1rmx"]
+
+[resource]
+script = ExtResource("1_w1rmx")
+corMaxTotal = 15
+corMaxStraight = 5
+corMinStraight = 5
+sectionName = "Corridor Mid"
+sectionType = "PathSection"
+sectionStyle = "Connector"
+defaultResponses = 15
+sizeWidthMin = 1
+sizeWidthMax = 1
+sizeDepthMin = 1
+sizeDepthMax = 1
+nbFloorsMin = 1
+nbFloorsMax = 2
+debug = false
+nbDoorsPerFloorMin = 0
+nbDoorsPerFloorMax = 0
+placers = []
+centerSpiralStairs = false
+firstPieceDoor = true
+backDoorChance = 30
+allFloor = false
