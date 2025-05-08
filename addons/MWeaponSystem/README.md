@@ -1,3 +1,0 @@
-# MWeaponSystem
-
-Modular weaponsystem

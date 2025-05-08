@@ -1,6 +1,5 @@
 # Godot 4+ specific ignores
 .godot/
-/android/
 
 # Godot-specific ignores
 .import/
@@ -16,7 +15,9 @@ data_*/
 mono_crash.*.json
 
 *.blend1
-
-
+*.depren
+*.uid
+*.import
 .vs/
 .vscode
+
